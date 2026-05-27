@@ -1373,23 +1373,20 @@
       const clamp = (value, min, max) => Math.max(min, Math.min(max, Math.round(value)));
 
       return {
-        title:clamp(base * 0.036, 30, 48),
-        coordLabel:clamp(base * 0.026, 21, 30),
-        coordValue:clamp(base * 0.037, 28, 46),
-        nameLabel:clamp(base * 0.024, 19, 28),
-        nameValue:clamp(base * 0.031, 24, 38),
-        areaLabel:clamp(base * 0.024, 19, 28),
-        areaValue:clamp(base * 0.031, 24, 38),
-        detailLabel:clamp(base * 0.023, 18, 27),
-        detailValue:clamp(base * 0.028, 22, 34),
-        metaLabel:clamp(base * 0.022, 17, 25),
-        metaValue:clamp(base * 0.025, 20, 30),
+        nameLabel:clamp(base * 0.025, 20, 30),
+        nameValue:clamp(base * 0.033, 26, 40),
+        detailLabel:clamp(base * 0.024, 19, 29),
+        detailValue:clamp(base * 0.030, 24, 36),
+        coordLabel:clamp(base * 0.025, 20, 30),
+        coordValue:clamp(base * 0.035, 28, 44),
+        metaLabel:clamp(base * 0.023, 18, 27),
+        metaValue:clamp(base * 0.028, 22, 34),
         paddingX:clamp(base * 0.030, 22, 34),
         paddingY:clamp(base * 0.028, 20, 32),
         radius:clamp(base * 0.024, 18, 28),
-        rowGap:clamp(base * 0.015, 10, 18),
-        innerGap:clamp(base * 0.011, 7, 13),
-        labelGap:clamp(base * 0.012, 9, 15)
+        rowGap:clamp(base * 0.016, 12, 18),
+        innerGap:clamp(base * 0.011, 8, 13),
+        labelGap:clamp(base * 0.012, 10, 16)
       };
     }
 
@@ -1397,15 +1394,9 @@
       const data = getAreaData();
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
-
       let h = s.paddingY * 2;
 
       rows.forEach(row => {
-        if (row.type === "title") {
-          h += row.lineHeight + s.rowGap;
-          return;
-        }
-
         if (row.type === "highlight") {
           const innerW = boxW - s.paddingX * 2 - 28;
           ctx.font = row.valueFont;
@@ -1416,10 +1407,8 @@
 
         const labelW = row.labelWidth;
         const valueW = boxW - s.paddingX * 2 - labelW - s.labelGap;
-
         ctx.font = row.valueFont;
         const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
-
         h += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
 
@@ -1438,8 +1427,8 @@
         w,
         h,
         s.radius,
-        "rgba(3, 12, 24, 0.66)",
-        "rgba(126, 245, 255, 0.36)"
+        "rgba(3, 12, 24, 0.68)",
+        "rgba(126, 245, 255, 0.30)"
       );
 
       ctx.save();
@@ -1447,16 +1436,8 @@
       ctx.textBaseline = "top";
 
       rows.forEach(row => {
-        ctx.shadowColor = "rgba(0,0,0,0.75)";
+        ctx.shadowColor = "rgba(0,0,0,0.72)";
         ctx.shadowBlur = 6;
-
-        if (row.type === "title") {
-          ctx.font = row.font;
-          ctx.fillStyle = row.color;
-          ctx.fillText(row.text, x + s.paddingX, cy);
-          cy += row.lineHeight + s.rowGap;
-          return;
-        }
 
         if (row.type === "highlight") {
           const cardX = x + s.paddingX;
@@ -1467,7 +1448,6 @@
 
           ctx.font = row.valueFont;
           const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-
           const cardH = 16 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 16;
 
           drawRoundRect(
@@ -1477,8 +1457,8 @@
             cardW,
             cardH,
             Math.round(s.radius * 0.68),
-            "rgba(56, 170, 255, 0.12)",
-            "rgba(76, 201, 255, 0.28)"
+            "rgba(50, 160, 255, 0.12)",
+            "rgba(76, 201, 255, 0.24)"
           );
 
           ctx.font = row.labelFont;
@@ -1526,28 +1506,8 @@
       const plotName = getPlotName() || "-";
       const plotDetail = getPlotDetail() || "-";
       const nowText = formatShortThaiDateTime(new Date());
-      const thaiArea = data.area > 0 ? formatThaiArea(data.area) : "-";
 
       return [
-        {
-          type:"title",
-          text:"ข้อมูลแปลง",
-          font:`900 ${s.title}px Arial`,
-          color:"#7ef5ff",
-          lineHeight:Math.round(s.title * 1.16)
-        },
-        {
-          type:"highlight",
-          label:"พิกัดศูนย์กลางแปลง",
-          text:data.centroidText || "-",
-          labelFont:`900 ${s.coordLabel}px Arial`,
-          valueFont:`900 ${s.coordValue}px Arial`,
-          labelColor:"#89f7ff",
-          color:"#ffffff",
-          maxLines:2,
-          labelLineHeight:Math.round(s.coordLabel * 1.15),
-          valueLineHeight:Math.round(s.coordValue * 1.18)
-        },
         {
           type:"normal",
           label:"ชื่อ",
@@ -1556,23 +1516,10 @@
           valueFont:`900 ${s.nameValue}px Arial`,
           labelColor:"#ffffff",
           color:"#ffffff",
-          maxLines:1,
+          maxLines:2,
           labelWidth:s.nameLabel * 2.8,
           labelLineHeight:Math.round(s.nameLabel * 1.16),
           valueLineHeight:Math.round(s.nameValue * 1.18)
-        },
-        {
-          type:"normal",
-          label:"ขนาด",
-          text:thaiArea,
-          labelFont:`800 ${s.areaLabel}px Arial`,
-          valueFont:`900 ${s.areaValue}px Arial`,
-          labelColor:"#76ffbf",
-          color:"#f3fff8",
-          maxLines:2,
-          labelWidth:s.areaLabel * 3.3,
-          labelLineHeight:Math.round(s.areaLabel * 1.16),
-          valueLineHeight:Math.round(s.areaValue * 1.18)
         },
         {
           type:"normal",
@@ -1580,7 +1527,7 @@
           text:plotDetail,
           labelFont:`800 ${s.detailLabel}px Arial`,
           valueFont:`800 ${s.detailValue}px Arial`,
-          labelColor:"#e6f3ff",
+          labelColor:"#cfeeff",
           color:"#ffffff",
           maxLines:2,
           labelWidth:s.detailLabel * 5.4,
@@ -1588,15 +1535,27 @@
           valueLineHeight:Math.round(s.detailValue * 1.18)
         },
         {
+          type:"highlight",
+          label:"พิกัดแปลง",
+          text:data.centroidText || "-",
+          labelFont:`900 ${s.coordLabel}px Arial`,
+          valueFont:`900 ${s.coordValue}px Arial`,
+          labelColor:"#8ff7ff",
+          color:"#ffffff",
+          maxLines:2,
+          labelLineHeight:Math.round(s.coordLabel * 1.15),
+          valueLineHeight:Math.round(s.coordValue * 1.18)
+        },
+        {
           type:"normal",
-          label:"เวลา",
+          label:"วันที่และเวลา",
           text:nowText,
           labelFont:`800 ${s.metaLabel}px Arial`,
           valueFont:`800 ${s.metaValue}px Arial`,
           labelColor:"#ffcf5a",
           color:"#fff5d9",
           maxLines:1,
-          labelWidth:s.metaLabel * 3.0,
+          labelWidth:s.metaLabel * 5.6,
           labelLineHeight:Math.round(s.metaLabel * 1.16),
           valueLineHeight:Math.round(s.metaValue * 1.16)
         }
