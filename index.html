@@ -1353,8 +1353,8 @@
       drawOverlayLogo(ctx, margin, margin, logoW, logoH);
 
       const infoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.58)
-        : Math.round(canvasWidth * 0.86);
+        ? Math.round(canvasWidth * 0.60)
+        : Math.round(canvasWidth * 0.88);
 
       const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
       const infoX = Math.round((canvasWidth - infoW) / 2);
@@ -1373,23 +1373,23 @@
       const clamp = (value, min, max) => Math.max(min, Math.min(max, Math.round(value)));
 
       return {
-        title:clamp(base * 0.030, 26, 40),
-        coordLabel:clamp(base * 0.022, 18, 26),
-        coordValue:clamp(base * 0.031, 24, 40),
-        nameLabel:clamp(base * 0.021, 17, 24),
-        nameValue:clamp(base * 0.027, 22, 34),
-        areaLabel:clamp(base * 0.021, 17, 24),
-        areaValue:clamp(base * 0.026, 21, 34),
-        detailLabel:clamp(base * 0.020, 16, 23),
-        detailValue:clamp(base * 0.024, 20, 30),
-        metaLabel:clamp(base * 0.019, 15, 22),
-        metaValue:clamp(base * 0.021, 17, 26),
-        paddingX:clamp(base * 0.028, 20, 32),
-        paddingY:clamp(base * 0.026, 18, 30),
+        title:clamp(base * 0.036, 30, 48),
+        coordLabel:clamp(base * 0.026, 21, 30),
+        coordValue:clamp(base * 0.037, 28, 46),
+        nameLabel:clamp(base * 0.024, 19, 28),
+        nameValue:clamp(base * 0.031, 24, 38),
+        areaLabel:clamp(base * 0.024, 19, 28),
+        areaValue:clamp(base * 0.031, 24, 38),
+        detailLabel:clamp(base * 0.023, 18, 27),
+        detailValue:clamp(base * 0.028, 22, 34),
+        metaLabel:clamp(base * 0.022, 17, 25),
+        metaValue:clamp(base * 0.025, 20, 30),
+        paddingX:clamp(base * 0.030, 22, 34),
+        paddingY:clamp(base * 0.028, 20, 32),
         radius:clamp(base * 0.024, 18, 28),
-        rowGap:clamp(base * 0.013, 9, 16),
-        innerGap:clamp(base * 0.010, 6, 12),
-        labelGap:clamp(base * 0.010, 8, 14)
+        rowGap:clamp(base * 0.015, 10, 18),
+        innerGap:clamp(base * 0.011, 7, 13),
+        labelGap:clamp(base * 0.012, 9, 15)
       };
     }
 
@@ -1397,6 +1397,7 @@
       const data = getAreaData();
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
+
       let h = s.paddingY * 2;
 
       rows.forEach(row => {
@@ -1406,21 +1407,23 @@
         }
 
         if (row.type === "highlight") {
-          const innerW = boxW - s.paddingX * 2 - 26;
+          const innerW = boxW - s.paddingX * 2 - 28;
           ctx.font = row.valueFont;
           const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-          h += 14 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 14 + s.rowGap;
+          h += 16 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 16 + s.rowGap;
           return;
         }
 
         const labelW = row.labelWidth;
         const valueW = boxW - s.paddingX * 2 - labelW - s.labelGap;
+
         ctx.font = row.valueFont;
         const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
+
         h += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
 
-      return h + 6;
+      return h + 8;
     }
 
     function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
@@ -1428,22 +1431,24 @@
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
 
-      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(3, 12, 24, 0.58)", "rgba(126, 245, 255, 0.38)");
+      drawRoundRect(
+        ctx,
+        x,
+        y,
+        w,
+        h,
+        s.radius,
+        "rgba(3, 12, 24, 0.66)",
+        "rgba(126, 245, 255, 0.36)"
+      );
 
       ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(x + s.paddingX, y + 13);
-      ctx.lineTo(x + w - s.paddingX, y + 13);
-      ctx.lineWidth = 2.5;
-      ctx.strokeStyle = "rgba(126,245,255,0.72)";
-      ctx.stroke();
-
       let cy = y + s.paddingY;
       ctx.textBaseline = "top";
 
       rows.forEach(row => {
         ctx.shadowColor = "rgba(0,0,0,0.75)";
-        ctx.shadowBlur = 5;
+        ctx.shadowBlur = 6;
 
         if (row.type === "title") {
           ctx.font = row.font;
@@ -1457,16 +1462,29 @@
           const cardX = x + s.paddingX;
           const cardY = cy;
           const cardW = w - s.paddingX * 2;
-          const innerX = cardX + 13;
-          const innerW = cardW - 26;
+          const innerX = cardX + 14;
+          const innerW = cardW - 28;
+
           ctx.font = row.valueFont;
           const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-          const cardH = 14 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 14;
 
-          drawRoundRect(ctx, cardX, cardY, cardW, cardH, Math.round(s.radius * 0.68), "rgba(50, 160, 255, 0.14)", "rgba(76, 201, 255, 0.34)");
+          const cardH = 16 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 16;
+
+          drawRoundRect(
+            ctx,
+            cardX,
+            cardY,
+            cardW,
+            cardH,
+            Math.round(s.radius * 0.68),
+            "rgba(56, 170, 255, 0.12)",
+            "rgba(76, 201, 255, 0.28)"
+          );
+
           ctx.font = row.labelFont;
           ctx.fillStyle = row.labelColor;
           ctx.fillText(row.label, innerX, cardY + 12);
+
           ctx.font = row.valueFont;
           ctx.fillStyle = row.color;
 
@@ -1475,6 +1493,7 @@
             ctx.fillText(line, innerX, valueY);
             valueY += row.valueLineHeight;
           });
+
           cy += cardH + s.rowGap;
           return;
         }
@@ -1499,6 +1518,7 @@
 
         cy += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
+
       ctx.restore();
     }
 
@@ -1522,11 +1542,11 @@
           text:data.centroidText || "-",
           labelFont:`900 ${s.coordLabel}px Arial`,
           valueFont:`900 ${s.coordValue}px Arial`,
-          labelColor:"#7ef5ff",
+          labelColor:"#89f7ff",
           color:"#ffffff",
           maxLines:2,
           labelLineHeight:Math.round(s.coordLabel * 1.15),
-          valueLineHeight:Math.round(s.coordValue * 1.16)
+          valueLineHeight:Math.round(s.coordValue * 1.18)
         },
         {
           type:"normal",
@@ -1534,12 +1554,12 @@
           text:plotName,
           labelFont:`800 ${s.nameLabel}px Arial`,
           valueFont:`900 ${s.nameValue}px Arial`,
-          labelColor:"#dff7ff",
+          labelColor:"#ffffff",
           color:"#ffffff",
           maxLines:1,
           labelWidth:s.nameLabel * 2.8,
-          labelLineHeight:Math.round(s.nameLabel * 1.15),
-          valueLineHeight:Math.round(s.nameValue * 1.16)
+          labelLineHeight:Math.round(s.nameLabel * 1.16),
+          valueLineHeight:Math.round(s.nameValue * 1.18)
         },
         {
           type:"normal",
@@ -1548,11 +1568,11 @@
           labelFont:`800 ${s.areaLabel}px Arial`,
           valueFont:`900 ${s.areaValue}px Arial`,
           labelColor:"#76ffbf",
-          color:"#eafff4",
+          color:"#f3fff8",
           maxLines:2,
           labelWidth:s.areaLabel * 3.3,
-          labelLineHeight:Math.round(s.areaLabel * 1.15),
-          valueLineHeight:Math.round(s.areaValue * 1.16)
+          labelLineHeight:Math.round(s.areaLabel * 1.16),
+          valueLineHeight:Math.round(s.areaValue * 1.18)
         },
         {
           type:"normal",
@@ -1560,11 +1580,11 @@
           text:plotDetail,
           labelFont:`800 ${s.detailLabel}px Arial`,
           valueFont:`800 ${s.detailValue}px Arial`,
-          labelColor:"#d6ecff",
-          color:"#f3faff",
+          labelColor:"#e6f3ff",
+          color:"#ffffff",
           maxLines:2,
-          labelWidth:s.detailLabel * 5.2,
-          labelLineHeight:Math.round(s.detailLabel * 1.15),
+          labelWidth:s.detailLabel * 5.4,
+          labelLineHeight:Math.round(s.detailLabel * 1.16),
           valueLineHeight:Math.round(s.detailValue * 1.18)
         },
         {
@@ -1574,11 +1594,11 @@
           labelFont:`800 ${s.metaLabel}px Arial`,
           valueFont:`800 ${s.metaValue}px Arial`,
           labelColor:"#ffcf5a",
-          color:"#fff6dc",
+          color:"#fff5d9",
           maxLines:1,
           labelWidth:s.metaLabel * 3.0,
-          labelLineHeight:Math.round(s.metaLabel * 1.15),
-          valueLineHeight:Math.round(s.metaValue * 1.15)
+          labelLineHeight:Math.round(s.metaLabel * 1.16),
+          valueLineHeight:Math.round(s.metaValue * 1.16)
         }
       ];
     }
