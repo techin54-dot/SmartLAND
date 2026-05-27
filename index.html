@@ -72,7 +72,7 @@
       inset:0;
       z-index:2;
       pointer-events:none;
-      background:linear-gradient(to bottom,rgba(0,0,0,.12),transparent 35%,rgba(0,0,0,.18));
+      background:linear-gradient(to bottom,rgba(0,0,0,.10),transparent 35%,rgba(0,0,0,.16));
     }
 
     .crosshair{
@@ -229,6 +229,7 @@
       font-weight:900;
       line-height:1;
       box-shadow:none;
+      cursor:pointer;
     }
 
     .info-grid{
@@ -279,6 +280,7 @@
       background:linear-gradient(135deg,var(--green),var(--cyan));
       border:1px solid rgba(255,255,255,.25);
       box-shadow:0 12px 30px rgba(0,0,0,.35);
+      cursor:pointer;
     }
 
     .note-panel{
@@ -565,6 +567,7 @@
       font-size:18px;
       line-height:1;
       box-shadow:none;
+      cursor:pointer;
     }
 
     .toast{
@@ -977,32 +980,32 @@
 
     function initMap() {
       map = L.map("map", {
-        zoomControl:false,
-        tap:true,
-        maxZoom:20
+        zoomControl: false,
+        tap: true,
+        maxZoom: 20
       }).setView([17.1547, 104.1348], 16);
 
       L.control.zoom({
-        position:"bottomright"
+        position: "bottomright"
       }).addTo(map);
 
       L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
-          maxZoom:20,
-          maxNativeZoom:17,
-          attribution:"Tiles © Esri",
-          crossOrigin:"anonymous"
+          maxZoom: 20,
+          maxNativeZoom: 17,
+          attribution: "Tiles © Esri",
+          crossOrigin: "anonymous"
         }
       ).addTo(map);
 
       L.tileLayer(
         "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
         {
-          maxZoom:20,
-          maxNativeZoom:17,
-          attribution:"Labels © Esri",
-          crossOrigin:"anonymous"
+          maxZoom: 20,
+          maxNativeZoom: 17,
+          attribution: "Labels © Esri",
+          crossOrigin: "anonymous"
         }
       ).addTo(map);
 
@@ -1084,7 +1087,6 @@
       updateAreaInfo();
       updateCenterCoordinateBox();
       updateCenterPopupIfVisible();
-
       showToast(`เปลี่ยนพิกัดเป็น ${coordinateMode === "utm" ? "UTM" : "Lat/Lon"}`);
     }
 
@@ -1094,7 +1096,6 @@
 
     function addPointFromCenter() {
       if (!map) return;
-
       const center = map.getCenter();
       addMeasurePoint(center.lat, center.lng);
       showToast(`เพิ่มจุดที่ ${measurePoints.length} แล้ว`);
@@ -1104,8 +1105,8 @@
       measurePoints.push([lat, lon]);
 
       const marker = L.marker([lat, lon], {
-        draggable:true,
-        icon:createPointIcon(measurePoints.length)
+        draggable: true,
+        icon: createPointIcon(measurePoints.length)
       }).addTo(map);
 
       marker.on("drag", () => {
@@ -1125,15 +1126,15 @@
 
     function createPointIcon(number) {
       return L.divIcon({
-        html:`<div class="point-marker">${number}</div>`,
-        className:"",
-        iconSize:[30,30],
-        iconAnchor:[15,15]
+        html: `<div class="point-marker">${number}</div>`,
+        className: "",
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
       });
     }
 
     function refreshMarkerNumbers() {
-      markers.forEach((marker,index) => {
+      markers.forEach((marker, index) => {
         marker.setIcon(createPointIcon(index + 1));
       });
     }
@@ -1151,9 +1152,9 @@
 
       if (measurePoints.length >= 2) {
         lineLayer = L.polyline(measurePoints, {
-          color:"#ffb703",
-          weight:4,
-          opacity:1
+          color: "#ffb703",
+          weight: 4,
+          opacity: 1
         }).addTo(map);
 
         lineLayer.bringToFront();
@@ -1161,10 +1162,10 @@
 
       if (measurePoints.length >= 3) {
         polygonLayer = L.polygon(measurePoints, {
-          color:"#ffb703",
-          weight:4,
-          fillColor:"#39f2a2",
-          fillOpacity:0.18
+          color: "#ffb703",
+          weight: 4,
+          fillColor: "#39f2a2",
+          fillOpacity: 0.18
         }).addTo(map);
 
         polygonLayer.bringToFront();
@@ -1263,24 +1264,24 @@
           updateCenterCoordinateBox();
         },
         {
-          enableHighAccuracy:true,
-          maximumAge:2000,
-          timeout:20000
+          enableHighAccuracy: true,
+          maximumAge: 2000,
+          timeout: 20000
         }
       );
     }
 
     function updateCurrentLocationMarker(lat, lon) {
       const icon = L.divIcon({
-        html:`<div class="my-location"></div>`,
-        className:"",
-        iconSize:[22,22],
-        iconAnchor:[11,11]
+        html: `<div class="my-location"></div>`,
+        className: "",
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
       });
 
       if (!currentLocationMarker) {
         currentLocationMarker = L.marker([lat, lon], {
-          title:"ตำแหน่งปัจจุบัน",
+          title: "ตำแหน่งปัจจุบัน",
           icon
         }).addTo(map);
       } else {
@@ -1317,10 +1318,9 @@
       selectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(el => {
           hiddenElements.push({
-            element:el,
-            display:el.style.display
+            element: el,
+            display: el.style.display
           });
-
           el.style.display = "none";
         });
       });
@@ -1350,18 +1350,17 @@
         const mapElement = document.getElementById("map");
 
         restoreView = await fitMapToPolygonForCapture(mapElement);
-
         await waitForMapTiles(5000);
 
         restoreMap = prepareMapForCapture();
 
         const mapCanvas = await html2canvas(mapElement, {
-          backgroundColor:"#000000",
-          scale:Math.min(2, window.devicePixelRatio || 1),
-          useCORS:true,
-          allowTaint:false,
-          logging:false,
-          imageTimeout:20000
+          backgroundColor: "#000000",
+          scale: Math.min(2, window.devicePixelRatio || 1),
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+          imageTimeout: 20000
         });
 
         if (restoreMap) {
@@ -1418,29 +1417,29 @@
       const oldZoom = map.getZoom();
 
       const bounds = L.latLngBounds(
-        measurePoints.map(([lat,lng]) => [lat,lng])
+        measurePoints.map(([lat, lng]) => [lat, lng])
       );
 
       const mapW = mapElement.clientWidth;
       const mapH = mapElement.clientHeight;
 
-      const topSafe = Math.max(95, Math.round(mapH * 0.16));
-      const bottomSafe = Math.max(210, Math.round(mapH * 0.30));
-      const sideSafe = Math.max(45, Math.round(mapW * 0.09));
+      const topSafe = Math.max(80, Math.round(mapH * 0.12));
+      const bottomSafe = Math.max(170, Math.round(mapH * 0.24));
+      const sideSafe = Math.max(28, Math.round(mapW * 0.055));
 
       map.fitBounds(bounds, {
-        paddingTopLeft:[sideSafe, topSafe],
-        paddingBottomRight:[sideSafe, bottomSafe],
-        maxZoom:17,
-        animate:false
+        paddingTopLeft: [sideSafe, topSafe],
+        paddingBottomRight: [sideSafe, bottomSafe],
+        maxZoom: 19,
+        animate: false
       });
 
       await waitForMapTiles(5000);
-      await waitForMapRender(350);
+      await waitForMapRender(450);
 
       return function restoreOriginalView() {
         map.setView(oldCenter, oldZoom, {
-          animate:false
+          animate: false
         });
 
         setTimeout(() => {
@@ -1496,43 +1495,46 @@
       if (!map || measurePoints.length < 2) return;
 
       const points = getMeasurePointsOnCanvas(canvasWidth, canvasHeight, mapWidth, mapHeight);
+      const base = Math.min(canvasWidth, canvasHeight);
 
       ctx.save();
 
       if (points.length >= 3) {
         ctx.beginPath();
-
-        points.forEach((pt,index) => {
-          if (index === 0) ctx.moveTo(pt.x,pt.y);
-          else ctx.lineTo(pt.x,pt.y);
+        points.forEach((pt, index) => {
+          if (index === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
         });
-
         ctx.closePath();
-        ctx.fillStyle = "rgba(57,242,162,0.18)";
+        ctx.fillStyle = "rgba(57, 242, 162, 0.22)";
         ctx.fill();
       }
 
       ctx.beginPath();
-
-      points.forEach((pt,index) => {
-        if (index === 0) ctx.moveTo(pt.x,pt.y);
-        else ctx.lineTo(pt.x,pt.y);
+      points.forEach((pt, index) => {
+        if (index === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
       });
-
       if (points.length >= 3) ctx.closePath();
 
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.78)";
+      ctx.lineWidth = Math.max(12, Math.round(base * 0.010));
+      ctx.stroke();
+
       ctx.strokeStyle = "#ffb703";
-      ctx.lineWidth = Math.max(7, Math.round(Math.min(canvasWidth, canvasHeight) * 0.006));
-      ctx.shadowColor = "rgba(0,0,0,0.75)";
-      ctx.shadowBlur = 10;
+      ctx.lineWidth = Math.max(8, Math.round(base * 0.007));
+      ctx.shadowColor = "rgba(0,0,0,0.70)";
+      ctx.shadowBlur = 8;
       ctx.stroke();
 
       ctx.shadowBlur = 0;
-      ctx.strokeStyle = "rgba(255,255,255,0.75)";
-      ctx.lineWidth = Math.max(2, Math.round(Math.min(canvasWidth, canvasHeight) * 0.002));
+      ctx.strokeStyle = "rgba(255,255,255,0.82)";
+      ctx.lineWidth = Math.max(2, Math.round(base * 0.002));
       ctx.stroke();
 
-      points.forEach((pt,index) => {
+      points.forEach((pt, index) => {
         drawCapturePointMarker(ctx, pt.x, pt.y, index + 1, canvasWidth, canvasHeight);
       });
 
@@ -1543,29 +1545,34 @@
       const scaleX = canvasWidth / mapWidth;
       const scaleY = canvasHeight / mapHeight;
 
-      return measurePoints.map(([lat,lng]) => {
-        const p = map.latLngToContainerPoint([lat,lng]);
-
+      return measurePoints.map(([lat, lng]) => {
+        const p = map.latLngToContainerPoint([lat, lng]);
         return {
-          x:p.x * scaleX,
-          y:p.y * scaleY
+          x: p.x * scaleX,
+          y: p.y * scaleY
         };
       });
     }
 
     function drawCapturePointMarker(ctx, x, y, number, canvasWidth, canvasHeight) {
-      const r = Math.max(22, Math.round(Math.min(canvasWidth, canvasHeight) * 0.022));
-      const fontSize = Math.max(24, Math.round(r * 1.05));
+      const base = Math.min(canvasWidth, canvasHeight);
+      const r = Math.max(26, Math.round(base * 0.026));
+      const fontSize = Math.max(26, Math.round(r * 0.96));
 
       ctx.save();
 
       ctx.beginPath();
-      ctx.arc(x,y,r,0,Math.PI * 2);
+      ctx.arc(x, y, r + 5, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(0,0,0,0.35)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fillStyle = "#59e1db";
       ctx.fill();
 
-      ctx.lineWidth = Math.max(4, Math.round(r * 0.20));
-      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = Math.max(5, Math.round(r * 0.20));
+      ctx.strokeStyle = "#ffffff";
       ctx.stroke();
 
       ctx.fillStyle = "#04120c";
@@ -1591,8 +1598,8 @@
       drawOverlayLogo(ctx, margin, margin, logoW, logoH);
 
       const infoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.52)
-        : Math.round(canvasWidth * 0.78);
+        ? Math.round(canvasWidth * 0.48)
+        : Math.round(canvasWidth * 0.74);
 
       const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
       const infoX = margin;
@@ -1613,15 +1620,15 @@
       const base = Math.min(canvasW, canvasH);
 
       return {
-        title:Math.max(38, Math.round(base * 0.050)),
-        body:Math.max(32, Math.round(base * 0.043)),
-        area:Math.max(35, Math.round(base * 0.047)),
-        meta:Math.max(28, Math.round(base * 0.037)),
-        label:Math.max(26, Math.round(base * 0.034)),
-        paddingX:Math.max(22, Math.round(base * 0.026)),
-        paddingY:Math.max(20, Math.round(base * 0.023)),
-        radius:Math.max(20, Math.round(base * 0.020)),
-        rowGap:Math.max(8, Math.round(base * 0.010))
+        title: Math.max(34, Math.round(base * 0.044)),
+        area: Math.max(38, Math.round(base * 0.050)),
+        body: Math.max(28, Math.round(base * 0.036)),
+        meta: Math.max(25, Math.round(base * 0.032)),
+        label: Math.max(24, Math.round(base * 0.031)),
+        paddingX: Math.max(24, Math.round(base * 0.028)),
+        paddingY: Math.max(22, Math.round(base * 0.025)),
+        radius: Math.max(24, Math.round(base * 0.024)),
+        rowGap: Math.max(10, Math.round(base * 0.012))
       };
     }
 
@@ -1635,13 +1642,28 @@
       rows.forEach(row => {
         ctx.font = row.font;
 
-        const labelW = s.label * 2.5;
-        const wrapped = wrapCanvasText(ctx, row.text, boxW - s.paddingX * 2 - labelW, row.maxLines);
+        if (row.type === "title") {
+          h += row.lineHeight + s.rowGap;
+          return;
+        }
+
+        if (row.type === "area") {
+          h += row.lineHeight + s.rowGap + 12;
+          return;
+        }
+
+        const labelW = s.label * 2.35;
+        const wrapped = wrapCanvasText(
+          ctx,
+          row.text,
+          boxW - s.paddingX * 2 - labelW,
+          row.maxLines
+        );
 
         h += wrapped.length * row.lineHeight + s.rowGap;
       });
 
-      return h + 8;
+      return h + 12;
     }
 
     function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
@@ -1656,21 +1678,21 @@
         w,
         h,
         s.radius,
-        "rgba(4,12,24,0.40)",
-        "rgba(255,255,255,0.34)"
+        "rgba(4, 12, 24, 0.52)",
+        "rgba(126, 245, 255, 0.38)"
       );
 
       ctx.save();
 
       ctx.beginPath();
-      ctx.moveTo(x + s.paddingX, y + 12);
-      ctx.lineTo(x + w - s.paddingX, y + 12);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "rgba(126,245,255,0.55)";
+      ctx.moveTo(x + s.paddingX, y + 14);
+      ctx.lineTo(x + w - s.paddingX, y + 14);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(126,245,255,0.70)";
       ctx.stroke();
 
       let cy = y + s.paddingY;
-      const labelW = s.label * 2.5;
+      const labelW = s.label * 2.35;
       const labelX = x + s.paddingX;
       const textX = x + s.paddingX + labelW;
       const maxTextW = w - s.paddingX * 2 - labelW;
@@ -1678,17 +1700,48 @@
       ctx.textBaseline = "top";
 
       rows.forEach(row => {
-        ctx.font = `900 ${s.label}px Arial`;
-        ctx.fillStyle = row.labelColor;
         ctx.shadowColor = "rgba(0,0,0,0.85)";
         ctx.shadowBlur = 6;
+
+        if (row.type === "title") {
+          ctx.font = row.font;
+          ctx.fillStyle = row.color;
+          ctx.fillText(row.text, x + s.paddingX, cy);
+          cy += row.lineHeight + s.rowGap;
+          return;
+        }
+
+        if (row.type === "area") {
+          const pillH = row.lineHeight + 12;
+          const pillY = cy - 4;
+
+          drawRoundRect(
+            ctx,
+            x + s.paddingX - 4,
+            pillY,
+            w - s.paddingX * 2 + 8,
+            pillH,
+            Math.round(pillH / 2),
+            "rgba(57, 242, 162, 0.16)",
+            "rgba(57, 242, 162, 0.38)"
+          );
+
+          ctx.font = row.font;
+          ctx.fillStyle = row.color;
+          ctx.fillText(row.text, x + s.paddingX + 8, cy + 2);
+
+          cy += pillH + s.rowGap;
+          return;
+        }
+
+        ctx.font = `900 ${s.label}px Arial`;
+        ctx.fillStyle = row.labelColor;
         ctx.fillText(row.label, labelX, cy);
 
         ctx.font = row.font;
         ctx.fillStyle = row.color;
 
         const wrapped = wrapCanvasText(ctx, row.text, maxTextW, row.maxLines);
-
         wrapped.forEach(line => {
           ctx.fillText(line, textX, cy);
           cy += row.lineHeight;
@@ -1705,69 +1758,75 @@
       const plotDetail = getPlotDetail();
       const nowText = formatShortThaiDateTime(new Date());
 
-      return [
+      const rows = [
         {
-          label:"ข้อมูล",
-          text:"แปลง",
-          font:`900 ${s.title}px Arial`,
-          color:"#7ef5ff",
-          labelColor:"#7ef5ff",
-          maxLines:1,
-          lineHeight:Math.round(s.title * 1.18)
+          type: "title",
+          text: "ข้อมูลแปลง",
+          font: `900 ${s.title}px Arial`,
+          color: "#7ef5ff",
+          lineHeight: Math.round(s.title * 1.18)
         },
         {
-          label:"ชื่อ",
-          text:plotName,
-          font:`900 ${s.body}px Arial`,
-          color:"#ffffff",
-          labelColor:"#ffffff",
-          maxLines:1,
-          lineHeight:Math.round(s.body * 1.20)
-        },
-        {
-          label:"ราย",
-          text:plotDetail,
-          font:`800 ${s.body}px Arial`,
-          color:"#eef6ff",
-          labelColor:"#eef6ff",
-          maxLines:1,
-          lineHeight:Math.round(s.body * 1.20)
-        },
-        {
-          label:"พื้นที่",
-          text:formatThaiArea(data.area),
-          font:`900 ${s.area}px Arial`,
-          color:"#d8fff0",
-          labelColor:"#39f2a2",
-          maxLines:1,
-          lineHeight:Math.round(s.area * 1.20)
-        },
-        {
-          label:"พิกัด",
-          text:data.centroidText,
-          font:`800 ${s.meta}px Arial`,
-          color:"#e3f7ff",
-          labelColor:"#4cc9ff",
-          maxLines:1,
-          lineHeight:Math.round(s.meta * 1.20)
-        },
-        {
-          label:"เวลา",
-          text:nowText,
-          font:`800 ${s.meta}px Arial`,
-          color:"#e3f7ff",
-          labelColor:"#ffb703",
-          maxLines:1,
-          lineHeight:Math.round(s.meta * 1.20)
+          type: "area",
+          text: `ขนาดพื้นที่ ${formatThaiArea(data.area)}`,
+          font: `900 ${s.area}px Arial`,
+          color: "#d8fff0",
+          lineHeight: Math.round(s.area * 1.16)
         }
       ];
+
+      rows.push({
+        type: "normal",
+        label: "ชื่อ",
+        text: plotName,
+        font: `850 ${s.body}px Arial`,
+        color: "#ffffff",
+        labelColor: "#ffffff",
+        maxLines: 1,
+        lineHeight: Math.round(s.body * 1.18)
+      });
+
+      rows.push({
+        type: "normal",
+        label: "ราย",
+        text: plotDetail,
+        font: `800 ${s.body}px Arial`,
+        color: "#eef6ff",
+        labelColor: "#eef6ff",
+        maxLines: 1,
+        lineHeight: Math.round(s.body * 1.18)
+      });
+
+      rows.push({
+        type: "normal",
+        label: "พิกัด",
+        text: data.centroidText,
+        font: `800 ${s.meta}px Arial`,
+        color: "#dff7ff",
+        labelColor: "#4cc9ff",
+        maxLines: 1,
+        lineHeight: Math.round(s.meta * 1.18)
+      });
+
+      rows.push({
+        type: "normal",
+        label: "เวลา",
+        text: nowText,
+        font: `800 ${s.meta}px Arial`,
+        color: "#fff3d0",
+        labelColor: "#ffb703",
+        maxLines: 1,
+        lineHeight: Math.round(s.meta * 1.18)
+      });
+
+      return rows;
     }
 
     function getAreaData() {
       if (measurePoints.length < 3) {
         return {
-          area:0,
-          centroidText:"-"
+          area: 0,
+          centroidText: "-"
         };
       }
 
@@ -1779,7 +1838,7 @@
 
       return {
         area,
-        centroidText:formatCoordinate(lat, lon)
+        centroidText: formatCoordinate(lat, lon)
       };
     }
 
@@ -1811,7 +1870,7 @@
       }
 
       return new Blob([array], {
-        type:mime
+        type: mime
       });
     }
 
@@ -1921,7 +1980,6 @@
       previewImage.src = latestImageUrl;
 
       const isIOSNow = isIOSDevice();
-
       tapSaveOverlay.style.display = isIOSNow ? "block" : "none";
       iosSaveHint.style.display = isIOSNow ? "block" : "none";
       saveImageButton.style.display = isIOSNow ? "none" : "block";
@@ -1954,7 +2012,6 @@
         document.body.removeChild(link);
 
         setTimeout(() => URL.revokeObjectURL(url), 2000);
-
         showToast("บันทึกภาพแล้ว");
       } catch (error) {
         const url = URL.createObjectURL(latestImageBlob);
@@ -1971,26 +2028,24 @@
 
       try {
         const file = new File([latestImageBlob], latestFileName, {
-          type:latestImageBlob.type || "image/jpeg"
+          type: latestImageBlob.type || "image/jpeg"
         });
 
-        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
-            title:"SmartLAND",
-            text:"ภาพแผนที่จาก SmartLAND",
-            files:[file]
+            title: "SmartLAND",
+            text: "ภาพแผนที่จาก SmartLAND",
+            files: [file]
           });
-
           showToast("แชร์รูปภาพแล้ว");
           return;
         }
 
         if (navigator.share) {
           await navigator.share({
-            title:"SmartLAND",
-            text:"ภาพแผนที่จาก SmartLAND"
+            title: "SmartLAND",
+            text: "ภาพแผนที่จาก SmartLAND"
           });
-
           showToast("แชร์ข้อมูลแล้ว");
           return;
         }
@@ -2028,35 +2083,35 @@
 
       if (isInApp && !browserGateDismissed) {
         return {
-          ok:false,
-          reason:"ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
+          ok: false,
+          reason: "ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
         };
       }
 
       if (!isSecure) {
         return {
-          ok:false,
-          reason:"เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
+          ok: false,
+          reason: "เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
         };
       }
 
       if (!hasGeo) {
         return {
-          ok:false,
-          reason:"เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
+          ok: false,
+          reason: "เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
         };
       }
 
       if (!hasCanvas) {
         return {
-          ok:false,
-          reason:"เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
+          ok: false,
+          reason: "เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
         };
       }
 
       return {
-        ok:true,
-        reason:""
+        ok: true,
+        reason: ""
       };
     }
 
