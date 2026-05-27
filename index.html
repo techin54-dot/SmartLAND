@@ -407,9 +407,7 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    button:active{
-      transform:scale(.96);
-    }
+    button:active{transform:scale(.96)}
 
     button:disabled{
       opacity:.55;
@@ -501,36 +499,28 @@
       bottom:calc(334px + env(safe-area-inset-bottom));
     }
 
-    .float-coord-mode .flat-svg{
-      fill:#7c3aed;
-    }
+    .float-coord-mode .flat-svg{fill:#7c3aed}
 
     .float-center-coord{
       right:14px;
       bottom:calc(262px + env(safe-area-inset-bottom));
     }
 
-    .float-center-coord .flat-svg{
-      fill:#f59e0b;
-    }
+    .float-center-coord .flat-svg{fill:#f59e0b}
 
     .float-location{
       right:14px;
       bottom:calc(190px + env(safe-area-inset-bottom));
     }
 
-    .float-location .flat-svg{
-      fill:#1f78b8;
-    }
+    .float-location .flat-svg{fill:#1f78b8}
 
     .float-save{
       right:14px;
       bottom:calc(118px + env(safe-area-inset-bottom));
     }
 
-    .float-save .flat-svg{
-      fill:#12835d;
-    }
+    .float-save .flat-svg{fill:#12835d}
 
     .coord-badge{
       position:absolute;
@@ -574,21 +564,9 @@
     }
 
     @keyframes locationPulse{
-      0%{
-        box-shadow:
-          0 0 0 0 rgba(29,161,255,.65),
-          0 0 14px rgba(29,161,255,.80);
-      }
-      70%{
-        box-shadow:
-          0 0 0 16px rgba(29,161,255,0),
-          0 0 18px rgba(29,161,255,.55);
-      }
-      100%{
-        box-shadow:
-          0 0 0 0 rgba(29,161,255,0),
-          0 0 14px rgba(29,161,255,.80);
-      }
+      0%{box-shadow:0 0 0 0 rgba(29,161,255,.65),0 0 14px rgba(29,161,255,.80)}
+      70%{box-shadow:0 0 0 16px rgba(29,161,255,0),0 0 18px rgba(29,161,255,.55)}
+      100%{box-shadow:0 0 0 0 rgba(29,161,255,0),0 0 14px rgba(29,161,255,.80)}
     }
 
     .toast{
@@ -631,14 +609,10 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    .browser-gate{
-      z-index:2000;
-    }
+    .browser-gate{z-index:2000}
 
     .preview-modal.hide,
-    .browser-gate.hide{
-      display:none;
-    }
+    .browser-gate.hide{display:none}
 
     .preview-card,
     .browser-card{
@@ -671,7 +645,7 @@
       font-size:22px;
       font-weight:900;
       margin-bottom:8px;
-      color:#ffffff;
+      color:#fff;
     }
 
     .browser-desc{
@@ -706,17 +680,9 @@
       font-weight:900;
     }
 
-    .primary-action{
-      background:linear-gradient(135deg,#16a34a,#22c55e);
-    }
-
-    .secondary-action{
-      background:rgba(255,255,255,.12);
-    }
-
-    .danger-action{
-      background:linear-gradient(135deg,#7f1d1d,#be123c);
-    }
+    .primary-action{background:linear-gradient(135deg,#16a34a,#22c55e)}
+    .secondary-action{background:rgba(255,255,255,.12)}
+    .danger-action{background:linear-gradient(135deg,#7f1d1d,#be123c)}
 
     .preview-title{
       font-size:18px;
@@ -795,9 +761,7 @@
       line-height:1.55;
     }
 
-    .hide{
-      display:none!important;
-    }
+    .hide{display:none!important}
 
     @media (max-width:520px){
       .top-panel{
@@ -806,9 +770,7 @@
         width:min(94vw,390px);
       }
 
-      .info-card{
-        width:100%;
-      }
+      .info-card{width:100%}
 
       .note-panel{
         bottom:calc(112px + env(safe-area-inset-bottom));
@@ -1429,13 +1391,8 @@
       const plotName = getPlotName();
       const plotDetail = getPlotDetail();
 
-      if (infoPlotName) {
-        infoPlotName.textContent = `ชื่อ: ${plotName}`;
-      }
-
-      if (infoPlotDetail) {
-        infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
-      }
+      if (infoPlotName) infoPlotName.textContent = `ชื่อ: ${plotName}`;
+      if (infoPlotDetail) infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
 
       if (measurePoints.length < 3) {
         thaiAreaText.textContent = "ขนาดพื้นที่: -";
@@ -1617,45 +1574,30 @@
           restoreMap = null;
         }
 
-        const cleanMapCanvas = document.createElement("canvas");
-        cleanMapCanvas.width = rawMapCanvas.width;
-        cleanMapCanvas.height = rawMapCanvas.height;
+        const outputCanvas = document.createElement("canvas");
+        outputCanvas.width = rawMapCanvas.width;
+        outputCanvas.height = rawMapCanvas.height;
 
-        const cleanCtx = cleanMapCanvas.getContext("2d");
-        cleanCtx.drawImage(rawMapCanvas, 0, 0);
+        const ctx = outputCanvas.getContext("2d");
+        ctx.drawImage(rawMapCanvas, 0, 0);
 
         drawMeasuredPolygonOnCanvas(
-          cleanCtx,
-          cleanMapCanvas.width,
-          cleanMapCanvas.height,
+          ctx,
+          outputCanvas.width,
+          outputCanvas.height,
           mapElement.clientWidth,
           mapElement.clientHeight
         );
 
-        const headerH = Math.max(90, Math.round(cleanMapCanvas.height * 0.10));
-        const footerH = Math.max(230, Math.round(cleanMapCanvas.height * 0.22));
-
-        const finalCanvas = document.createElement("canvas");
-        finalCanvas.width = cleanMapCanvas.width;
-        finalCanvas.height = cleanMapCanvas.height + headerH + footerH;
-
-        const ctx = finalCanvas.getContext("2d");
-
-        ctx.fillStyle = "#07111d";
-        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-
-        drawSavedImageHeader(ctx, finalCanvas.width, headerH);
-        ctx.drawImage(cleanMapCanvas, 0, headerH);
-
-        drawSavedImageFooter(
+        drawOverlayLogoAndInfo(
           ctx,
-          0,
-          headerH + cleanMapCanvas.height,
-          finalCanvas.width,
-          footerH
+          outputCanvas.width,
+          outputCanvas.height,
+          mapElement.clientWidth,
+          mapElement.clientHeight
         );
 
-        const blob = await canvasToBlobSafe(finalCanvas, "image/jpeg", 0.94);
+        const blob = await canvasToBlobSafe(outputCanvas, "image/jpeg", 0.94);
 
         if (!blob) {
           alert("ไม่สามารถสร้างไฟล์ภาพได้ กรุณาลองเปิดผ่าน Chrome หรือ Edge");
@@ -1676,6 +1618,247 @@
         if (restoreMap) restoreMap();
         if (saveButton) saveButton.disabled = false;
       }
+    }
+
+    function getPolygonCanvasBounds(canvasWidth, canvasHeight, mapWidth, mapHeight) {
+      if (!map || measurePoints.length === 0) return null;
+
+      const scaleX = canvasWidth / mapWidth;
+      const scaleY = canvasHeight / mapHeight;
+
+      const pts = measurePoints.map(([lat, lng]) => {
+        const p = map.latLngToContainerPoint([lat, lng]);
+        return {
+          x:p.x * scaleX,
+          y:p.y * scaleY
+        };
+      });
+
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+
+      pts.forEach(pt => {
+        if (pt.x < minX) minX = pt.x;
+        if (pt.y < minY) minY = pt.y;
+        if (pt.x > maxX) maxX = pt.x;
+        if (pt.y > maxY) maxY = pt.y;
+      });
+
+      return {
+        x:minX,
+        y:minY,
+        w:maxX - minX,
+        h:maxY - minY
+      };
+    }
+
+    function rectsOverlap(a, b, padding = 0) {
+      if (!a || !b) return false;
+
+      return !(
+        a.x + a.w + padding < b.x ||
+        a.x > b.x + b.w + padding ||
+        a.y + a.h + padding < b.y ||
+        a.y > b.y + b.h + padding
+      );
+    }
+
+    function overlapArea(a, b, padding = 0) {
+      if (!a || !b) return 0;
+
+      const left = Math.max(a.x, b.x - padding);
+      const right = Math.min(a.x + a.w, b.x + b.w + padding);
+      const top = Math.max(a.y, b.y - padding);
+      const bottom = Math.min(a.y + a.h, b.y + b.h + padding);
+
+      if (right <= left || bottom <= top) return 0;
+      return (right - left) * (bottom - top);
+    }
+
+    function chooseBestOverlayPosition(boxW, boxH, canvasW, canvasH, avoidRects = [], preferred = "top-left") {
+      const margin = Math.round(Math.min(canvasW, canvasH) * 0.03);
+
+      const positions = [
+        {name:"top-left", x:margin, y:margin, w:boxW, h:boxH},
+        {name:"top-right", x:canvasW - boxW - margin, y:margin, w:boxW, h:boxH},
+        {name:"bottom-left", x:margin, y:canvasH - boxH - margin, w:boxW, h:boxH},
+        {name:"bottom-right", x:canvasW - boxW - margin, y:canvasH - boxH - margin, w:boxW, h:boxH},
+        {name:"top-center", x:(canvasW - boxW) / 2, y:margin, w:boxW, h:boxH},
+        {name:"bottom-center", x:(canvasW - boxW) / 2, y:canvasH - boxH - margin, w:boxW, h:boxH}
+      ];
+
+      const ordered = [
+        ...positions.filter(p => p.name === preferred),
+        ...positions.filter(p => p.name !== preferred)
+      ];
+
+      for (const pos of ordered) {
+        const hasOverlap = avoidRects.some(rect => rectsOverlap(pos, rect, 22));
+        if (!hasOverlap) return pos;
+      }
+
+      let best = ordered[0];
+      let bestScore = Infinity;
+
+      ordered.forEach(pos => {
+        const score = avoidRects.reduce((sum, rect) => sum + overlapArea(pos, rect, 22), 0);
+        if (score < bestScore) {
+          bestScore = score;
+          best = pos;
+        }
+      });
+
+      return best;
+    }
+
+    function drawOverlayLogoAndInfo(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
+      const polygonBounds = getPolygonCanvasBounds(canvasWidth, canvasHeight, mapWidth, mapHeight);
+      const avoidRects = polygonBounds ? [polygonBounds] : [];
+
+      const logoMaxW = canvasWidth > canvasHeight
+        ? Math.round(canvasWidth * 0.22)
+        : Math.round(canvasWidth * 0.34);
+
+      const logoMaxH = canvasWidth > canvasHeight
+        ? Math.round(canvasHeight * 0.08)
+        : Math.round(canvasHeight * 0.07);
+
+      const logoRect = chooseBestOverlayPosition(
+        logoMaxW,
+        logoMaxH,
+        canvasWidth,
+        canvasHeight,
+        avoidRects,
+        "top-left"
+      );
+
+      drawOverlayLogo(ctx, logoRect.x, logoRect.y, logoRect.w, logoRect.h);
+
+      const infoW = canvasWidth > canvasHeight
+        ? Math.round(canvasWidth * 0.56)
+        : Math.round(canvasWidth * 0.72);
+
+      const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
+
+      const infoRect = chooseBestOverlayPosition(
+        infoW,
+        infoH,
+        canvasWidth,
+        canvasHeight,
+        [...avoidRects, logoRect],
+        "bottom-left"
+      );
+
+      drawOverlayInfoBox(ctx, infoRect.x, infoRect.y, infoRect.w, infoRect.h, canvasWidth, canvasHeight);
+    }
+
+    function drawOverlayLogo(ctx, x, y, maxW, maxH) {
+      if (logoImage) {
+        drawLogoFit(ctx, logoImage, x, y, maxW, maxH);
+      } else {
+        drawSmartLandBadge(ctx, x, y, maxW, maxH);
+      }
+    }
+
+    function getOverlayTextStyles(canvasW, canvasH) {
+      const base = Math.min(canvasW, canvasH);
+
+      return {
+        title:Math.max(28, Math.round(base * 0.034)),
+        name:Math.max(24, Math.round(base * 0.030)),
+        detail:Math.max(22, Math.round(base * 0.027)),
+        area:Math.max(25, Math.round(base * 0.032)),
+        meta:Math.max(21, Math.round(base * 0.026)),
+        paddingX:Math.max(18, Math.round(base * 0.022)),
+        paddingY:Math.max(16, Math.round(base * 0.020)),
+        radius:Math.max(18, Math.round(base * 0.018))
+      };
+    }
+
+    function measureInfoBoxHeight(ctx, boxW, canvasW, canvasH) {
+      const data = getAreaData();
+      const plotName = getPlotName();
+      const plotDetail = getPlotDetail();
+      const nowText = formatShortThaiDateTime(new Date());
+      const s = getOverlayTextStyles(canvasW, canvasH);
+
+      const rows = [
+        {text:"ข้อมูลพื้นที่แปลง", font:`900 ${s.title}px Arial`, maxLines:1, lineHeight:Math.round(s.title * 1.25)},
+        {text:`ชื่อ: ${plotName}`, font:`900 ${s.name}px Arial`, maxLines:2, lineHeight:Math.round(s.name * 1.25)},
+        {text:`รายละเอียด: ${plotDetail}`, font:`700 ${s.detail}px Arial`, maxLines:3, lineHeight:Math.round(s.detail * 1.28)},
+        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:`900 ${s.area}px Arial`, maxLines:2, lineHeight:Math.round(s.area * 1.25)},
+        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:`700 ${s.meta}px Arial`, maxLines:2, lineHeight:Math.round(s.meta * 1.28)},
+        {text:`วันที่: ${nowText}`, font:`700 ${s.meta}px Arial`, maxLines:1, lineHeight:Math.round(s.meta * 1.28)}
+      ];
+
+      let h = s.paddingY * 2;
+
+      rows.forEach(row => {
+        ctx.font = row.font;
+        const wrapped = wrapCanvasText(ctx, row.text, boxW - s.paddingX * 2, row.maxLines);
+        h += wrapped.length * row.lineHeight + 6;
+      });
+
+      return h + 4;
+    }
+
+    function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
+      const data = getAreaData();
+      const plotName = getPlotName();
+      const plotDetail = getPlotDetail();
+      const nowText = formatShortThaiDateTime(new Date());
+      const s = getOverlayTextStyles(canvasW, canvasH);
+
+      drawRoundRect(
+        ctx,
+        x,
+        y,
+        w,
+        h,
+        s.radius,
+        "rgba(4, 12, 24, 0.46)",
+        "rgba(255,255,255,0.30)"
+      );
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x + s.paddingX, y + 12);
+      ctx.lineTo(x + w - s.paddingX, y + 12);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(126,245,255,0.44)";
+      ctx.stroke();
+      ctx.restore();
+
+      let cy = y + s.paddingY;
+      ctx.textBaseline = "top";
+
+      const rows = [
+        {text:"ข้อมูลพื้นที่แปลง", font:`900 ${s.title}px Arial`, color:"#7ef5ff", maxLines:1, lineHeight:Math.round(s.title * 1.25)},
+        {text:`ชื่อ: ${plotName}`, font:`900 ${s.name}px Arial`, color:"#ffffff", maxLines:2, lineHeight:Math.round(s.name * 1.25)},
+        {text:`รายละเอียด: ${plotDetail}`, font:`700 ${s.detail}px Arial`, color:"#eef6ff", maxLines:3, lineHeight:Math.round(s.detail * 1.28)},
+        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:`900 ${s.area}px Arial`, color:"#d8fff0", maxLines:2, lineHeight:Math.round(s.area * 1.25)},
+        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:`700 ${s.meta}px Arial`, color:"#e3f7ff", maxLines:2, lineHeight:Math.round(s.meta * 1.28)},
+        {text:`วันที่: ${nowText}`, font:`700 ${s.meta}px Arial`, color:"#e3f7ff", maxLines:1, lineHeight:Math.round(s.meta * 1.28)}
+      ];
+
+      rows.forEach(row => {
+        ctx.font = row.font;
+        ctx.fillStyle = row.color;
+        ctx.shadowColor = "rgba(0,0,0,0.70)";
+        ctx.shadowBlur = 5;
+
+        const wrapped = wrapCanvasText(ctx, row.text, w - s.paddingX * 2, row.maxLines);
+        wrapped.forEach(line => {
+          ctx.fillText(line, x + s.paddingX, cy);
+          cy += row.lineHeight;
+        });
+
+        cy += 6;
+      });
+
+      ctx.shadowBlur = 0;
     }
 
     function drawMeasuredPolygonOnCanvas(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
@@ -1722,14 +1905,15 @@
       }
 
       pts.forEach((pt, index) => {
-        drawCapturePointMarker(ctx, pt.x, pt.y, index + 1);
+        drawCapturePointMarker(ctx, pt.x, pt.y, index + 1, canvasWidth, canvasHeight);
       });
 
       ctx.restore();
     }
 
-    function drawCapturePointMarker(ctx, x, y, number) {
-      const r = 22;
+    function drawCapturePointMarker(ctx, x, y, number, canvasWidth, canvasHeight) {
+      const r = Math.max(18, Math.round(Math.min(canvasWidth, canvasHeight) * 0.018));
+      const fontSize = Math.max(20, Math.round(r * 1.05));
 
       ctx.save();
 
@@ -1738,110 +1922,15 @@
       ctx.fillStyle = "#59e1db";
       ctx.fill();
 
-      ctx.lineWidth = 4;
+      ctx.lineWidth = Math.max(3, Math.round(r * 0.18));
       ctx.strokeStyle = "#ffffff";
       ctx.stroke();
 
       ctx.fillStyle = "#04120c";
-      ctx.font = "bold 24px Arial";
+      ctx.font = `bold ${fontSize}px Arial`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(String(number), x, y + 1);
-
-      ctx.restore();
-    }
-
-    function drawSavedImageHeader(ctx, width, height) {
-      ctx.save();
-
-      const gradient = ctx.createLinearGradient(0, 0, width, 0);
-      gradient.addColorStop(0, "#07111d");
-      gradient.addColorStop(1, "#0b1a2a");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.strokeStyle = "rgba(255,255,255,0.12)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, height - 1);
-      ctx.lineTo(width, height - 1);
-      ctx.stroke();
-
-      const margin = Math.round(height * 0.18);
-      const maxW = Math.round(width * 0.34);
-      const maxH = Math.round(height * 0.72);
-
-      if (logoImage) {
-        drawLogoFit(ctx, logoImage, margin, Math.round((height - maxH) / 2), maxW, maxH);
-      } else {
-        drawSmartLandBadge(ctx, margin, Math.round((height - maxH) / 2), maxW, maxH);
-      }
-
-      ctx.restore();
-    }
-
-    function drawSavedImageFooter(ctx, x, y, width, height) {
-      const data = getAreaData();
-      const plotName = getPlotName();
-      const plotDetail = getPlotDetail();
-      const nowText = formatShortThaiDateTime(new Date());
-
-      ctx.save();
-
-      const gradient = ctx.createLinearGradient(0, y, 0, y + height);
-      gradient.addColorStop(0, "#0b1623");
-      gradient.addColorStop(1, "#07111d");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x, y, width, height);
-
-      const margin = 24;
-      const cardX = x + margin;
-      const cardY = y + 18;
-      const cardW = width - margin * 2;
-      const cardH = height - 36;
-
-      drawRoundRect(
-        ctx,
-        cardX,
-        cardY,
-        cardW,
-        cardH,
-        20,
-        "rgba(255,255,255,0.06)",
-        "rgba(255,255,255,0.14)"
-      );
-
-      let cy = cardY + 18;
-      const paddingX = 18;
-
-      ctx.textBaseline = "top";
-
-      ctx.font = "900 30px Arial";
-      ctx.fillStyle = "#7ef5ff";
-      ctx.fillText("ข้อมูลพื้นที่แปลง", cardX + paddingX, cy);
-      cy += 42;
-
-      const rows = [
-        {text:`ชื่อ: ${plotName}`, font:"900 28px Arial", color:"#ffffff", maxLines:2, lineHeight:34},
-        {text:`รายละเอียด: ${plotDetail}`, font:"700 26px Arial", color:"#eef6ff", maxLines:3, lineHeight:32},
-        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:"900 30px Arial", color:"#d8fff0", maxLines:2, lineHeight:36},
-        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:"700 25px Arial", color:"#e3f7ff", maxLines:2, lineHeight:31},
-        {text:`วันที่: ${nowText}`, font:"700 25px Arial", color:"#e3f7ff", maxLines:1, lineHeight:31}
-      ];
-
-      rows.forEach(row => {
-        ctx.font = row.font;
-        ctx.fillStyle = row.color;
-
-        const wrapped = wrapCanvasText(ctx, row.text, cardW - paddingX * 2, row.maxLines);
-        wrapped.forEach(line => {
-          ctx.fillText(line, cardX + paddingX, cy);
-          cy += row.lineHeight;
-        });
-        cy += 6;
-      });
 
       ctx.restore();
     }
