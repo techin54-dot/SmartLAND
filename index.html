@@ -1341,14 +1341,25 @@
 
     function drawOverlayLogoAndInfo(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
       const margin = Math.round(Math.min(canvasWidth, canvasHeight) * 0.035);
-      const logoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.23) : Math.round(canvasWidth * 0.36);
-      const logoH = canvasWidth > canvasHeight ? Math.round(canvasHeight * 0.085) : Math.round(canvasHeight * 0.075);
+
+      const logoW = canvasWidth > canvasHeight
+        ? Math.round(canvasWidth * 0.23)
+        : Math.round(canvasWidth * 0.36);
+
+      const logoH = canvasWidth > canvasHeight
+        ? Math.round(canvasHeight * 0.085)
+        : Math.round(canvasHeight * 0.075);
+
       drawOverlayLogo(ctx, margin, margin, logoW, logoH);
 
-      const infoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.58) : Math.round(canvasWidth * 0.88);
+      const infoW = canvasWidth > canvasHeight
+        ? Math.round(canvasWidth * 0.58)
+        : Math.round(canvasWidth * 0.86);
+
       const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
       const infoX = Math.round((canvasWidth - infoW) / 2);
       const infoY = canvasHeight - infoH - margin;
+
       drawOverlayInfoBox(ctx, infoX, infoY, infoW, infoH, canvasWidth, canvasHeight);
     }
 
@@ -1360,23 +1371,25 @@
     function getOverlayTextStyles(canvasW, canvasH) {
       const base = Math.min(canvasW, canvasH);
       const clamp = (value, min, max) => Math.max(min, Math.min(max, Math.round(value)));
+
       return {
-        title:clamp(base * 0.032, 28, 42),
-        coordLabel:clamp(base * 0.025, 21, 30),
-        coordValue:clamp(base * 0.033, 28, 44),
-        nameLabel:clamp(base * 0.023, 20, 28),
-        nameValue:clamp(base * 0.030, 25, 38),
-        areaLabel:clamp(base * 0.022, 19, 27),
-        areaValue:clamp(base * 0.028, 24, 36),
-        detailLabel:clamp(base * 0.021, 18, 26),
-        detailValue:clamp(base * 0.025, 22, 32),
-        metaLabel:clamp(base * 0.020, 17, 24),
-        metaValue:clamp(base * 0.022, 19, 28),
-        paddingX:clamp(base * 0.030, 22, 34),
-        paddingY:clamp(base * 0.028, 20, 32),
-        radius:clamp(base * 0.026, 20, 30),
-        rowGap:clamp(base * 0.014, 10, 18),
-        innerGap:clamp(base * 0.010, 7, 14)
+        title:clamp(base * 0.030, 26, 40),
+        coordLabel:clamp(base * 0.022, 18, 26),
+        coordValue:clamp(base * 0.031, 24, 40),
+        nameLabel:clamp(base * 0.021, 17, 24),
+        nameValue:clamp(base * 0.027, 22, 34),
+        areaLabel:clamp(base * 0.021, 17, 24),
+        areaValue:clamp(base * 0.026, 21, 34),
+        detailLabel:clamp(base * 0.020, 16, 23),
+        detailValue:clamp(base * 0.024, 20, 30),
+        metaLabel:clamp(base * 0.019, 15, 22),
+        metaValue:clamp(base * 0.021, 17, 26),
+        paddingX:clamp(base * 0.028, 20, 32),
+        paddingY:clamp(base * 0.026, 18, 30),
+        radius:clamp(base * 0.024, 18, 28),
+        rowGap:clamp(base * 0.013, 9, 16),
+        innerGap:clamp(base * 0.010, 6, 12),
+        labelGap:clamp(base * 0.010, 8, 14)
       };
     }
 
@@ -1385,25 +1398,29 @@
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
       let h = s.paddingY * 2;
+
       rows.forEach(row => {
         if (row.type === "title") {
           h += row.lineHeight + s.rowGap;
           return;
         }
+
         if (row.type === "highlight") {
-          const innerW = boxW - s.paddingX * 2 - 24;
+          const innerW = boxW - s.paddingX * 2 - 26;
           ctx.font = row.valueFont;
           const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-          h += 16 + row.labelLineHeight + s.innerGap + valueLines.length * row.valueLineHeight + 16 + s.rowGap;
+          h += 14 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 14 + s.rowGap;
           return;
         }
+
         const labelW = row.labelWidth;
-        const valueW = boxW - s.paddingX * 2 - labelW - 12;
+        const valueW = boxW - s.paddingX * 2 - labelW - s.labelGap;
         ctx.font = row.valueFont;
         const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
         h += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
-      return h + 8;
+
+      return h + 6;
     }
 
     function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
@@ -1411,22 +1428,22 @@
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
 
-      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(4, 12, 24, 0.58)", "rgba(126, 245, 255, 0.40)");
+      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(3, 12, 24, 0.58)", "rgba(126, 245, 255, 0.38)");
 
       ctx.save();
       ctx.beginPath();
-      ctx.moveTo(x + s.paddingX, y + 14);
-      ctx.lineTo(x + w - s.paddingX, y + 14);
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = "rgba(126,245,255,0.70)";
+      ctx.moveTo(x + s.paddingX, y + 13);
+      ctx.lineTo(x + w - s.paddingX, y + 13);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = "rgba(126,245,255,0.72)";
       ctx.stroke();
 
       let cy = y + s.paddingY;
       ctx.textBaseline = "top";
 
       rows.forEach(row => {
-        ctx.shadowColor = "rgba(0,0,0,0.85)";
-        ctx.shadowBlur = 6;
+        ctx.shadowColor = "rgba(0,0,0,0.75)";
+        ctx.shadowBlur = 5;
 
         if (row.type === "title") {
           ctx.font = row.font;
@@ -1440,19 +1457,20 @@
           const cardX = x + s.paddingX;
           const cardY = cy;
           const cardW = w - s.paddingX * 2;
-          const innerX = cardX + 14;
-          const innerW = cardW - 28;
+          const innerX = cardX + 13;
+          const innerW = cardW - 26;
           ctx.font = row.valueFont;
           const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-          const cardH = 16 + row.labelLineHeight + s.innerGap + valueLines.length * row.valueLineHeight + 16;
+          const cardH = 14 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 14;
 
-          drawRoundRect(ctx, cardX, cardY, cardW, cardH, Math.round(s.radius * 0.72), "rgba(76, 201, 255, 0.16)", "rgba(76, 201, 255, 0.42)");
+          drawRoundRect(ctx, cardX, cardY, cardW, cardH, Math.round(s.radius * 0.68), "rgba(50, 160, 255, 0.14)", "rgba(76, 201, 255, 0.34)");
           ctx.font = row.labelFont;
           ctx.fillStyle = row.labelColor;
-          ctx.fillText(row.label, innerX, cardY + 14);
+          ctx.fillText(row.label, innerX, cardY + 12);
           ctx.font = row.valueFont;
           ctx.fillStyle = row.color;
-          let valueY = cardY + 14 + row.labelLineHeight + s.innerGap;
+
+          let valueY = cardY + 12 + row.labelLineHeight + s.innerGap;
           valueLines.forEach(line => {
             ctx.fillText(line, innerX, valueY);
             valueY += row.valueLineHeight;
@@ -1462,8 +1480,8 @@
         }
 
         const labelX = x + s.paddingX;
-        const valueX = labelX + row.labelWidth + 12;
-        const valueW = w - s.paddingX * 2 - row.labelWidth - 12;
+        const valueX = labelX + row.labelWidth + s.labelGap;
+        const valueW = w - s.paddingX * 2 - row.labelWidth - s.labelGap;
 
         ctx.font = row.labelFont;
         ctx.fillStyle = row.labelColor;
@@ -1472,65 +1490,69 @@
         ctx.font = row.valueFont;
         ctx.fillStyle = row.color;
         const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
+
         let valueY = cy;
         valueLines.forEach(line => {
           ctx.fillText(line, valueX, valueY);
           valueY += row.valueLineHeight;
         });
+
         cy += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
       ctx.restore();
     }
 
     function getOverlayInfoRows(data, s) {
-      const plotName = getPlotName();
-      const plotDetail = getPlotDetail();
+      const plotName = getPlotName() || "-";
+      const plotDetail = getPlotDetail() || "-";
       const nowText = formatShortThaiDateTime(new Date());
+      const thaiArea = data.area > 0 ? formatThaiArea(data.area) : "-";
+
       return [
         {
           type:"title",
           text:"ข้อมูลแปลง",
           font:`900 ${s.title}px Arial`,
           color:"#7ef5ff",
-          lineHeight:Math.round(s.title * 1.18)
+          lineHeight:Math.round(s.title * 1.16)
         },
         {
           type:"highlight",
           label:"พิกัดศูนย์กลางแปลง",
-          text:data.centroidText,
+          text:data.centroidText || "-",
           labelFont:`900 ${s.coordLabel}px Arial`,
           valueFont:`900 ${s.coordValue}px Arial`,
           labelColor:"#7ef5ff",
           color:"#ffffff",
           maxLines:2,
-          labelLineHeight:Math.round(s.coordLabel * 1.18),
-          valueLineHeight:Math.round(s.coordValue * 1.18)
+          labelLineHeight:Math.round(s.coordLabel * 1.15),
+          valueLineHeight:Math.round(s.coordValue * 1.16)
         },
         {
           type:"normal",
           label:"ชื่อ",
           text:plotName,
-          labelFont:`900 ${s.nameLabel}px Arial`,
+          labelFont:`800 ${s.nameLabel}px Arial`,
           valueFont:`900 ${s.nameValue}px Arial`,
-          labelColor:"#ffffff",
+          labelColor:"#dff7ff",
           color:"#ffffff",
           maxLines:1,
-          labelWidth:s.nameLabel * 3.2,
-          labelLineHeight:Math.round(s.nameLabel * 1.18),
-          valueLineHeight:Math.round(s.nameValue * 1.18)
+          labelWidth:s.nameLabel * 2.8,
+          labelLineHeight:Math.round(s.nameLabel * 1.15),
+          valueLineHeight:Math.round(s.nameValue * 1.16)
         },
         {
           type:"normal",
           label:"ขนาด",
-          text:formatThaiArea(data.area),
-          labelFont:`900 ${s.areaLabel}px Arial`,
+          text:thaiArea,
+          labelFont:`800 ${s.areaLabel}px Arial`,
           valueFont:`900 ${s.areaValue}px Arial`,
-          labelColor:"#39f2a2",
-          color:"#d8fff0",
+          labelColor:"#76ffbf",
+          color:"#eafff4",
           maxLines:2,
-          labelWidth:s.areaLabel * 3.2,
-          labelLineHeight:Math.round(s.areaLabel * 1.18),
-          valueLineHeight:Math.round(s.areaValue * 1.18)
+          labelWidth:s.areaLabel * 3.3,
+          labelLineHeight:Math.round(s.areaLabel * 1.15),
+          valueLineHeight:Math.round(s.areaValue * 1.16)
         },
         {
           type:"normal",
@@ -1538,11 +1560,11 @@
           text:plotDetail,
           labelFont:`800 ${s.detailLabel}px Arial`,
           valueFont:`800 ${s.detailValue}px Arial`,
-          labelColor:"#cdefff",
-          color:"#edf7ff",
+          labelColor:"#d6ecff",
+          color:"#f3faff",
           maxLines:2,
-          labelWidth:s.detailLabel * 5.0,
-          labelLineHeight:Math.round(s.detailLabel * 1.18),
+          labelWidth:s.detailLabel * 5.2,
+          labelLineHeight:Math.round(s.detailLabel * 1.15),
           valueLineHeight:Math.round(s.detailValue * 1.18)
         },
         {
@@ -1551,12 +1573,12 @@
           text:nowText,
           labelFont:`800 ${s.metaLabel}px Arial`,
           valueFont:`800 ${s.metaValue}px Arial`,
-          labelColor:"#ffb703",
-          color:"#fff3d0",
+          labelColor:"#ffcf5a",
+          color:"#fff6dc",
           maxLines:1,
-          labelWidth:s.metaLabel * 3.2,
-          labelLineHeight:Math.round(s.metaLabel * 1.18),
-          valueLineHeight:Math.round(s.metaValue * 1.18)
+          labelWidth:s.metaLabel * 3.0,
+          labelLineHeight:Math.round(s.metaLabel * 1.15),
+          valueLineHeight:Math.round(s.metaValue * 1.15)
         }
       ];
     }
@@ -1639,22 +1661,37 @@
     }
 
     function wrapCanvasText(ctx, text, maxWidth, maxLines = 2) {
-      text = String(text || "-");
-      const units = text.includes(" ") ? text.split(" ") : Array.from(text);
+      text = String(text || "-").trim();
+      if (!text) return ["-"];
+
+      const hasSpace = text.includes(" ");
+      const units = hasSpace ? text.split(" ").filter(Boolean) : Array.from(text);
       const lines = [];
       let line = "";
+
       for (const unit of units) {
-        const test = text.includes(" ") ? (line ? line + " " + unit : unit) : line + unit;
+        const test = hasSpace ? (line ? line + " " + unit : unit) : line + unit;
         if (ctx.measureText(test).width > maxWidth && line) {
           lines.push(line);
           line = unit;
-          if (lines.length >= maxLines) break;
+          if (lines.length >= maxLines - 1) break;
         } else {
           line = test;
         }
       }
+
       if (line && lines.length < maxLines) lines.push(line);
-      return lines;
+
+      const consumed = hasSpace ? lines.join(" ").trim() : lines.join("");
+      if (consumed.length < text.length && lines.length > 0) {
+        let last = lines[lines.length - 1];
+        while (ctx.measureText(last + "...").width > maxWidth && last.length > 0) {
+          last = last.slice(0, -1);
+        }
+        lines[lines.length - 1] = last + "...";
+      }
+
+      return lines.length ? lines : ["-"];
     }
 
     function showPreviewModal(blob, fileName) {
