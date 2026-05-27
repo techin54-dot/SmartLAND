@@ -346,14 +346,6 @@
       margin-bottom:8px;
     }
 
-    .note-close-btn{
-      padding:5px 8px;
-      border-radius:10px;
-      font-size:11px;
-      background:rgba(255,255,255,.12);
-      box-shadow:none;
-    }
-
     label{
       display:block;
       font-size:12px;
@@ -607,7 +599,8 @@
       transform:translateX(-50%) translateY(0);
     }
 
-    .preview-modal{
+    .preview-modal,
+    .browser-gate{
       position:fixed;
       inset:0;
       z-index:1200;
@@ -620,9 +613,17 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    .preview-modal.hide{display:none}
+    .browser-gate{
+      z-index:2000;
+    }
 
-    .preview-card{
+    .preview-modal.hide,
+    .browser-gate.hide{
+      display:none;
+    }
+
+    .preview-card,
+    .browser-card{
       width:100%;
       max-width:440px;
       max-height:92vh;
@@ -633,6 +634,78 @@
       border:1px solid rgba(255,255,255,.16);
       box-shadow:0 18px 48px rgba(0,0,0,.55);
       text-align:center;
+    }
+
+    .browser-icon{
+      width:70px;
+      height:70px;
+      margin:0 auto 12px;
+      border-radius:22px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#39f2a2,#4cc9ff);
+      color:#04120c;
+      font-size:34px;
+      font-weight:900;
+    }
+
+    .browser-title{
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:#ffffff;
+    }
+
+    .browser-desc{
+      font-size:14px;
+      line-height:1.7;
+      color:rgba(255,255,255,.82);
+      margin-bottom:14px;
+    }
+
+    .browser-warning{
+      padding:10px 12px;
+      border-radius:16px;
+      background:rgba(245,158,11,.12);
+      border:1px solid rgba(245,158,11,.35);
+      color:#fde68a;
+      font-size:13px;
+      line-height:1.55;
+      margin-bottom:12px;
+    }
+
+    .browser-actions{
+      display:grid;
+      gap:10px;
+    }
+
+    .browser-actions button,
+    .browser-actions a{
+      width:100%;
+      min-height:50px;
+      border-radius:16px;
+      padding:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+
+    .primary-action{
+      background:linear-gradient(135deg,#16a34a,#22c55e);
+    }
+
+    .secondary-action{
+      background:rgba(255,255,255,.12);
+    }
+
+    .danger-action{
+      background:linear-gradient(135deg,#7f1d1d,#be123c);
     }
 
     .preview-title{
@@ -786,7 +859,7 @@
     <div id="notePanel" class="note-panel hide">
       <div class="note-panel-title">
         <span>บันทึกข้อมูลแปลง</span>
-        <button class="note-close-btn" onclick="toggleNotePanel()">ปิด</button>
+        <button class="icon-close-btn" onclick="toggleNotePanel()" title="ปิดหน้าต่างบันทึกข้อมูล">×</button>
       </div>
 
       <label for="plotName">ชื่อ</label>
@@ -843,6 +916,28 @@
 
     <div id="toast" class="toast">ดำเนินการเรียบร้อย</div>
 
+    <div id="browserGate" class="browser-gate hide">
+      <div class="browser-card">
+        <div class="browser-icon">🌐</div>
+        <div class="browser-title">กรุณาเปิดด้วยเบราว์เซอร์หลัก</div>
+        <div class="browser-desc">
+          เพื่อให้การบันทึกภาพแผนที่ การแชร์รูปภาพ และการใช้พิกัด GPS ทำงานได้ถูกต้อง
+          แนะนำให้เปิดผ่าน Chrome, Safari, Edge หรือเบราว์เซอร์หลักของอุปกรณ์
+        </div>
+
+        <div id="browserGateReason" class="browser-warning">
+          ระบบตรวจพบว่าอาจเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram
+        </div>
+
+        <div class="browser-actions">
+          <button class="primary-action" onclick="openInChromeAndroid()">เปิดด้วย Chrome</button>
+          <button class="secondary-action" onclick="copyCurrentLink()">คัดลอกลิงก์</button>
+          <button class="secondary-action" onclick="recheckBrowserSupport()">ตรวจสอบอีกครั้ง</button>
+          <button class="danger-action" onclick="continueAnyway()">ใช้งานต่อแบบจำกัด</button>
+        </div>
+      </div>
+    </div>
+
     <div id="previewModal" class="preview-modal hide">
       <div class="preview-card">
         <div class="preview-title">ตัวอย่างภาพแผนที่</div>
@@ -888,6 +983,8 @@
     let latestImageUrl = null;
     let latestFileName = null;
 
+    let browserGateDismissed = false;
+
     const brandLogo = document.getElementById("brandLogo");
     const brandText = document.getElementById("brandText");
 
@@ -900,6 +997,9 @@
     const coordModeBadge = document.getElementById("coordModeBadge");
     const centerCoordinatePopup = document.getElementById("centerCoordinatePopup");
     const centerCoordinatePopupText = document.getElementById("centerCoordinatePopupText");
+
+    const browserGate = document.getElementById("browserGate");
+    const browserGateReason = document.getElementById("browserGateReason");
 
     const previewModal = document.getElementById("previewModal");
     const previewImage = document.getElementById("previewImage");
@@ -920,6 +1020,7 @@
       updateAreaInfo();
       updateCoordModeBadge();
       startRealtimeLocation();
+      checkBrowserSupportOnStart();
 
       setTimeout(() => {
         showToast("เลื่อนแผนที่ให้ศูนย์เล็งตรงขอบแปลง แล้วกดปุ่ม +");
@@ -931,6 +1032,108 @@
         navigator.geolocation.clearWatch(locationWatchId);
       }
     });
+
+    function checkBrowserSupportOnStart() {
+      const result = getBrowserSupportStatus();
+
+      if (!result.ok) {
+        browserGateReason.textContent = result.reason;
+        browserGate.classList.remove("hide");
+      }
+    }
+
+    function getBrowserSupportStatus() {
+      const ua = navigator.userAgent || "";
+      const isLine = /Line/i.test(ua);
+      const isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBAN\/FBIOS/i.test(ua);
+      const isInstagram = /Instagram/i.test(ua);
+      const isMessenger = /MessengerForiOS|FB_IAB\/Messenger/i.test(ua);
+      const isTikTok = /TikTok/i.test(ua);
+      const isInApp = isLine || isFacebook || isInstagram || isMessenger || isTikTok;
+
+      const isSecure = window.isSecureContext || location.protocol === "https:" || location.hostname === "localhost";
+      const hasGeo = "geolocation" in navigator;
+      const hasCanvas = !!window.HTMLCanvasElement;
+      const hasDownload = "download" in document.createElement("a");
+      const hasShare = !!navigator.share;
+
+      if (isInApp && !browserGateDismissed) {
+        return {
+          ok: false,
+          reason: "ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
+        };
+      }
+
+      if (!isSecure) {
+        return {
+          ok: false,
+          reason: "เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
+        };
+      }
+
+      if (!hasGeo) {
+        return {
+          ok: false,
+          reason: "เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
+        };
+      }
+
+      if (!hasCanvas) {
+        return {
+          ok: false,
+          reason: "เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
+        };
+      }
+
+      if (!hasDownload && !hasShare) {
+        return {
+          ok: false,
+          reason: "เบราว์เซอร์นี้อาจไม่รองรับการบันทึกหรือแชร์รูปภาพ กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
+        };
+      }
+
+      return { ok: true, reason: "" };
+    }
+
+    function openInChromeAndroid() {
+      const url = location.href;
+      const isAndroid = /Android/i.test(navigator.userAgent || "");
+
+      if (isAndroid) {
+        const cleanUrl = url.replace(/^https?:\/\//, "");
+        location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
+        return;
+      }
+
+      copyCurrentLink();
+      alert("ระบบคัดลอกลิงก์แล้ว กรุณานำไปวางเปิดใน Safari / Chrome / Edge");
+    }
+
+    async function copyCurrentLink() {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        showToast("คัดลอกลิงก์แล้ว");
+      } catch (error) {
+        prompt("คัดลอกลิงก์นี้ไปเปิดใน Chrome / Safari / Edge", location.href);
+      }
+    }
+
+    function recheckBrowserSupport() {
+      const result = getBrowserSupportStatus();
+
+      if (result.ok) {
+        browserGate.classList.add("hide");
+        showToast("เบราว์เซอร์นี้พร้อมใช้งาน");
+      } else {
+        browserGateReason.textContent = result.reason;
+      }
+    }
+
+    function continueAnyway() {
+      browserGateDismissed = true;
+      browserGate.classList.add("hide");
+      showToast("ใช้งานต่อแบบจำกัด");
+    }
 
     function initMap() {
       map = L.map("map", {
@@ -1322,7 +1525,8 @@
             return element.classList &&
               (
                 element.classList.contains("preview-modal") ||
-                element.classList.contains("toast")
+                element.classList.contains("toast") ||
+                element.classList.contains("browser-gate")
               );
           }
         });
