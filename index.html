@@ -879,4 +879,1349 @@
       <textarea id="plotDetail" placeholder="เช่น ชนิดพืช สถานที่ หมายเหตุ หรือรายละเอียดเพิ่มเติม"></textarea>
     </div>
 
-    <button class="float-icon-btn float-coord-mode" onclick="toggleCoordinateMode(
+    <button class="float-icon-btn float-coord-mode" onclick="toggleCoordinateMode()" title="สลับ UTM / LatLon">
+      <svg viewBox="0 0 24 24" class="flat-svg">
+        <path d="M4 4h16v3H4V4zm0 6h10v3H4v-3zm0 6h16v3H4v-3zm13-6h3v3h-3v-3z"/>
+      </svg>
+      <span id="coordModeBadge" class="coord-badge">UTM</span>
+    </button>
+
+    <button class="float-icon-btn float-center-coord" onclick="showCenterCoordinate()" title="พิกัดจุดศูนย์กลางเป้าเล็ง">
+      <svg viewBox="0 0 24 24" class="flat-svg">
+        <path d="M12 2a1 1 0 0 1 1 1v2.1A7 7 0 0 1 18.9 11H21a1 1 0 1 1 0 2h-2.1A7 7 0 0 1 13 18.9V21a1 1 0 1 1-2 0v-2.1A7 7 0 0 1 5.1 13H3a1 1 0 1 1 0-2h2.1A7 7 0 0 1 11 5.1V3a1 1 0 0 1 1-1zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+      </svg>
+    </button>
+
+    <button class="float-icon-btn float-location" onclick="goToMyLocation()" title="กลับไปตำแหน่งปัจจุบัน">
+      <svg viewBox="0 0 24 24" class="flat-svg">
+        <path d="M12 2.5c-3.2 0-5.8 2.6-5.8 5.8 0 4.4 5.8 11.2 5.8 11.2s5.8-6.8 5.8-11.2c0-3.2-2.6-5.8-5.8-5.8zm0 8.2a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z"/>
+      </svg>
+    </button>
+
+    <button class="float-icon-btn float-save" onclick="captureMapImage()" title="บันทึกภาพแผนที่">
+      <svg viewBox="0 0 24 24" class="flat-svg">
+        <path d="M7.2 5.2 8.8 3.5h6.4l1.6 1.7h2.7c1.1 0 2 .9 2 2v11.1c0 1.1-.9 2-2 2h-15c-1.1 0-2-.9-2-2V7.2c0-1.1.9-2 2-2h2.7zm4.8 12a4.4 4.4 0 1 0 0-8.8 4.4 4.4 0 0 0 0 8.8zm6.2-8.1a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2z"/>
+      </svg>
+    </button>
+
+    <div class="control-pad">
+      <button class="control-side-btn" onclick="undoLastPoint()" title="ลบจุดล่าสุด">
+        <svg viewBox="0 0 24 24" class="control-svg">
+          <path d="M7.8 7H14c3.3 0 6 2.7 6 6s-2.7 6-6 6H7v-2h7c2.2 0 4-1.8 4-4s-1.8-4-4-4H7.8l2.6 2.6L9 13 4 8l5-5 1.4 1.4L7.8 7z"/>
+        </svg>
+      </button>
+
+      <button class="control-main-btn" onclick="addPointFromCenter()" title="เพิ่มจุดจากศูนย์เล็ง">
+        <svg viewBox="0 0 24 24" class="control-main-svg">
+          <path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/>
+        </svg>
+      </button>
+
+      <button class="control-side-btn" onclick="toggleNotePanel()" title="ข้อมูลแปลง">
+        <svg viewBox="0 0 24 24" class="control-svg">
+          <path d="M5 4h14c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm2 4v2h10V8H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="toast" class="toast">ดำเนินการเรียบร้อย</div>
+
+    <div id="browserGate" class="browser-gate hide">
+      <div class="browser-card">
+        <div class="browser-icon">🌐</div>
+        <div class="browser-title">กรุณาเปิดด้วยเบราว์เซอร์หลัก</div>
+        <div class="browser-desc">
+          เพื่อให้การบันทึกภาพแผนที่ การแชร์รูปภาพ และการใช้พิกัด GPS ทำงานได้ถูกต้อง
+          แนะนำให้เปิดผ่าน Chrome, Safari, Edge หรือเบราว์เซอร์หลักของอุปกรณ์
+        </div>
+
+        <div id="browserGateReason" class="browser-warning">
+          ระบบตรวจพบว่าอาจเปิดผ่านเบราว์เซอร์ในแอป
+        </div>
+
+        <div class="browser-actions">
+          <button class="primary-action" onclick="openInChromeAndroid()">เปิดด้วย Chrome</button>
+          <button class="secondary-action" onclick="copyCurrentLink()">คัดลอกลิงก์</button>
+          <button class="secondary-action" onclick="recheckBrowserSupport()">ตรวจสอบอีกครั้ง</button>
+          <button class="danger-action" onclick="continueAnyway()">ใช้งานต่อแบบจำกัด</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="previewModal" class="preview-modal hide">
+      <div class="preview-card">
+        <div class="preview-title">ตัวอย่างภาพแผนที่</div>
+        <div class="preview-note">ตรวจสอบภาพก่อนบันทึกหรือแชร์</div>
+
+        <div class="preview-image-wrap">
+          <img id="previewImage" class="preview-image" alt="SmartLAND Preview">
+          <div id="tapSaveOverlay" class="tap-save-overlay">
+            แตะค้างที่รูปภาพเพื่อบันทึก
+          </div>
+        </div>
+
+        <div class="preview-actions">
+          <button id="saveImageButton" onclick="savePreviewImage()">บันทึกลงเครื่อง</button>
+          <button onclick="sharePreviewImage()">แชร์รูปภาพ</button>
+          <button onclick="closePreviewModal()">กลับไปแก้ไขแผนที่</button>
+        </div>
+
+        <div id="iosSaveHint" class="preview-hint">
+          หากใช้ iPhone / iPad ให้แตะค้างที่รูปภาพ แล้วเลือก “บันทึกรูปภาพ” หรือใช้ปุ่มแชร์รูปภาพ
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LOGO_URL = "./logo.png";
+
+    let map;
+    let measurePoints = [];
+    let markers = [];
+    let polygonLayer = null;
+    let lineLayer = null;
+    let coordinateMode = "utm";
+
+    let locationWatchId = null;
+    let currentLocationMarker = null;
+    let lastCurrentLat = null;
+    let lastCurrentLon = null;
+
+    let logoImage = null;
+    let latestImageBlob = null;
+    let latestImageUrl = null;
+    let latestFileName = null;
+
+    let browserGateDismissed = false;
+
+    const brandLogo = document.getElementById("brandLogo");
+    const brandText = document.getElementById("brandText");
+
+    const infoPlotName = document.getElementById("infoPlotName");
+    const infoPlotDetail = document.getElementById("infoPlotDetail");
+    const thaiAreaText = document.getElementById("thaiAreaText");
+    const currentLocationBox = document.getElementById("currentLocationBox");
+    const floatingAreaText = document.getElementById("floatingAreaText");
+
+    const coordModeBadge = document.getElementById("coordModeBadge");
+    const centerCoordinatePopup = document.getElementById("centerCoordinatePopup");
+    const centerCoordinatePopupText = document.getElementById("centerCoordinatePopupText");
+
+    const browserGate = document.getElementById("browserGate");
+    const browserGateReason = document.getElementById("browserGateReason");
+
+    const previewModal = document.getElementById("previewModal");
+    const previewImage = document.getElementById("previewImage");
+    const tapSaveOverlay = document.getElementById("tapSaveOverlay");
+    const iosSaveHint = document.getElementById("iosSaveHint");
+    const saveImageButton = document.getElementById("saveImageButton");
+    const toast = document.getElementById("toast");
+
+    document.addEventListener("input", (event) => {
+      if (event.target && (event.target.id === "plotName" || event.target.id === "plotDetail")) {
+        updateAreaInfo();
+      }
+    });
+
+    window.addEventListener("load", async () => {
+      setupResponsiveViewport();
+
+      await loadLogo();
+      initMap();
+
+      setTimeout(() => {
+        setResponsiveViewport();
+        map.invalidateSize(false);
+      }, 300);
+
+      updateAreaInfo();
+      updateCoordModeBadge();
+      startRealtimeLocation();
+      checkBrowserSupportOnStart();
+
+      setTimeout(() => {
+        showToast("เลื่อนแผนที่ให้ศูนย์เล็งตรงขอบแปลง แล้วกดปุ่ม +");
+      }, 1200);
+    });
+
+    window.addEventListener("beforeunload", () => {
+      if (locationWatchId !== null) {
+        navigator.geolocation.clearWatch(locationWatchId);
+      }
+    });
+
+    function setResponsiveViewport() {
+      const viewport = window.visualViewport;
+      const width = viewport ? viewport.width : window.innerWidth;
+      const height = viewport ? viewport.height : window.innerHeight;
+
+      document.documentElement.style.setProperty("--app-width", `${Math.round(width)}px`);
+      document.documentElement.style.setProperty("--app-height", `${Math.round(height)}px`);
+
+      if (map) {
+        setTimeout(() => {
+          map.invalidateSize(false);
+          updateCenterCoordinateBox();
+          updateCenterPopupIfVisible();
+        }, 80);
+      }
+    }
+
+    function setupResponsiveViewport() {
+      setResponsiveViewport();
+
+      window.addEventListener("resize", setResponsiveViewport);
+
+      window.addEventListener("orientationchange", () => {
+        setTimeout(setResponsiveViewport, 250);
+        setTimeout(setResponsiveViewport, 700);
+      });
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", setResponsiveViewport);
+        window.visualViewport.addEventListener("scroll", setResponsiveViewport);
+      }
+    }
+
+    function checkBrowserSupportOnStart() {
+      const result = getBrowserSupportStatus();
+
+      if (!result.ok) {
+        browserGateReason.textContent = result.reason;
+        browserGate.classList.remove("hide");
+      }
+    }
+
+    function getBrowserSupportStatus() {
+      const ua = navigator.userAgent || "";
+      const isLine = /Line/i.test(ua);
+      const isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBAN\/FBIOS/i.test(ua);
+      const isInstagram = /Instagram/i.test(ua);
+      const isMessenger = /MessengerForiOS|FB_IAB\/Messenger/i.test(ua);
+      const isTikTok = /TikTok/i.test(ua);
+      const isInApp = isLine || isFacebook || isInstagram || isMessenger || isTikTok;
+
+      const isSecure = window.isSecureContext || location.protocol === "https:" || location.hostname === "localhost";
+      const hasGeo = "geolocation" in navigator;
+      const hasCanvas = !!window.HTMLCanvasElement;
+      const hasDownload = "download" in document.createElement("a");
+      const hasShare = !!navigator.share;
+
+      if (isInApp && !browserGateDismissed) {
+        return {
+          ok:false,
+          reason:"ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
+        };
+      }
+
+      if (!isSecure) {
+        return {
+          ok:false,
+          reason:"เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
+        };
+      }
+
+      if (!hasGeo) {
+        return {
+          ok:false,
+          reason:"เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
+        };
+      }
+
+      if (!hasCanvas) {
+        return {
+          ok:false,
+          reason:"เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
+        };
+      }
+
+      if (!hasDownload && !hasShare) {
+        return {
+          ok:false,
+          reason:"เบราว์เซอร์นี้อาจไม่รองรับการบันทึกหรือแชร์รูปภาพ กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
+        };
+      }
+
+      return {ok:true, reason:""};
+    }
+
+    function openInChromeAndroid() {
+      const url = location.href;
+      const isAndroid = /Android/i.test(navigator.userAgent || "");
+
+      if (isAndroid) {
+        const cleanUrl = url.replace(/^https?:\/\//, "");
+        location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
+        return;
+      }
+
+      copyCurrentLink();
+      alert("ระบบคัดลอกลิงก์แล้ว กรุณานำไปวางเปิดใน Safari / Chrome / Edge");
+    }
+
+    async function copyCurrentLink() {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        showToast("คัดลอกลิงก์แล้ว");
+      } catch (error) {
+        prompt("คัดลอกลิงก์นี้ไปเปิดใน Chrome / Safari / Edge", location.href);
+      }
+    }
+
+    function recheckBrowserSupport() {
+      const result = getBrowserSupportStatus();
+
+      if (result.ok) {
+        browserGate.classList.add("hide");
+        showToast("เบราว์เซอร์นี้พร้อมใช้งาน");
+      } else {
+        browserGateReason.textContent = result.reason;
+      }
+    }
+
+    function continueAnyway() {
+      browserGateDismissed = true;
+      browserGate.classList.add("hide");
+      showToast("ใช้งานต่อแบบจำกัด");
+    }
+
+    function initMap() {
+      map = L.map("map", {
+        zoomControl:false,
+        tap:true
+      }).setView([17.1547, 104.1348], 16);
+
+      L.control.zoom({
+        position:"bottomright"
+      }).addTo(map);
+
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          maxZoom:20,
+          attribution:"Tiles &copy; Esri",
+          crossOrigin:"anonymous"
+        }
+      ).addTo(map);
+
+      L.tileLayer(
+        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+        {
+          maxZoom:20,
+          attribution:"Labels &copy; Esri",
+          crossOrigin:"anonymous"
+        }
+      ).addTo(map);
+
+      map.on("move", () => {
+        updateCenterCoordinateBox();
+        updateCenterPopupIfVisible();
+      });
+
+      map.on("zoomend", () => {
+        updateCenterCoordinateBox();
+        updateCenterPopupIfVisible();
+      });
+
+      map.whenReady(() => {
+        setResponsiveViewport();
+        map.invalidateSize(false);
+        updateCenterCoordinateBox();
+      });
+    }
+
+    function loadLogo() {
+      return new Promise((resolve) => {
+        const img = new Image();
+
+        img.onload = () => {
+          logoImage = img;
+          brandLogo.src = LOGO_URL;
+          brandLogo.style.display = "block";
+          brandText.style.display = "none";
+          resolve(img);
+        };
+
+        img.onerror = () => {
+          logoImage = null;
+          brandLogo.style.display = "none";
+          brandText.style.display = "block";
+          resolve(null);
+        };
+
+        img.src = LOGO_URL + "?v=" + Date.now();
+      });
+    }
+
+    function getCenterCoordinateText() {
+      if (!map) return "-";
+      const center = map.getCenter();
+      return formatCoordinate(center.lat, center.lng);
+    }
+
+    function updateCenterCoordinateBox() {
+      if (!currentLocationBox || !map) return;
+
+      currentLocationBox.innerHTML =
+        `พิกัดจุดศูนย์กลางเป้าเล็ง:<br>` +
+        `${getCenterCoordinateText()}`;
+    }
+
+    function showCenterCoordinate() {
+      if (!map) {
+        showToast("ยังไม่พร้อมอ่านพิกัด");
+        return;
+      }
+
+      centerCoordinatePopupText.textContent = getCenterCoordinateText();
+      centerCoordinatePopup.classList.remove("hide");
+      updateCenterCoordinateBox();
+    }
+
+    function showCoordinatePopupText(text) {
+      centerCoordinatePopupText.textContent = text;
+      centerCoordinatePopup.classList.remove("hide");
+    }
+
+    function hideCenterCoordinatePopup() {
+      centerCoordinatePopup.classList.add("hide");
+    }
+
+    function updateCenterPopupIfVisible() {
+      if (!centerCoordinatePopup.classList.contains("hide")) {
+        centerCoordinatePopupText.textContent = getCenterCoordinateText();
+      }
+    }
+
+    function toggleCoordinateMode() {
+      coordinateMode = coordinateMode === "utm" ? "latlon" : "utm";
+      updateCoordModeBadge();
+      updateAreaInfo();
+      updateCenterCoordinateBox();
+      updateCenterPopupIfVisible();
+
+      if (currentLocationMarker && lastCurrentLat !== null && lastCurrentLon !== null) {
+        currentLocationMarker.bindPopup(
+          `<b>ตำแหน่งปัจจุบัน</b><br>${formatCoordinate(lastCurrentLat, lastCurrentLon)}`
+        );
+      }
+
+      showToast(`เปลี่ยนพิกัดเป็น ${coordinateMode === "utm" ? "UTM" : "Lat/Lon"}`);
+    }
+
+    function updateCoordModeBadge() {
+      coordModeBadge.textContent = coordinateMode === "utm" ? "UTM" : "LL";
+    }
+
+    function addPointFromCenter() {
+      if (!map) return;
+
+      const center = map.getCenter();
+      addMeasurePoint(center.lat, center.lng);
+      showToast(`เพิ่มจุดที่ ${measurePoints.length} แล้ว`);
+    }
+
+    function addMeasurePoint(lat, lon) {
+      measurePoints.push([lat, lon]);
+
+      const marker = L.marker([lat, lon], {
+        draggable:true,
+        icon:createNumberIcon(measurePoints.length)
+      }).addTo(map);
+
+      marker.on("drag", () => {
+        const index = markers.indexOf(marker);
+        if (index >= 0) {
+          const latlng = marker.getLatLng();
+          measurePoints[index] = [latlng.lat, latlng.lng];
+          updateShape();
+        }
+      });
+
+      marker.on("dragend", updateAreaInfo);
+
+      markers.push(marker);
+      updateShape();
+    }
+
+    function createNumberIcon(number) {
+      return L.divIcon({
+        html:`<div class="point-marker">${number}</div>`,
+        className:"",
+        iconSize:[28,28],
+        iconAnchor:[14,14]
+      });
+    }
+
+    function refreshMarkerNumbers() {
+      markers.forEach((marker, index) => {
+        marker.setIcon(createNumberIcon(index + 1));
+      });
+    }
+
+    function updateShape() {
+      if (polygonLayer) {
+        map.removeLayer(polygonLayer);
+        polygonLayer = null;
+      }
+
+      if (lineLayer) {
+        map.removeLayer(lineLayer);
+        lineLayer = null;
+      }
+
+      if (measurePoints.length >= 2) {
+        lineLayer = L.polyline(measurePoints, {
+          color:"#ffb703",
+          weight:4,
+          opacity:1
+        }).addTo(map);
+
+        lineLayer.bringToFront();
+      }
+
+      if (measurePoints.length >= 3) {
+        polygonLayer = L.polygon(measurePoints, {
+          color:"#ffb703",
+          weight:4,
+          fillColor:"#39f2a2",
+          fillOpacity:0.18
+        }).addTo(map);
+
+        polygonLayer.bringToFront();
+      }
+
+      refreshMarkerNumbers();
+      updateAreaInfo();
+    }
+
+    function undoLastPoint() {
+      if (measurePoints.length === 0) {
+        showToast("ยังไม่มีจุดให้ลบ");
+        return;
+      }
+
+      const marker = markers.pop();
+      if (marker) map.removeLayer(marker);
+
+      measurePoints.pop();
+      updateShape();
+      showToast("ลบจุดล่าสุดแล้ว");
+    }
+
+    function clearAllPoints() {
+      markers.forEach(marker => map.removeLayer(marker));
+      markers = [];
+      measurePoints = [];
+
+      if (polygonLayer) map.removeLayer(polygonLayer);
+      if (lineLayer) map.removeLayer(lineLayer);
+
+      polygonLayer = null;
+      lineLayer = null;
+
+      updateAreaInfo();
+      showToast("ล้างจุดทั้งหมดแล้ว");
+    }
+
+    function updateAreaInfo() {
+      const plotName = getPlotName();
+      const plotDetail = getPlotDetail();
+
+      if (infoPlotName) {
+        infoPlotName.textContent = `ชื่อ: ${plotName}`;
+      }
+
+      if (infoPlotDetail) {
+        infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
+      }
+
+      if (measurePoints.length < 3) {
+        thaiAreaText.textContent = "ขนาดพื้นที่: -";
+        floatingAreaText.textContent = "-";
+        return;
+      }
+
+      const geojson = pointsToPolygonGeoJSON(measurePoints);
+      const area = turf.area(geojson);
+      const thaiArea = formatThaiArea(area);
+
+      thaiAreaText.textContent = `ขนาดพื้นที่: ${thaiArea}`;
+      floatingAreaText.textContent = thaiArea;
+    }
+
+    function pointsToPolygonGeoJSON(points) {
+      const coords = points.map(p => [p[1], p[0]]);
+      coords.push([points[0][1], points[0][0]]);
+      return turf.polygon([coords]);
+    }
+
+    function formatCoordinate(lat, lon) {
+      if (coordinateMode === "utm") {
+        const utm = latLonToUTM(lat, lon);
+        return `UTM ${utm.zone}${utm.hemisphere} X ${Math.round(utm.easting)} Y ${Math.round(utm.northing)}`;
+      }
+
+      return `Lat ${lat.toFixed(6)}, Lon ${lon.toFixed(6)}`;
+    }
+
+    function hideInfoPanel() {
+      const infoCard = document.getElementById("infoCard");
+      const showBtn = document.getElementById("showInfoButton");
+
+      if (infoCard) infoCard.classList.add("hide");
+      if (showBtn) showBtn.classList.remove("hide");
+    }
+
+    function showInfoPanel() {
+      const infoCard = document.getElementById("infoCard");
+      const showBtn = document.getElementById("showInfoButton");
+
+      if (infoCard) infoCard.classList.remove("hide");
+      if (showBtn) showBtn.classList.add("hide");
+
+      updateAreaInfo();
+      updateCenterCoordinateBox();
+    }
+
+    function toggleNotePanel() {
+      const panel = document.getElementById("notePanel");
+      if (!panel) return;
+      panel.classList.toggle("hide");
+      updateAreaInfo();
+    }
+
+    function startRealtimeLocation() {
+      if (!navigator.geolocation) {
+        updateCenterCoordinateBox();
+        return;
+      }
+
+      locationWatchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          lastCurrentLat = lat;
+          lastCurrentLon = lon;
+
+          updateCurrentLocationMarker(lat, lon);
+          updateCenterCoordinateBox();
+        },
+        () => {
+          updateCenterCoordinateBox();
+        },
+        {
+          enableHighAccuracy:true,
+          maximumAge:2000,
+          timeout:20000
+        }
+      );
+    }
+
+    function updateCurrentLocationMarker(lat, lon) {
+      if (!map) return;
+
+      const myLocationIcon = L.divIcon({
+        html:`<div class="my-location-pulse"></div>`,
+        className:"",
+        iconSize:[22,22],
+        iconAnchor:[11,11]
+      });
+
+      if (!currentLocationMarker) {
+        currentLocationMarker = L.marker([lat, lon], {
+          title:"ตำแหน่งปัจจุบัน",
+          icon:myLocationIcon
+        }).addTo(map);
+      } else {
+        currentLocationMarker.setLatLng([lat, lon]);
+        currentLocationMarker.setIcon(myLocationIcon);
+      }
+
+      currentLocationMarker.bindPopup(
+        `<b>ตำแหน่งปัจจุบัน</b><br>${formatCoordinate(lat, lon)}`
+      );
+    }
+
+    function goToMyLocation() {
+      if (lastCurrentLat === null || lastCurrentLon === null) {
+        showToast("กำลังรอตำแหน่ง GPS...");
+        return;
+      }
+
+      map.setView([lastCurrentLat, lastCurrentLon], 18);
+      const text = formatCoordinate(lastCurrentLat, lastCurrentLon);
+      showCoordinatePopupText(text);
+      updateCenterCoordinateBox();
+    }
+
+    function prepareMapForCapture() {
+      const hiddenElements = [];
+      const selectors = [
+        ".leaflet-control-container",
+        ".leaflet-popup-pane",
+        ".leaflet-tooltip-pane",
+        ".leaflet-marker-pane",
+        ".leaflet-overlay-pane"
+      ];
+
+      selectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+          hiddenElements.push({
+            element:el,
+            display:el.style.display
+          });
+          el.style.display = "none";
+        });
+      });
+
+      return function restoreMapAfterCapture() {
+        hiddenElements.forEach(item => {
+          item.element.style.display = item.display;
+        });
+      };
+    }
+
+    async function captureMapImage() {
+      if (measurePoints.length < 3) {
+        alert("กรุณาปักจุดอย่างน้อย 3 จุดก่อนบันทึกภาพแผนที่");
+        return;
+      }
+
+      showToast("กำลังสร้างภาพแผนที่...");
+
+      const saveButton = document.querySelector(".float-save");
+      if (saveButton) saveButton.disabled = true;
+
+      let restoreMap = null;
+
+      try {
+        await waitForMapTiles();
+
+        const mapElement = document.getElementById("map");
+        restoreMap = prepareMapForCapture();
+
+        const rawMapCanvas = await html2canvas(mapElement, {
+          backgroundColor:"#000000",
+          scale:Math.min(2, window.devicePixelRatio || 1),
+          useCORS:true,
+          allowTaint:true,
+          logging:false,
+          imageTimeout:20000
+        });
+
+        if (restoreMap) {
+          restoreMap();
+          restoreMap = null;
+        }
+
+        const cleanMapCanvas = document.createElement("canvas");
+        cleanMapCanvas.width = rawMapCanvas.width;
+        cleanMapCanvas.height = rawMapCanvas.height;
+
+        const cleanCtx = cleanMapCanvas.getContext("2d");
+        cleanCtx.drawImage(rawMapCanvas, 0, 0);
+
+        drawMeasuredPolygonOnCanvas(
+          cleanCtx,
+          cleanMapCanvas.width,
+          cleanMapCanvas.height,
+          mapElement.clientWidth,
+          mapElement.clientHeight
+        );
+
+        const headerH = Math.max(90, Math.round(cleanMapCanvas.height * 0.10));
+        const footerH = Math.max(230, Math.round(cleanMapCanvas.height * 0.22));
+
+        const finalCanvas = document.createElement("canvas");
+        finalCanvas.width = cleanMapCanvas.width;
+        finalCanvas.height = cleanMapCanvas.height + headerH + footerH;
+
+        const ctx = finalCanvas.getContext("2d");
+
+        ctx.fillStyle = "#07111d";
+        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+
+        drawSavedImageHeader(ctx, finalCanvas.width, headerH);
+        ctx.drawImage(cleanMapCanvas, 0, headerH);
+
+        drawSavedImageFooter(
+          ctx,
+          0,
+          headerH + cleanMapCanvas.height,
+          finalCanvas.width,
+          footerH
+        );
+
+        const blob = await canvasToBlobSafe(finalCanvas, "image/jpeg", 0.94);
+
+        if (!blob) {
+          alert("ไม่สามารถสร้างไฟล์ภาพได้ กรุณาลองเปิดผ่าน Chrome หรือ Edge");
+          return;
+        }
+
+        const fileName = createMapFileName();
+        showPreviewModal(blob, fileName);
+        showToast("สร้างภาพสำเร็จ");
+
+      } catch (error) {
+        console.error("captureMapImage error:", error);
+        alert(
+          "ไม่สามารถบันทึกภาพแผนที่ได้\n\n" +
+          "ให้ลองเปิดผ่าน Chrome / Edge / Safari โดยตรง และรอให้แผนที่โหลดครบก่อนกดบันทึก"
+        );
+      } finally {
+        if (restoreMap) restoreMap();
+        if (saveButton) saveButton.disabled = false;
+      }
+    }
+
+    function drawMeasuredPolygonOnCanvas(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
+      if (!map || measurePoints.length < 2) return;
+
+      const scaleX = canvasWidth / mapWidth;
+      const scaleY = canvasHeight / mapHeight;
+
+      const pts = measurePoints.map(([lat, lng]) => {
+        const p = map.latLngToContainerPoint([lat, lng]);
+        return {
+          x:p.x * scaleX,
+          y:p.y * scaleY
+        };
+      });
+
+      ctx.save();
+
+      if (pts.length >= 3) {
+        ctx.beginPath();
+        pts.forEach((pt, i) => {
+          if (i === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = "rgba(57, 242, 162, 0.16)";
+        ctx.fill();
+      }
+
+      if (pts.length >= 2) {
+        ctx.beginPath();
+        pts.forEach((pt, i) => {
+          if (i === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        });
+        if (pts.length >= 3) ctx.closePath();
+
+        ctx.strokeStyle = "#ffb703";
+        ctx.lineWidth = Math.max(5, Math.round(Math.min(canvasWidth, canvasHeight) * 0.0045));
+        ctx.shadowColor = "rgba(0,0,0,0.45)";
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      pts.forEach((pt, index) => {
+        drawCapturePointMarker(ctx, pt.x, pt.y, index + 1);
+      });
+
+      ctx.restore();
+    }
+
+    function drawCapturePointMarker(ctx, x, y, number) {
+      const r = 22;
+
+      ctx.save();
+
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = "#59e1db";
+      ctx.fill();
+
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+
+      ctx.fillStyle = "#04120c";
+      ctx.font = "bold 24px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(number), x, y + 1);
+
+      ctx.restore();
+    }
+
+    function drawSavedImageHeader(ctx, width, height) {
+      ctx.save();
+
+      const gradient = ctx.createLinearGradient(0, 0, width, 0);
+      gradient.addColorStop(0, "#07111d");
+      gradient.addColorStop(1, "#0b1a2a");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.strokeStyle = "rgba(255,255,255,0.12)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, height - 1);
+      ctx.lineTo(width, height - 1);
+      ctx.stroke();
+
+      const margin = Math.round(height * 0.18);
+      const maxW = Math.round(width * 0.34);
+      const maxH = Math.round(height * 0.72);
+
+      if (logoImage) {
+        drawLogoFit(ctx, logoImage, margin, Math.round((height - maxH) / 2), maxW, maxH);
+      } else {
+        drawSmartLandBadge(ctx, margin, Math.round((height - maxH) / 2), maxW, maxH);
+      }
+
+      ctx.restore();
+    }
+
+    function drawSavedImageFooter(ctx, x, y, width, height) {
+      const data = getAreaData();
+      const plotName = getPlotName();
+      const plotDetail = getPlotDetail();
+      const nowText = formatShortThaiDateTime(new Date());
+
+      ctx.save();
+
+      const gradient = ctx.createLinearGradient(0, y, 0, y + height);
+      gradient.addColorStop(0, "#0b1623");
+      gradient.addColorStop(1, "#07111d");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x, y, width, height);
+
+      const margin = 24;
+      const cardX = x + margin;
+      const cardY = y + 18;
+      const cardW = width - margin * 2;
+      const cardH = height - 36;
+
+      drawRoundRect(
+        ctx,
+        cardX,
+        cardY,
+        cardW,
+        cardH,
+        20,
+        "rgba(255,255,255,0.06)",
+        "rgba(255,255,255,0.14)"
+      );
+
+      let cy = cardY + 18;
+      const paddingX = 18;
+
+      ctx.textBaseline = "top";
+
+      ctx.font = "900 30px Arial";
+      ctx.fillStyle = "#7ef5ff";
+      ctx.fillText("ข้อมูลพื้นที่แปลง", cardX + paddingX, cy);
+      cy += 42;
+
+      const rows = [
+        {text:`ชื่อ: ${plotName}`, font:"900 28px Arial", color:"#ffffff", maxLines:2, lineHeight:34},
+        {text:`รายละเอียด: ${plotDetail}`, font:"700 26px Arial", color:"#eef6ff", maxLines:3, lineHeight:32},
+        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:"900 30px Arial", color:"#d8fff0", maxLines:2, lineHeight:36},
+        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:"700 25px Arial", color:"#e3f7ff", maxLines:2, lineHeight:31},
+        {text:`วันที่: ${nowText}`, font:"700 25px Arial", color:"#e3f7ff", maxLines:1, lineHeight:31}
+      ];
+
+      rows.forEach(row => {
+        ctx.font = row.font;
+        ctx.fillStyle = row.color;
+
+        const wrapped = wrapCanvasText(ctx, row.text, cardW - paddingX * 2, row.maxLines);
+        wrapped.forEach(line => {
+          ctx.fillText(line, cardX + paddingX, cy);
+          cy += row.lineHeight;
+        });
+        cy += 6;
+      });
+
+      ctx.restore();
+    }
+
+    function waitForMapTiles() {
+      return new Promise((resolve) => {
+        if (!map) {
+          resolve();
+          return;
+        }
+
+        let resolved = false;
+
+        const finish = () => {
+          if (resolved) return;
+          resolved = true;
+          resolve();
+        };
+
+        map.once("idle", finish);
+        setTimeout(finish, 1200);
+      });
+    }
+
+    function canvasToBlobSafe(canvas, type = "image/jpeg", quality = 0.94) {
+      return new Promise((resolve) => {
+        try {
+          if (canvas.toBlob) {
+            canvas.toBlob((blob) => {
+              resolve(blob);
+            }, type, quality);
+          } else {
+            const dataUrl = canvas.toDataURL(type, quality);
+            resolve(dataURLToBlob(dataUrl));
+          }
+        } catch (error) {
+          console.error("canvasToBlobSafe error:", error);
+          resolve(null);
+        }
+      });
+    }
+
+    function dataURLToBlob(dataUrl) {
+      const parts = dataUrl.split(",");
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const binary = atob(parts[1]);
+      const length = binary.length;
+      const array = new Uint8Array(length);
+
+      for (let i = 0; i < length; i++) {
+        array[i] = binary.charCodeAt(i);
+      }
+
+      return new Blob([array], {type:mime});
+    }
+
+    function getAreaData() {
+      if (measurePoints.length < 3) {
+        return {area:0, centroidText:"-"};
+      }
+
+      const geojson = pointsToPolygonGeoJSON(measurePoints);
+      const area = turf.area(geojson);
+      const centroid = turf.centroid(geojson);
+      const centerLon = centroid.geometry.coordinates[0];
+      const centerLat = centroid.geometry.coordinates[1];
+
+      return {
+        area,
+        centroidText:formatCoordinate(centerLat, centerLon)
+      };
+    }
+
+    function drawLogoFit(ctx, img, x, y, maxW, maxH) {
+      const ratio = img.width / img.height;
+      let drawW = maxW;
+      let drawH = Math.round(drawW / ratio);
+
+      if (drawH > maxH) {
+        drawH = maxH;
+        drawW = Math.round(drawH * ratio);
+      }
+
+      ctx.drawImage(img, x, y, drawW, drawH);
+    }
+
+    function drawSmartLandBadge(ctx, x, y, maxW, h) {
+      ctx.save();
+
+      const text = "SmartLAND";
+      const r = Math.round(h * 0.24);
+
+      ctx.font = `900 ${Math.round(h * 0.46)}px Arial`;
+      const textWidth = ctx.measureText(text).width;
+      const w = Math.min(maxW, Math.round(textWidth + h * 0.90));
+
+      drawRoundRect(ctx, x, y, w, h, r, "rgba(57,242,162,.95)", "rgba(255,255,255,.18)");
+
+      ctx.fillStyle = "rgba(2,8,14,.95)";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x + Math.round(h * 0.30), y + h / 2);
+
+      ctx.restore();
+    }
+
+    function drawRoundRect(ctx, x, y, w, h, r, fill, stroke) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+
+      ctx.fillStyle = fill;
+      ctx.fill();
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = stroke;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function wrapCanvasText(ctx, text, maxWidth, maxLines = 2) {
+      text = String(text || "-");
+      const units = text.includes(" ") ? text.split(" ") : Array.from(text);
+      const lines = [];
+      let line = "";
+
+      for (const unit of units) {
+        const test = text.includes(" ")
+          ? (line ? line + " " + unit : unit)
+          : line + unit;
+
+        if (ctx.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = unit;
+          if (lines.length >= maxLines) break;
+        } else {
+          line = test;
+        }
+      }
+
+      if (line && lines.length < maxLines) {
+        lines.push(line);
+      }
+
+      return lines;
+    }
+
+    function showPreviewModal(blob, fileName) {
+      latestImageBlob = blob;
+      latestFileName = fileName;
+
+      if (latestImageUrl) {
+        URL.revokeObjectURL(latestImageUrl);
+      }
+
+      latestImageUrl = URL.createObjectURL(blob);
+      previewImage.src = latestImageUrl;
+
+      const isIOSNow = isIOSDevice();
+
+      tapSaveOverlay.style.display = isIOSNow ? "block" : "none";
+      iosSaveHint.style.display = isIOSNow ? "block" : "none";
+      saveImageButton.style.display = isIOSNow ? "none" : "block";
+
+      previewModal.classList.remove("hide");
+
+      if (!isIOSNow) {
+        setTimeout(() => {
+          savePreviewImage();
+        }, 500);
+      }
+    }
+
+    function closePreviewModal() {
+      previewModal.classList.add("hide");
+    }
+
+    function savePreviewImage() {
+      if (!latestImageBlob || !latestFileName) {
+        alert("ยังไม่มีรูปภาพสำหรับบันทึก");
+        return;
+      }
+
+      try {
+        const url = URL.createObjectURL(latestImageBlob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = latestFileName;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.style.display = "none";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 2000);
+
+        showToast("บันทึกภาพแล้ว");
+      } catch (error) {
+        console.error("savePreviewImage error:", error);
+
+        const url = URL.createObjectURL(latestImageBlob);
+        window.open(url, "_blank");
+
+        alert("ระบบเปิดรูปภาพในแท็บใหม่แล้ว ให้คลิกขวาที่รูปภาพแล้วเลือก Save image as...");
+      }
+    }
+
+    async function sharePreviewImage() {
+      if (!latestImageBlob || !latestFileName) {
+        alert("ยังไม่มีรูปภาพสำหรับแชร์");
+        return;
+      }
+
+      try {
+        const file = new File([latestImageBlob], latestFileName, {
+          type:latestImageBlob.type || "image/jpeg"
+        });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+          await navigator.share({
+            title:"SmartLAND",
+            text:"ภาพแผนที่จาก SmartLAND",
+            files:[file]
+          });
+
+          showToast("แชร์รูปภาพแล้ว");
+          return;
+        }
+
+        if (navigator.share) {
+          await navigator.share({
+            title:"SmartLAND",
+            text:"ภาพแผนที่จาก SmartLAND"
+          });
+
+          showToast("แชร์ข้อมูลแล้ว");
+          return;
+        }
+
+        alert("อุปกรณ์หรือเบราว์เซอร์นี้ยังไม่รองรับการแชร์โดยตรง");
+      } catch (error) {
+        console.error(error);
+        if (error.name !== "AbortError") {
+          alert("ไม่สามารถแชร์รูปภาพได้ในขณะนี้");
+        }
+      }
+    }
+
+    function isIOSDevice() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent || "") ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+
+      if (navigator.vibrate) {
+        navigator.vibrate(60);
+      }
+    }
+
+    function getPlotName() {
+      const value = document.getElementById("plotName").value.trim();
+      return value || "-";
+    }
+
+    function getPlotDetail() {
+      const value = document.getElementById("plotDetail").value.trim();
+      return value || "-";
+    }
+
+    function createMapFileName() {
+      const date = new Date();
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      const h = String(date.getHours()).padStart(2, "0");
+      const min = String(date.getMinutes()).padStart(2, "0");
+      const s = String(date.getSeconds()).padStart(2, "0");
+      return `SmartLAND_${y}${m}${d}_${h}${min}${s}.jpg`;
+    }
+
+    function formatShortThaiDateTime(date) {
+      const d = String(date.getDate()).padStart(2, "0");
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const y = date.getFullYear() + 543;
+      const h = String(date.getHours()).padStart(2, "0");
+      const min = String(date.getMinutes()).padStart(2, "0");
+      const s = String(date.getSeconds()).padStart(2, "0");
+      return `${d}/${m}/${y} ${h}:${min}:${s}`;
+    }
+
+    function formatThaiArea(areaSqm) {
+      if (!areaSqm || areaSqm <= 0) return "-";
+
+      const rai = Math.floor(areaSqm / 1600);
+      const remainAfterRai = areaSqm - rai * 1600;
+
+      const ngan = Math.floor(remainAfterRai / 400);
+      const remainAfterNgan = remainAfterRai - ngan * 400;
+
+      const sqWa = remainAfterNgan / 4;
+
+      return `${rai} ไร่ ${ngan} งาน ${sqWa.toFixed(2)} ตร.วา`;
+    }
+
+    function degToRad(deg) {
+      return deg * Math.PI / 180;
+    }
+
+    function latLonToUTM(lat, lon) {
+      const a = 6378137.0;
+      const f = 1 / 298.257223563;
+      const k0 = 0.9996;
+
+      const e = Math.sqrt(f * (2 - f));
+      const eSq = e * e;
+      const ePrimeSq = eSq / (1 - eSq);
+
+      const zone = Math.floor((lon + 180) / 6) + 1;
+      const lonOrigin = (zone - 1) * 6 - 180 + 3;
+
+      const latRad = degToRad(lat);
+      const lonRad = degToRad(lon);
+      const lonOriginRad = degToRad(lonOrigin);
+
+      const sinLat = Math.sin(latRad);
+      const cosLat = Math.cos(latRad);
+      const tanLat = Math.tan(latRad);
+
+      const N = a / Math.sqrt(1 - eSq * sinLat * sinLat);
+      const T = tanLat * tanLat;
+      const C = ePrimeSq * cosLat * cosLat;
+      const A = cosLat * (lonRad - lonOriginRad);
+
+      const M = a * (
+        (1 - eSq / 4 - 3 * Math.pow(eSq, 2) / 64 - 5 * Math.pow(eSq, 3) / 256) * latRad
+        - (3 * eSq / 8 + 3 * Math.pow(eSq, 2) / 32 + 45 * Math.pow(eSq, 3) / 1024) * Math.sin(2 * latRad)
+        + (15 * Math.pow(eSq, 2) / 256 + 45 * Math.pow(eSq, 3) / 1024) * Math.sin(4 * latRad)
+        - (35 * Math.pow(eSq, 3) / 3072) * Math.sin(6 * latRad)
+      );
+
+      let easting = k0 * N * (
+        A
+        + (1 - T + C) * Math.pow(A, 3) / 6
+        + (5 - 18 * T + T * T + 72 * C - 58 * ePrimeSq) * Math.pow(A, 5) / 120
+      ) + 500000.0;
+
+      let northing = k0 * (
+        M + N * tanLat * (
+          Math.pow(A, 2) / 2
+          + (5 - T + 9 * C + 4 * C * C) * Math.pow(A, 4) / 24
+          + (61 - 58 * T + T * T + 600 * C - 330 * ePrimeSq) * Math.pow(A, 6) / 720
+        )
+      );
+
+      const hemisphere = lat >= 0 ? "N" : "S";
+      if (lat < 0) northing += 10000000.0;
+
+      return {zone, hemisphere, easting, northing};
+    }
+  </script>
+</body>
+</html>
