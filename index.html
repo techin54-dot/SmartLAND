@@ -2,10 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
   <meta name="theme-color" content="#02070d" />
   <title>SmartLAND</title>
 
@@ -30,8 +27,7 @@
       -webkit-tap-highlight-color:transparent;
     }
 
-    html,
-    body{
+    html,body{
       margin:0;
       padding:0;
       width:100%;
@@ -114,37 +110,10 @@
       box-shadow:0 0 0 2px rgba(0,0,0,.55);
     }
 
-    .tick.top{
-      width:5px;
-      height:16px;
-      left:50%;
-      top:1px;
-      transform:translateX(-50%);
-    }
-
-    .tick.bottom{
-      width:5px;
-      height:16px;
-      left:50%;
-      bottom:1px;
-      transform:translateX(-50%);
-    }
-
-    .tick.left{
-      width:16px;
-      height:5px;
-      left:1px;
-      top:50%;
-      transform:translateY(-50%);
-    }
-
-    .tick.right{
-      width:16px;
-      height:5px;
-      right:1px;
-      top:50%;
-      transform:translateY(-50%);
-    }
+    .tick.top{width:5px;height:16px;left:50%;top:1px;transform:translateX(-50%)}
+    .tick.bottom{width:5px;height:16px;left:50%;bottom:1px;transform:translateX(-50%)}
+    .tick.left{width:16px;height:5px;left:1px;top:50%;transform:translateY(-50%)}
+    .tick.right{width:16px;height:5px;right:1px;top:50%;transform:translateY(-50%)}
 
     .top-panel{
       position:absolute;
@@ -308,8 +277,7 @@
       margin-bottom:5px;
     }
 
-    input,
-    textarea{
+    input,textarea{
       width:100%;
       border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.10);
@@ -320,20 +288,9 @@
       outline:none;
     }
 
-    input{
-      margin-bottom:8px;
-    }
-
-    textarea{
-      min-height:62px;
-      max-height:110px;
-      resize:vertical;
-    }
-
-    input::placeholder,
-    textarea::placeholder{
-      color:rgba(255,255,255,.56);
-    }
+    input{margin-bottom:8px}
+    textarea{min-height:62px;max-height:110px;resize:vertical}
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,.56)}
 
     button{
       cursor:pointer;
@@ -346,14 +303,8 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    button:active{
-      transform:scale(.96);
-    }
-
-    button:disabled{
-      opacity:.55;
-      pointer-events:none;
-    }
+    button:active{transform:scale(.96)}
+    button:disabled{opacity:.55;pointer-events:none}
 
     .float-btn{
       position:absolute;
@@ -370,43 +321,15 @@
       box-shadow:0 10px 22px rgba(0,0,0,.32);
     }
 
-    .float-btn svg{
-      width:29px;
-      height:29px;
-      display:block;
-    }
-
-    .btn-mode{
-      bottom:calc(334px + env(safe-area-inset-bottom));
-    }
-
-    .btn-mode svg{
-      fill:#7c3aed;
-    }
-
-    .btn-center{
-      bottom:calc(262px + env(safe-area-inset-bottom));
-    }
-
-    .btn-center svg{
-      fill:#f59e0b;
-    }
-
-    .btn-location{
-      bottom:calc(190px + env(safe-area-inset-bottom));
-    }
-
-    .btn-location svg{
-      fill:#1f78b8;
-    }
-
-    .btn-save{
-      bottom:calc(118px + env(safe-area-inset-bottom));
-    }
-
-    .btn-save svg{
-      fill:#12835d;
-    }
+    .float-btn svg{width:29px;height:29px;display:block}
+    .btn-mode{bottom:calc(334px + env(safe-area-inset-bottom))}
+    .btn-mode svg{fill:#7c3aed}
+    .btn-center{bottom:calc(262px + env(safe-area-inset-bottom))}
+    .btn-center svg{fill:#f59e0b}
+    .btn-location{bottom:calc(190px + env(safe-area-inset-bottom))}
+    .btn-location svg{fill:#1f78b8}
+    .btn-save{bottom:calc(118px + env(safe-area-inset-bottom))}
+    .btn-save svg{fill:#12835d}
 
     .mode-badge{
       position:absolute;
@@ -439,8 +362,7 @@
       pointer-events:none;
     }
 
-    .pad-btn,
-    .add-btn{
+    .pad-btn,.add-btn{
       pointer-events:auto;
       position:relative;
       display:grid;
@@ -453,12 +375,7 @@
       overflow:hidden;
     }
 
-    .pad-btn{
-      width:58px;
-      height:52px;
-      border-radius:18px;
-    }
-
+    .pad-btn{width:58px;height:52px;border-radius:18px}
     .add-btn{
       width:78px;
       height:78px;
@@ -468,17 +385,8 @@
       box-shadow:0 12px 26px rgba(0,0,0,.35);
     }
 
-    .pad-btn svg{
-      width:28px;
-      height:28px;
-      fill:#23658f;
-    }
-
-    .add-btn svg{
-      width:40px;
-      height:40px;
-      fill:#fff;
-    }
+    .pad-btn svg{width:28px;height:28px;fill:#23658f}
+    .add-btn svg{width:40px;height:40px;fill:#fff}
 
     .point-marker{
       width:30px;
@@ -505,15 +413,9 @@
     }
 
     @keyframes pulse{
-      0%{
-        box-shadow:0 0 0 0 rgba(29,161,255,.65),0 0 14px rgba(29,161,255,.8);
-      }
-      70%{
-        box-shadow:0 0 0 16px rgba(29,161,255,0),0 0 18px rgba(29,161,255,.55);
-      }
-      100%{
-        box-shadow:0 0 0 0 rgba(29,161,255,0),0 0 14px rgba(29,161,255,.8);
-      }
+      0%{box-shadow:0 0 0 0 rgba(29,161,255,.65),0 0 14px rgba(29,161,255,.8)}
+      70%{box-shadow:0 0 0 16px rgba(29,161,255,0),0 0 18px rgba(29,161,255,.55)}
+      100%{box-shadow:0 0 0 0 rgba(29,161,255,0),0 0 14px rgba(29,161,255,.8)}
     }
 
     .center-popup{
@@ -591,10 +493,7 @@
       text-align:center;
     }
 
-    .toast.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(0);
-    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
     .modal{
       position:fixed;
@@ -622,18 +521,8 @@
       text-align:center;
     }
 
-    .modal-title{
-      font-size:20px;
-      font-weight:900;
-      margin-bottom:8px;
-    }
-
-    .modal-desc{
-      font-size:14px;
-      line-height:1.7;
-      color:rgba(255,255,255,.82);
-      margin-bottom:14px;
-    }
+    .modal-title{font-size:20px;font-weight:900;margin-bottom:8px}
+    .modal-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.82);margin-bottom:14px}
 
     .warning{
       padding:10px 12px;
@@ -646,12 +535,7 @@
       margin-bottom:12px;
     }
 
-    .modal-actions{
-      display:grid;
-      gap:10px;
-      margin-top:12px;
-    }
-
+    .modal-actions{display:grid;gap:10px;margin-top:12px}
     .modal-actions button{
       width:100%;
       min-height:52px;
@@ -661,13 +545,8 @@
       background:linear-gradient(180deg,rgba(24,34,52,.94),rgba(10,16,28,.94));
     }
 
-    .primary{
-      background:linear-gradient(135deg,#16a34a,#22c55e)!important;
-    }
-
-    .danger{
-      background:linear-gradient(135deg,#7f1d1d,#be123c)!important;
-    }
+    .primary{background:linear-gradient(135deg,#16a34a,#22c55e)!important}
+    .danger{background:linear-gradient(135deg,#7f1d1d,#be123c)!important}
 
     .preview-image-wrap{
       position:relative;
@@ -715,24 +594,12 @@
       display:none;
     }
 
-    .hide{
-      display:none!important;
-    }
+    .hide{display:none!important}
 
     @media(max-width:520px){
-      .top-panel{
-        flex-direction:column;
-        right:auto;
-        width:min(94vw,390px);
-      }
-
-      .info-card{
-        width:100%;
-      }
-
-      .note-panel{
-        bottom:calc(112px + env(safe-area-inset-bottom));
-      }
+      .top-panel{flex-direction:column;right:auto;width:min(94vw,390px)}
+      .info-card{width:100%}
+      .note-panel{bottom:calc(112px + env(safe-area-inset-bottom))}
     }
   </style>
 </head>
@@ -774,10 +641,7 @@
           <div id="thaiAreaText" class="thai-area">ขนาดพื้นที่: -</div>
         </div>
 
-        <div id="centerCoordBox" class="coord-box">
-          พิกัดจุดศูนย์กลางเป้าเล็ง: -
-        </div>
-
+        <div id="centerCoordBox" class="coord-box">พิกัดจุดศูนย์กลางเป้าเล็ง: -</div>
         <button class="danger-btn" onclick="clearAllPoints()">ล้างจุดทั้งหมด</button>
       </div>
     </div>
@@ -835,12 +699,8 @@
     <div id="browserGate" class="modal hide">
       <div class="modal-card">
         <div class="modal-title">กรุณาเปิดด้วยเบราว์เซอร์หลัก</div>
-        <div class="modal-desc">
-          เพื่อให้การบันทึกภาพ การแชร์รูปภาพ และการใช้พิกัด GPS ทำงานได้ถูกต้อง แนะนำให้เปิดผ่าน Chrome, Safari หรือ Edge
-        </div>
-        <div id="browserGateReason" class="warning">
-          ระบบตรวจพบว่าอาจเปิดผ่านเบราว์เซอร์ในแอป
-        </div>
+        <div class="modal-desc">เพื่อให้การบันทึกภาพ การแชร์รูปภาพ และการใช้พิกัด GPS ทำงานได้ถูกต้อง แนะนำให้เปิดผ่าน Chrome, Safari หรือ Edge</div>
+        <div id="browserGateReason" class="warning">ระบบตรวจพบว่าอาจเปิดผ่านเบราว์เซอร์ในแอป</div>
         <div class="modal-actions">
           <button class="primary" onclick="openInChromeAndroid()">เปิดด้วย Chrome</button>
           <button onclick="copyCurrentLink()">คัดลอกลิงก์</button>
@@ -866,9 +726,7 @@
           <button onclick="closePreviewModal()">กลับไปแก้ไขแผนที่</button>
         </div>
 
-        <div id="iosSaveHint" class="ios-hint">
-          หากใช้ iPhone / iPad ให้แตะค้างที่รูปภาพ แล้วเลือก “บันทึกรูปภาพ” หรือใช้ปุ่มแชร์รูปภาพ
-        </div>
+        <div id="iosSaveHint" class="ios-hint">หากใช้ iPhone / iPad ให้แตะค้างที่รูปภาพ แล้วเลือก “บันทึกรูปภาพ” หรือใช้ปุ่มแชร์รูปภาพ</div>
       </div>
     </div>
   </div>
@@ -934,27 +792,20 @@
     });
 
     window.addEventListener("beforeunload", () => {
-      if (locationWatchId !== null) {
-        navigator.geolocation.clearWatch(locationWatchId);
-      }
+      if (locationWatchId !== null) navigator.geolocation.clearWatch(locationWatchId);
     });
 
     document.addEventListener("input", (event) => {
-      if (event.target && (event.target.id === "plotName" || event.target.id === "plotDetail")) {
-        updateAreaInfo();
-      }
+      if (event.target && (event.target.id === "plotName" || event.target.id === "plotDetail")) updateAreaInfo();
     });
 
     function setupViewport() {
       setViewportSize();
-
       window.addEventListener("resize", setViewportSize);
-
       window.addEventListener("orientationchange", () => {
         setTimeout(setViewportSize, 250);
         setTimeout(setViewportSize, 700);
       });
-
       if (window.visualViewport) {
         window.visualViewport.addEventListener("resize", setViewportSize);
         window.visualViewport.addEventListener("scroll", setViewportSize);
@@ -980,32 +831,30 @@
 
     function initMap() {
       map = L.map("map", {
-        zoomControl: false,
-        tap: true,
-        maxZoom: 20
+        zoomControl:false,
+        tap:true,
+        maxZoom:20
       }).setView([17.1547, 104.1348], 16);
 
-      L.control.zoom({
-        position: "bottomright"
-      }).addTo(map);
+      L.control.zoom({position:"bottomright"}).addTo(map);
 
       L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
-          maxZoom: 20,
-          maxNativeZoom: 17,
-          attribution: "Tiles © Esri",
-          crossOrigin: "anonymous"
+          maxZoom:20,
+          maxNativeZoom:17,
+          attribution:"Tiles © Esri",
+          crossOrigin:"anonymous"
         }
       ).addTo(map);
 
       L.tileLayer(
         "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
         {
-          maxZoom: 20,
-          maxNativeZoom: 17,
-          attribution: "Labels © Esri",
-          crossOrigin: "anonymous"
+          maxZoom:20,
+          maxNativeZoom:17,
+          attribution:"Labels © Esri",
+          crossOrigin:"anonymous"
         }
       ).addTo(map);
 
@@ -1029,7 +878,6 @@
     function loadLogo() {
       return new Promise((resolve) => {
         const img = new Image();
-
         img.onload = () => {
           logoImage = img;
           brandLogo.src = LOGO_URL;
@@ -1037,14 +885,12 @@
           brandText.style.display = "none";
           resolve(img);
         };
-
         img.onerror = () => {
           logoImage = null;
           brandLogo.style.display = "none";
           brandText.style.display = "block";
           resolve(null);
         };
-
         img.src = LOGO_URL + "?v=" + Date.now();
       });
     }
@@ -1065,7 +911,6 @@
         showToast("ยังไม่พร้อมอ่านพิกัด");
         return;
       }
-
       centerPopupText.textContent = getCenterCoordinateText();
       centerPopup.classList.remove("hide");
       updateCenterCoordinateBox();
@@ -1076,9 +921,7 @@
     }
 
     function updateCenterPopupIfVisible() {
-      if (!centerPopup.classList.contains("hide")) {
-        centerPopupText.textContent = getCenterCoordinateText();
-      }
+      if (!centerPopup.classList.contains("hide")) centerPopupText.textContent = getCenterCoordinateText();
     }
 
     function toggleCoordinateMode() {
@@ -1103,10 +946,9 @@
 
     function addMeasurePoint(lat, lon) {
       measurePoints.push([lat, lon]);
-
       const marker = L.marker([lat, lon], {
-        draggable: true,
-        icon: createPointIcon(measurePoints.length)
+        draggable:true,
+        icon:createPointIcon(measurePoints.length)
       }).addTo(map);
 
       marker.on("drag", () => {
@@ -1117,26 +959,22 @@
           updateShape();
         }
       });
-
       marker.on("dragend", updateAreaInfo);
-
       markers.push(marker);
       updateShape();
     }
 
     function createPointIcon(number) {
       return L.divIcon({
-        html: `<div class="point-marker">${number}</div>`,
-        className: "",
-        iconSize: [30, 30],
-        iconAnchor: [15, 15]
+        html:`<div class="point-marker">${number}</div>`,
+        className:"",
+        iconSize:[30,30],
+        iconAnchor:[15,15]
       });
     }
 
     function refreshMarkerNumbers() {
-      markers.forEach((marker, index) => {
-        marker.setIcon(createPointIcon(index + 1));
-      });
+      markers.forEach((marker,index) => marker.setIcon(createPointIcon(index + 1)));
     }
 
     function updateShape() {
@@ -1144,33 +982,23 @@
         map.removeLayer(lineLayer);
         lineLayer = null;
       }
-
       if (polygonLayer) {
         map.removeLayer(polygonLayer);
         polygonLayer = null;
       }
-
       if (measurePoints.length >= 2) {
-        lineLayer = L.polyline(measurePoints, {
-          color: "#ffb703",
-          weight: 4,
-          opacity: 1
-        }).addTo(map);
-
+        lineLayer = L.polyline(measurePoints, {color:"#ffb703", weight:4, opacity:1}).addTo(map);
         lineLayer.bringToFront();
       }
-
       if (measurePoints.length >= 3) {
         polygonLayer = L.polygon(measurePoints, {
-          color: "#ffb703",
-          weight: 4,
-          fillColor: "#39f2a2",
-          fillOpacity: 0.18
+          color:"#ffb703",
+          weight:4,
+          fillColor:"#39f2a2",
+          fillOpacity:0.18
         }).addTo(map);
-
         polygonLayer.bringToFront();
       }
-
       refreshMarkerNumbers();
       updateAreaInfo();
     }
@@ -1180,10 +1008,8 @@
         showToast("ยังไม่มีจุดให้ลบ");
         return;
       }
-
       const marker = markers.pop();
       if (marker) map.removeLayer(marker);
-
       measurePoints.pop();
       updateShape();
       showToast("ลบจุดล่าสุดแล้ว");
@@ -1193,13 +1019,10 @@
       markers.forEach(marker => map.removeLayer(marker));
       markers = [];
       measurePoints = [];
-
       if (lineLayer) map.removeLayer(lineLayer);
       if (polygonLayer) map.removeLayer(polygonLayer);
-
       lineLayer = null;
       polygonLayer = null;
-
       updateAreaInfo();
       showToast("ล้างจุดทั้งหมดแล้ว");
     }
@@ -1207,19 +1030,15 @@
     function updateAreaInfo() {
       const plotName = getPlotName();
       const plotDetail = getPlotDetail();
-
       infoPlotName.textContent = `ชื่อ: ${plotName}`;
       infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
-
       if (measurePoints.length < 3) {
         thaiAreaText.textContent = "ขนาดพื้นที่: -";
         floatingAreaText.textContent = "-";
         return;
       }
-
       const area = turf.area(pointsToPolygonGeoJSON(measurePoints));
       const thaiArea = formatThaiArea(area);
-
       thaiAreaText.textContent = `ขนาดพื้นที่: ${thaiArea}`;
       floatingAreaText.textContent = thaiArea;
     }
@@ -1252,7 +1071,6 @@
         updateCenterCoordinateBox();
         return;
       }
-
       locationWatchId = navigator.geolocation.watchPosition(
         (position) => {
           lastCurrentLat = position.coords.latitude;
@@ -1260,35 +1078,24 @@
           updateCurrentLocationMarker(lastCurrentLat, lastCurrentLon);
           updateCenterCoordinateBox();
         },
-        () => {
-          updateCenterCoordinateBox();
-        },
-        {
-          enableHighAccuracy: true,
-          maximumAge: 2000,
-          timeout: 20000
-        }
+        () => updateCenterCoordinateBox(),
+        {enableHighAccuracy:true, maximumAge:2000, timeout:20000}
       );
     }
 
     function updateCurrentLocationMarker(lat, lon) {
       const icon = L.divIcon({
-        html: `<div class="my-location"></div>`,
-        className: "",
-        iconSize: [22, 22],
-        iconAnchor: [11, 11]
+        html:`<div class="my-location"></div>`,
+        className:"",
+        iconSize:[22,22],
+        iconAnchor:[11,11]
       });
-
       if (!currentLocationMarker) {
-        currentLocationMarker = L.marker([lat, lon], {
-          title: "ตำแหน่งปัจจุบัน",
-          icon
-        }).addTo(map);
+        currentLocationMarker = L.marker([lat, lon], {title:"ตำแหน่งปัจจุบัน", icon}).addTo(map);
       } else {
         currentLocationMarker.setLatLng([lat, lon]);
         currentLocationMarker.setIcon(icon);
       }
-
       currentLocationMarker.bindPopup(`<b>ตำแหน่งปัจจุบัน</b><br>${formatCoordinate(lat, lon)}`);
     }
 
@@ -1297,7 +1104,6 @@
         showToast("กำลังรอตำแหน่ง GPS...");
         return;
       }
-
       map.setView([lastCurrentLat, lastCurrentLon], 18);
       centerPopupText.textContent = formatCoordinate(lastCurrentLat, lastCurrentLon);
       centerPopup.classList.remove("hide");
@@ -1314,21 +1120,14 @@
         ".leaflet-popup-pane",
         ".leaflet-tooltip-pane"
       ];
-
       selectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(el => {
-          hiddenElements.push({
-            element: el,
-            display: el.style.display
-          });
+          hiddenElements.push({element:el, display:el.style.display});
           el.style.display = "none";
         });
       });
-
       return function restoreMapAfterCapture() {
-        hiddenElements.forEach(item => {
-          item.element.style.display = item.display;
-        });
+        hiddenElements.forEach(item => item.element.style.display = item.display);
       };
     }
 
@@ -1337,9 +1136,7 @@
         alert("กรุณาปักจุดอย่างน้อย 3 จุดก่อนบันทึกภาพแผนที่");
         return;
       }
-
       showToast("กำลังจัดตำแหน่งแปลงและสร้างภาพ...");
-
       const saveButton = document.querySelector(".btn-save");
       if (saveButton) saveButton.disabled = true;
 
@@ -1348,19 +1145,17 @@
 
       try {
         const mapElement = document.getElementById("map");
-
         restoreView = await fitMapToPolygonForCapture(mapElement);
         await waitForMapTiles(5000);
-
         restoreMap = prepareMapForCapture();
 
         const mapCanvas = await html2canvas(mapElement, {
-          backgroundColor: "#000000",
-          scale: Math.min(2, window.devicePixelRatio || 1),
-          useCORS: true,
-          allowTaint: false,
-          logging: false,
-          imageTimeout: 20000
+          backgroundColor:"#000000",
+          scale:Math.min(2, window.devicePixelRatio || 1),
+          useCORS:true,
+          allowTaint:false,
+          logging:false,
+          imageTimeout:20000
         });
 
         if (restoreMap) {
@@ -1392,16 +1187,13 @@
         );
 
         const blob = await canvasToBlobSafe(outputCanvas, "image/jpeg", 0.94);
-
         if (!blob) {
           alert("ไม่สามารถสร้างไฟล์ภาพได้ กรุณาลองเปิดผ่าน Chrome หรือ Edge");
           return;
         }
-
         const fileName = createMapFileName();
         showPreviewModal(blob, fileName);
         showToast("สร้างภาพสำเร็จ");
-
       } catch (error) {
         console.error("captureMapImage error:", error);
         alert("ไม่สามารถบันทึกภาพแผนที่ได้ กรุณาเปิดผ่าน Chrome / Edge / Safari โดยตรง และรอให้แผนที่โหลดครบก่อนกดบันทึก");
@@ -1415,33 +1207,25 @@
     async function fitMapToPolygonForCapture(mapElement) {
       const oldCenter = map.getCenter();
       const oldZoom = map.getZoom();
-
-      const bounds = L.latLngBounds(
-        measurePoints.map(([lat, lng]) => [lat, lng])
-      );
-
+      const bounds = L.latLngBounds(measurePoints.map(([lat, lng]) => [lat, lng]));
       const mapW = mapElement.clientWidth;
       const mapH = mapElement.clientHeight;
-
       const topSafe = Math.max(80, Math.round(mapH * 0.12));
-      const bottomSafe = Math.max(170, Math.round(mapH * 0.24));
+      const bottomSafe = Math.max(190, Math.round(mapH * 0.26));
       const sideSafe = Math.max(28, Math.round(mapW * 0.055));
 
       map.fitBounds(bounds, {
-        paddingTopLeft: [sideSafe, topSafe],
-        paddingBottomRight: [sideSafe, bottomSafe],
-        maxZoom: 19,
-        animate: false
+        paddingTopLeft:[sideSafe, topSafe],
+        paddingBottomRight:[sideSafe, bottomSafe],
+        maxZoom:19,
+        animate:false
       });
 
       await waitForMapTiles(5000);
       await waitForMapRender(450);
 
       return function restoreOriginalView() {
-        map.setView(oldCenter, oldZoom, {
-          animate: false
-        });
-
+        map.setView(oldCenter, oldZoom, {animate:false});
         setTimeout(() => {
           map.invalidateSize(false);
           updateCenterCoordinateBox();
@@ -1457,43 +1241,34 @@
     function waitForMapTiles(timeout = 3000) {
       return new Promise((resolve) => {
         const mapEl = document.getElementById("map");
-
         if (!mapEl) {
           resolve();
           return;
         }
-
         const start = Date.now();
-
         function checkTiles() {
           const tiles = Array.from(mapEl.querySelectorAll(".leaflet-tile"));
-
           const loadingTiles = tiles.filter(tile => {
             const visible = tile.style.display !== "none";
             const complete = tile.complete && tile.naturalWidth > 0;
             return visible && !complete;
           });
-
           if (loadingTiles.length === 0) {
             setTimeout(resolve, 350);
             return;
           }
-
           if (Date.now() - start > timeout) {
             resolve();
             return;
           }
-
           setTimeout(checkTiles, 120);
         }
-
         checkTiles();
       });
     }
 
     function drawMeasuredPolygonOnCanvas(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
       if (!map || measurePoints.length < 2) return;
-
       const points = getMeasurePointsOnCanvas(canvasWidth, canvasHeight, mapWidth, mapHeight);
       const base = Math.min(canvasWidth, canvasHeight);
 
@@ -1501,22 +1276,15 @@
 
       if (points.length >= 3) {
         ctx.beginPath();
-        points.forEach((pt, index) => {
-          if (index === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        });
+        points.forEach((pt, index) => index === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y));
         ctx.closePath();
         ctx.fillStyle = "rgba(57, 242, 162, 0.22)";
         ctx.fill();
       }
 
       ctx.beginPath();
-      points.forEach((pt, index) => {
-        if (index === 0) ctx.moveTo(pt.x, pt.y);
-        else ctx.lineTo(pt.x, pt.y);
-      });
+      points.forEach((pt, index) => index === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y));
       if (points.length >= 3) ctx.closePath();
-
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.strokeStyle = "rgba(0, 0, 0, 0.78)";
@@ -1534,23 +1302,16 @@
       ctx.lineWidth = Math.max(2, Math.round(base * 0.002));
       ctx.stroke();
 
-      points.forEach((pt, index) => {
-        drawCapturePointMarker(ctx, pt.x, pt.y, index + 1, canvasWidth, canvasHeight);
-      });
-
+      points.forEach((pt,index) => drawCapturePointMarker(ctx, pt.x, pt.y, index + 1, canvasWidth, canvasHeight));
       ctx.restore();
     }
 
     function getMeasurePointsOnCanvas(canvasWidth, canvasHeight, mapWidth, mapHeight) {
       const scaleX = canvasWidth / mapWidth;
       const scaleY = canvasHeight / mapHeight;
-
-      return measurePoints.map(([lat, lng]) => {
-        const p = map.latLngToContainerPoint([lat, lng]);
-        return {
-          x: p.x * scaleX,
-          y: p.y * scaleY
-        };
+      return measurePoints.map(([lat,lng]) => {
+        const p = map.latLngToContainerPoint([lat,lng]);
+        return {x:p.x * scaleX, y:p.y * scaleY};
       });
     }
 
@@ -1558,77 +1319,64 @@
       const base = Math.min(canvasWidth, canvasHeight);
       const r = Math.max(26, Math.round(base * 0.026));
       const fontSize = Math.max(26, Math.round(r * 0.96));
-
       ctx.save();
-
       ctx.beginPath();
       ctx.arc(x, y, r + 5, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(0,0,0,0.35)";
       ctx.fill();
-
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fillStyle = "#59e1db";
       ctx.fill();
-
       ctx.lineWidth = Math.max(5, Math.round(r * 0.20));
       ctx.strokeStyle = "#ffffff";
       ctx.stroke();
-
       ctx.fillStyle = "#04120c";
       ctx.font = `900 ${fontSize}px Arial`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(String(number), x, y + 1);
-
       ctx.restore();
     }
 
     function drawOverlayLogoAndInfo(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
       const margin = Math.round(Math.min(canvasWidth, canvasHeight) * 0.035);
-
-      const logoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.23)
-        : Math.round(canvasWidth * 0.36);
-
-      const logoH = canvasWidth > canvasHeight
-        ? Math.round(canvasHeight * 0.085)
-        : Math.round(canvasHeight * 0.075);
-
+      const logoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.23) : Math.round(canvasWidth * 0.36);
+      const logoH = canvasWidth > canvasHeight ? Math.round(canvasHeight * 0.085) : Math.round(canvasHeight * 0.075);
       drawOverlayLogo(ctx, margin, margin, logoW, logoH);
 
-      const infoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.48)
-        : Math.round(canvasWidth * 0.74);
-
+      const infoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.58) : Math.round(canvasWidth * 0.88);
       const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
-      const infoX = margin;
+      const infoX = Math.round((canvasWidth - infoW) / 2);
       const infoY = canvasHeight - infoH - margin;
-
       drawOverlayInfoBox(ctx, infoX, infoY, infoW, infoH, canvasWidth, canvasHeight);
     }
 
     function drawOverlayLogo(ctx, x, y, maxW, maxH) {
-      if (logoImage) {
-        drawLogoFit(ctx, logoImage, x, y, maxW, maxH);
-      } else {
-        drawSmartLandBadge(ctx, x, y, maxW, maxH);
-      }
+      if (logoImage) drawLogoFit(ctx, logoImage, x, y, maxW, maxH);
+      else drawSmartLandBadge(ctx, x, y, maxW, maxH);
     }
 
     function getOverlayTextStyles(canvasW, canvasH) {
       const base = Math.min(canvasW, canvasH);
-
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, Math.round(value)));
       return {
-        title: Math.max(34, Math.round(base * 0.044)),
-        area: Math.max(38, Math.round(base * 0.050)),
-        body: Math.max(28, Math.round(base * 0.036)),
-        meta: Math.max(25, Math.round(base * 0.032)),
-        label: Math.max(24, Math.round(base * 0.031)),
-        paddingX: Math.max(24, Math.round(base * 0.028)),
-        paddingY: Math.max(22, Math.round(base * 0.025)),
-        radius: Math.max(24, Math.round(base * 0.024)),
-        rowGap: Math.max(10, Math.round(base * 0.012))
+        title:clamp(base * 0.032, 28, 42),
+        coordLabel:clamp(base * 0.025, 21, 30),
+        coordValue:clamp(base * 0.033, 28, 44),
+        nameLabel:clamp(base * 0.023, 20, 28),
+        nameValue:clamp(base * 0.030, 25, 38),
+        areaLabel:clamp(base * 0.022, 19, 27),
+        areaValue:clamp(base * 0.028, 24, 36),
+        detailLabel:clamp(base * 0.021, 18, 26),
+        detailValue:clamp(base * 0.025, 22, 32),
+        metaLabel:clamp(base * 0.020, 17, 24),
+        metaValue:clamp(base * 0.022, 19, 28),
+        paddingX:clamp(base * 0.030, 22, 34),
+        paddingY:clamp(base * 0.028, 20, 32),
+        radius:clamp(base * 0.026, 20, 30),
+        rowGap:clamp(base * 0.014, 10, 18),
+        innerGap:clamp(base * 0.010, 7, 14)
       };
     }
 
@@ -1636,34 +1384,26 @@
       const data = getAreaData();
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
-
       let h = s.paddingY * 2;
-
       rows.forEach(row => {
-        ctx.font = row.font;
-
         if (row.type === "title") {
           h += row.lineHeight + s.rowGap;
           return;
         }
-
-        if (row.type === "area") {
-          h += row.lineHeight + s.rowGap + 12;
+        if (row.type === "highlight") {
+          const innerW = boxW - s.paddingX * 2 - 24;
+          ctx.font = row.valueFont;
+          const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
+          h += 16 + row.labelLineHeight + s.innerGap + valueLines.length * row.valueLineHeight + 16 + s.rowGap;
           return;
         }
-
-        const labelW = s.label * 2.35;
-        const wrapped = wrapCanvasText(
-          ctx,
-          row.text,
-          boxW - s.paddingX * 2 - labelW,
-          row.maxLines
-        );
-
-        h += wrapped.length * row.lineHeight + s.rowGap;
+        const labelW = row.labelWidth;
+        const valueW = boxW - s.paddingX * 2 - labelW - 12;
+        ctx.font = row.valueFont;
+        const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
+        h += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
-
-      return h + 12;
+      return h + 8;
     }
 
     function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
@@ -1671,19 +1411,9 @@
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
 
-      drawRoundRect(
-        ctx,
-        x,
-        y,
-        w,
-        h,
-        s.radius,
-        "rgba(4, 12, 24, 0.52)",
-        "rgba(126, 245, 255, 0.38)"
-      );
+      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(4, 12, 24, 0.58)", "rgba(126, 245, 255, 0.40)");
 
       ctx.save();
-
       ctx.beginPath();
       ctx.moveTo(x + s.paddingX, y + 14);
       ctx.lineTo(x + w - s.paddingX, y + 14);
@@ -1692,11 +1422,6 @@
       ctx.stroke();
 
       let cy = y + s.paddingY;
-      const labelW = s.label * 2.35;
-      const labelX = x + s.paddingX;
-      const textX = x + s.paddingX + labelW;
-      const maxTextW = w - s.paddingX * 2 - labelW;
-
       ctx.textBaseline = "top";
 
       rows.forEach(row => {
@@ -1711,45 +1436,49 @@
           return;
         }
 
-        if (row.type === "area") {
-          const pillH = row.lineHeight + 12;
-          const pillY = cy - 4;
+        if (row.type === "highlight") {
+          const cardX = x + s.paddingX;
+          const cardY = cy;
+          const cardW = w - s.paddingX * 2;
+          const innerX = cardX + 14;
+          const innerW = cardW - 28;
+          ctx.font = row.valueFont;
+          const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
+          const cardH = 16 + row.labelLineHeight + s.innerGap + valueLines.length * row.valueLineHeight + 16;
 
-          drawRoundRect(
-            ctx,
-            x + s.paddingX - 4,
-            pillY,
-            w - s.paddingX * 2 + 8,
-            pillH,
-            Math.round(pillH / 2),
-            "rgba(57, 242, 162, 0.16)",
-            "rgba(57, 242, 162, 0.38)"
-          );
-
-          ctx.font = row.font;
+          drawRoundRect(ctx, cardX, cardY, cardW, cardH, Math.round(s.radius * 0.72), "rgba(76, 201, 255, 0.16)", "rgba(76, 201, 255, 0.42)");
+          ctx.font = row.labelFont;
+          ctx.fillStyle = row.labelColor;
+          ctx.fillText(row.label, innerX, cardY + 14);
+          ctx.font = row.valueFont;
           ctx.fillStyle = row.color;
-          ctx.fillText(row.text, x + s.paddingX + 8, cy + 2);
-
-          cy += pillH + s.rowGap;
+          let valueY = cardY + 14 + row.labelLineHeight + s.innerGap;
+          valueLines.forEach(line => {
+            ctx.fillText(line, innerX, valueY);
+            valueY += row.valueLineHeight;
+          });
+          cy += cardH + s.rowGap;
           return;
         }
 
-        ctx.font = `900 ${s.label}px Arial`;
+        const labelX = x + s.paddingX;
+        const valueX = labelX + row.labelWidth + 12;
+        const valueW = w - s.paddingX * 2 - row.labelWidth - 12;
+
+        ctx.font = row.labelFont;
         ctx.fillStyle = row.labelColor;
         ctx.fillText(row.label, labelX, cy);
 
-        ctx.font = row.font;
+        ctx.font = row.valueFont;
         ctx.fillStyle = row.color;
-
-        const wrapped = wrapCanvasText(ctx, row.text, maxTextW, row.maxLines);
-        wrapped.forEach(line => {
-          ctx.fillText(line, textX, cy);
-          cy += row.lineHeight;
+        const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
+        let valueY = cy;
+        valueLines.forEach(line => {
+          ctx.fillText(line, valueX, valueY);
+          valueY += row.valueLineHeight;
         });
-
-        cy += s.rowGap;
+        cy += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
       });
-
       ctx.restore();
     }
 
@@ -1757,100 +1486,96 @@
       const plotName = getPlotName();
       const plotDetail = getPlotDetail();
       const nowText = formatShortThaiDateTime(new Date());
-
-      const rows = [
+      return [
         {
-          type: "title",
-          text: "ข้อมูลแปลง",
-          font: `900 ${s.title}px Arial`,
-          color: "#7ef5ff",
-          lineHeight: Math.round(s.title * 1.18)
+          type:"title",
+          text:"ข้อมูลแปลง",
+          font:`900 ${s.title}px Arial`,
+          color:"#7ef5ff",
+          lineHeight:Math.round(s.title * 1.18)
         },
         {
-          type: "area",
-          text: `ขนาดพื้นที่ ${formatThaiArea(data.area)}`,
-          font: `900 ${s.area}px Arial`,
-          color: "#d8fff0",
-          lineHeight: Math.round(s.area * 1.16)
+          type:"highlight",
+          label:"พิกัดศูนย์กลางแปลง",
+          text:data.centroidText,
+          labelFont:`900 ${s.coordLabel}px Arial`,
+          valueFont:`900 ${s.coordValue}px Arial`,
+          labelColor:"#7ef5ff",
+          color:"#ffffff",
+          maxLines:2,
+          labelLineHeight:Math.round(s.coordLabel * 1.18),
+          valueLineHeight:Math.round(s.coordValue * 1.18)
+        },
+        {
+          type:"normal",
+          label:"ชื่อ",
+          text:plotName,
+          labelFont:`900 ${s.nameLabel}px Arial`,
+          valueFont:`900 ${s.nameValue}px Arial`,
+          labelColor:"#ffffff",
+          color:"#ffffff",
+          maxLines:1,
+          labelWidth:s.nameLabel * 3.2,
+          labelLineHeight:Math.round(s.nameLabel * 1.18),
+          valueLineHeight:Math.round(s.nameValue * 1.18)
+        },
+        {
+          type:"normal",
+          label:"ขนาด",
+          text:formatThaiArea(data.area),
+          labelFont:`900 ${s.areaLabel}px Arial`,
+          valueFont:`900 ${s.areaValue}px Arial`,
+          labelColor:"#39f2a2",
+          color:"#d8fff0",
+          maxLines:2,
+          labelWidth:s.areaLabel * 3.2,
+          labelLineHeight:Math.round(s.areaLabel * 1.18),
+          valueLineHeight:Math.round(s.areaValue * 1.18)
+        },
+        {
+          type:"normal",
+          label:"รายละเอียด",
+          text:plotDetail,
+          labelFont:`800 ${s.detailLabel}px Arial`,
+          valueFont:`800 ${s.detailValue}px Arial`,
+          labelColor:"#cdefff",
+          color:"#edf7ff",
+          maxLines:2,
+          labelWidth:s.detailLabel * 5.0,
+          labelLineHeight:Math.round(s.detailLabel * 1.18),
+          valueLineHeight:Math.round(s.detailValue * 1.18)
+        },
+        {
+          type:"normal",
+          label:"เวลา",
+          text:nowText,
+          labelFont:`800 ${s.metaLabel}px Arial`,
+          valueFont:`800 ${s.metaValue}px Arial`,
+          labelColor:"#ffb703",
+          color:"#fff3d0",
+          maxLines:1,
+          labelWidth:s.metaLabel * 3.2,
+          labelLineHeight:Math.round(s.metaLabel * 1.18),
+          valueLineHeight:Math.round(s.metaValue * 1.18)
         }
       ];
-
-      rows.push({
-        type: "normal",
-        label: "ชื่อ",
-        text: plotName,
-        font: `850 ${s.body}px Arial`,
-        color: "#ffffff",
-        labelColor: "#ffffff",
-        maxLines: 1,
-        lineHeight: Math.round(s.body * 1.18)
-      });
-
-      rows.push({
-        type: "normal",
-        label: "ราย",
-        text: plotDetail,
-        font: `800 ${s.body}px Arial`,
-        color: "#eef6ff",
-        labelColor: "#eef6ff",
-        maxLines: 1,
-        lineHeight: Math.round(s.body * 1.18)
-      });
-
-      rows.push({
-        type: "normal",
-        label: "พิกัด",
-        text: data.centroidText,
-        font: `800 ${s.meta}px Arial`,
-        color: "#dff7ff",
-        labelColor: "#4cc9ff",
-        maxLines: 1,
-        lineHeight: Math.round(s.meta * 1.18)
-      });
-
-      rows.push({
-        type: "normal",
-        label: "เวลา",
-        text: nowText,
-        font: `800 ${s.meta}px Arial`,
-        color: "#fff3d0",
-        labelColor: "#ffb703",
-        maxLines: 1,
-        lineHeight: Math.round(s.meta * 1.18)
-      });
-
-      return rows;
     }
 
     function getAreaData() {
-      if (measurePoints.length < 3) {
-        return {
-          area: 0,
-          centroidText: "-"
-        };
-      }
-
+      if (measurePoints.length < 3) return {area:0, centroidText:"-"};
       const geojson = pointsToPolygonGeoJSON(measurePoints);
       const area = turf.area(geojson);
       const centroid = turf.centroid(geojson);
       const lon = centroid.geometry.coordinates[0];
       const lat = centroid.geometry.coordinates[1];
-
-      return {
-        area,
-        centroidText: formatCoordinate(lat, lon)
-      };
+      return {area, centroidText:formatCoordinate(lat, lon)};
     }
 
     function canvasToBlobSafe(canvas, type = "image/jpeg", quality = 0.94) {
       return new Promise((resolve) => {
         try {
-          if (canvas.toBlob) {
-            canvas.toBlob(blob => resolve(blob), type, quality);
-          } else {
-            const dataUrl = canvas.toDataURL(type, quality);
-            resolve(dataURLToBlob(dataUrl));
-          }
+          if (canvas.toBlob) canvas.toBlob(blob => resolve(blob), type, quality);
+          else resolve(dataURLToBlob(canvas.toDataURL(type, quality)));
         } catch (error) {
           console.error(error);
           resolve(null);
@@ -1864,59 +1589,36 @@
       const binary = atob(parts[1]);
       const length = binary.length;
       const array = new Uint8Array(length);
-
-      for (let i = 0; i < length; i++) {
-        array[i] = binary.charCodeAt(i);
-      }
-
-      return new Blob([array], {
-        type: mime
-      });
+      for (let i = 0; i < length; i++) array[i] = binary.charCodeAt(i);
+      return new Blob([array], {type:mime});
     }
 
     function drawLogoFit(ctx, img, x, y, maxW, maxH) {
       const ratio = img.width / img.height;
       let w = maxW;
       let h = Math.round(w / ratio);
-
       if (h > maxH) {
         h = maxH;
         w = Math.round(h * ratio);
       }
-
       ctx.drawImage(img, x, y, w, h);
     }
 
     function drawSmartLandBadge(ctx, x, y, maxW, h) {
       ctx.save();
-
       const text = "SmartLAND";
       ctx.font = `900 ${Math.round(h * 0.46)}px Arial`;
-
       const textW = ctx.measureText(text).width;
       const w = Math.min(maxW, Math.round(textW + h * 0.9));
-
-      drawRoundRect(
-        ctx,
-        x,
-        y,
-        w,
-        h,
-        Math.round(h * 0.24),
-        "rgba(57,242,162,.95)",
-        "rgba(255,255,255,.18)"
-      );
-
+      drawRoundRect(ctx, x, y, w, h, Math.round(h * 0.24), "rgba(57,242,162,.95)", "rgba(255,255,255,.18)");
       ctx.fillStyle = "rgba(2,8,14,.95)";
       ctx.textBaseline = "middle";
       ctx.fillText(text, x + Math.round(h * 0.30), y + h / 2);
-
       ctx.restore();
     }
 
     function drawRoundRect(ctx, x, y, w, h, r, fill, stroke) {
       ctx.save();
-
       ctx.beginPath();
       ctx.moveTo(x + r, y);
       ctx.lineTo(x + w - r, y);
@@ -1928,62 +1630,43 @@
       ctx.lineTo(x, y + r);
       ctx.quadraticCurveTo(x, y, x + r, y);
       ctx.closePath();
-
       ctx.fillStyle = fill;
       ctx.fill();
-
       ctx.lineWidth = 2;
       ctx.strokeStyle = stroke;
       ctx.stroke();
-
       ctx.restore();
     }
 
     function wrapCanvasText(ctx, text, maxWidth, maxLines = 2) {
       text = String(text || "-");
-
       const units = text.includes(" ") ? text.split(" ") : Array.from(text);
       const lines = [];
       let line = "";
-
       for (const unit of units) {
-        const test = text.includes(" ")
-          ? (line ? line + " " + unit : unit)
-          : line + unit;
-
+        const test = text.includes(" ") ? (line ? line + " " + unit : unit) : line + unit;
         if (ctx.measureText(test).width > maxWidth && line) {
           lines.push(line);
           line = unit;
-
           if (lines.length >= maxLines) break;
         } else {
           line = test;
         }
       }
-
-      if (line && lines.length < maxLines) {
-        lines.push(line);
-      }
-
+      if (line && lines.length < maxLines) lines.push(line);
       return lines;
     }
 
     function showPreviewModal(blob, fileName) {
       latestImageBlob = blob;
       latestFileName = fileName;
-
-      if (latestImageUrl) {
-        URL.revokeObjectURL(latestImageUrl);
-      }
-
+      if (latestImageUrl) URL.revokeObjectURL(latestImageUrl);
       latestImageUrl = URL.createObjectURL(blob);
       previewImage.src = latestImageUrl;
-
       const isIOSNow = isIOSDevice();
       tapSaveOverlay.style.display = isIOSNow ? "block" : "none";
       iosSaveHint.style.display = isIOSNow ? "block" : "none";
       saveImageButton.style.display = isIOSNow ? "none" : "block";
-
       previewModal.classList.remove("hide");
     }
 
@@ -1996,21 +1679,17 @@
         alert("ยังไม่มีรูปภาพสำหรับบันทึก");
         return;
       }
-
       try {
         const url = URL.createObjectURL(latestImageBlob);
         const link = document.createElement("a");
-
         link.href = url;
         link.download = latestFileName;
         link.target = "_blank";
         link.rel = "noopener";
         link.style.display = "none";
-
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
         setTimeout(() => URL.revokeObjectURL(url), 2000);
         showToast("บันทึกภาพแล้ว");
       } catch (error) {
@@ -2025,42 +1704,26 @@
         alert("ยังไม่มีรูปภาพสำหรับแชร์");
         return;
       }
-
       try {
-        const file = new File([latestImageBlob], latestFileName, {
-          type: latestImageBlob.type || "image/jpeg"
-        });
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: "SmartLAND",
-            text: "ภาพแผนที่จาก SmartLAND",
-            files: [file]
-          });
+        const file = new File([latestImageBlob], latestFileName, {type:latestImageBlob.type || "image/jpeg"});
+        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+          await navigator.share({title:"SmartLAND", text:"ภาพแผนที่จาก SmartLAND", files:[file]});
           showToast("แชร์รูปภาพแล้ว");
           return;
         }
-
         if (navigator.share) {
-          await navigator.share({
-            title: "SmartLAND",
-            text: "ภาพแผนที่จาก SmartLAND"
-          });
+          await navigator.share({title:"SmartLAND", text:"ภาพแผนที่จาก SmartLAND"});
           showToast("แชร์ข้อมูลแล้ว");
           return;
         }
-
         alert("อุปกรณ์หรือเบราว์เซอร์นี้ยังไม่รองรับการแชร์โดยตรง");
       } catch (error) {
-        if (error.name !== "AbortError") {
-          alert("ไม่สามารถแชร์รูปภาพได้ในขณะนี้");
-        }
+        if (error.name !== "AbortError") alert("ไม่สามารถแชร์รูปภาพได้ในขณะนี้");
       }
     }
 
     function checkBrowserSupportOnStart() {
       const result = getBrowserSupportStatus();
-
       if (!result.ok) {
         browserGateReason.textContent = result.reason;
         browserGate.classList.remove("hide");
@@ -2069,62 +1732,33 @@
 
     function getBrowserSupportStatus() {
       const ua = navigator.userAgent || "";
-
       const isLine = /Line/i.test(ua);
       const isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBAN\/FBIOS/i.test(ua);
       const isInstagram = /Instagram/i.test(ua);
       const isMessenger = /MessengerForiOS|FB_IAB\/Messenger/i.test(ua);
       const isTikTok = /TikTok/i.test(ua);
       const isInApp = isLine || isFacebook || isInstagram || isMessenger || isTikTok;
-
       const isSecure = window.isSecureContext || location.protocol === "https:" || location.hostname === "localhost";
       const hasGeo = "geolocation" in navigator;
       const hasCanvas = !!window.HTMLCanvasElement;
 
       if (isInApp && !browserGateDismissed) {
-        return {
-          ok: false,
-          reason: "ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
-        };
+        return {ok:false, reason:"ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"};
       }
-
-      if (!isSecure) {
-        return {
-          ok: false,
-          reason: "เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
-        };
-      }
-
-      if (!hasGeo) {
-        return {
-          ok: false,
-          reason: "เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
-        };
-      }
-
-      if (!hasCanvas) {
-        return {
-          ok: false,
-          reason: "เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
-        };
-      }
-
-      return {
-        ok: true,
-        reason: ""
-      };
+      if (!isSecure) return {ok:false, reason:"เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"};
+      if (!hasGeo) return {ok:false, reason:"เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"};
+      if (!hasCanvas) return {ok:false, reason:"เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"};
+      return {ok:true, reason:""};
     }
 
     function openInChromeAndroid() {
       const url = location.href;
       const isAndroid = /Android/i.test(navigator.userAgent || "");
-
       if (isAndroid) {
         const cleanUrl = url.replace(/^https?:\/\//, "");
         location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
         return;
       }
-
       copyCurrentLink();
       alert("ระบบคัดลอกลิงก์แล้ว กรุณานำไปวางเปิดใน Safari / Chrome / Edge");
     }
@@ -2140,7 +1774,6 @@
 
     function recheckBrowserSupport() {
       const result = getBrowserSupportStatus();
-
       if (result.ok) {
         browserGate.classList.add("hide");
         showToast("เบราว์เซอร์นี้พร้อมใช้งาน");
@@ -2163,14 +1796,8 @@
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
-
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
-
-      if (navigator.vibrate) {
-        navigator.vibrate(60);
-      }
+      setTimeout(() => toast.classList.remove("show"), 2200);
+      if (navigator.vibrate) navigator.vibrate(60);
     }
 
     function getPlotName() {
@@ -2191,7 +1818,6 @@
       const h = String(d.getHours()).padStart(2, "0");
       const min = String(d.getMinutes()).padStart(2, "0");
       const s = String(d.getSeconds()).padStart(2, "0");
-
       return `SmartLAND_${y}${m}${day}_${h}${min}${s}.jpg`;
     }
 
@@ -2202,19 +1828,16 @@
       const h = String(date.getHours()).padStart(2, "0");
       const min = String(date.getMinutes()).padStart(2, "0");
       const s = String(date.getSeconds()).padStart(2, "0");
-
       return `${d}/${m}/${y} ${h}:${min}:${s}`;
     }
 
     function formatThaiArea(areaSqm) {
       if (!areaSqm || areaSqm <= 0) return "-";
-
       const rai = Math.floor(areaSqm / 1600);
       const remainAfterRai = areaSqm - rai * 1600;
       const ngan = Math.floor(remainAfterRai / 400);
       const remainAfterNgan = remainAfterRai - ngan * 400;
       const sqWa = remainAfterNgan / 4;
-
       return `${rai} ไร่ ${ngan} งาน ${sqWa.toFixed(2)} ตร.วา`;
     }
 
@@ -2223,7 +1846,6 @@
         const utm = latLonToUTM(lat, lon);
         return `UTM ${utm.zone}${utm.hemisphere} X ${Math.round(utm.easting)} Y ${Math.round(utm.northing)}`;
       }
-
       return `Lat ${lat.toFixed(6)}, Lon ${lon.toFixed(6)}`;
     }
 
@@ -2235,40 +1857,32 @@
       const a = 6378137.0;
       const f = 1 / 298.257223563;
       const k0 = 0.9996;
-
       const e = Math.sqrt(f * (2 - f));
       const eSq = e * e;
       const ePrimeSq = eSq / (1 - eSq);
-
       const zone = Math.floor((lon + 180) / 6) + 1;
       const lonOrigin = (zone - 1) * 6 - 180 + 3;
-
       const latRad = degToRad(lat);
       const lonRad = degToRad(lon);
       const lonOriginRad = degToRad(lonOrigin);
-
       const sinLat = Math.sin(latRad);
       const cosLat = Math.cos(latRad);
       const tanLat = Math.tan(latRad);
-
       const N = a / Math.sqrt(1 - eSq * sinLat * sinLat);
       const T = tanLat * tanLat;
       const C = ePrimeSq * cosLat * cosLat;
       const A = cosLat * (lonRad - lonOriginRad);
-
       const M = a * (
         (1 - eSq / 4 - 3 * Math.pow(eSq, 2) / 64 - 5 * Math.pow(eSq, 3) / 256) * latRad
         - (3 * eSq / 8 + 3 * Math.pow(eSq, 2) / 32 + 45 * Math.pow(eSq, 3) / 1024) * Math.sin(2 * latRad)
         + (15 * Math.pow(eSq, 2) / 256 + 45 * Math.pow(eSq, 3) / 1024) * Math.sin(4 * latRad)
         - (35 * Math.pow(eSq, 3) / 3072) * Math.sin(6 * latRad)
       );
-
-      let easting = k0 * N * (
+      const easting = k0 * N * (
         A
         + (1 - T + C) * Math.pow(A, 3) / 6
         + (5 - 18 * T + T * T + 72 * C - 58 * ePrimeSq) * Math.pow(A, 5) / 120
       ) + 500000.0;
-
       let northing = k0 * (
         M + N * tanLat * (
           Math.pow(A, 2) / 2
@@ -2276,19 +1890,9 @@
           + (61 - 58 * T + T * T + 600 * C - 330 * ePrimeSq) * Math.pow(A, 6) / 720
         )
       );
-
       const hemisphere = lat >= 0 ? "N" : "S";
-
-      if (lat < 0) {
-        northing += 10000000.0;
-      }
-
-      return {
-        zone,
-        hemisphere,
-        easting,
-        northing
-      };
+      if (lat < 0) northing += 10000000.0;
+      return {zone, hemisphere, easting, northing};
     }
   </script>
 </body>
