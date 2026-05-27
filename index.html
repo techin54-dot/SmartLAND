@@ -766,10 +766,9 @@
         </div>
 
         <div class="info-grid">
-          <div id="pointsText">จำนวนจุด: 0</div>
-          <div id="areaSqmText">พื้นที่: - m²</div>
-          <div id="thaiAreaText" class="thai-area">พื้นที่ไทย: -</div>
-          <div id="centroidText">พิกัดศูนย์กลางแปลง: -</div>
+          <div id="infoPlotName">ชื่อ: -</div>
+          <div id="infoPlotDetail">รายละเอียด: -</div>
+          <div id="thaiAreaText" class="thai-area">ขนาดพื้นที่: -</div>
         </div>
 
         <div id="currentLocationBox" class="current-location-box">
@@ -781,7 +780,7 @@
     </div>
 
     <button id="showInfoButton" class="show-info-btn hide" onclick="showInfoPanel()">
-      พื้นที่: <span id="floatingAreaText">-</span>
+      ขนาดพื้นที่: <span id="floatingAreaText">-</span>
     </button>
 
     <div id="notePanel" class="note-panel hide">
@@ -891,21 +890,29 @@
 
     const brandLogo = document.getElementById("brandLogo");
     const brandText = document.getElementById("brandText");
-    const pointsText = document.getElementById("pointsText");
-    const areaSqmText = document.getElementById("areaSqmText");
+
+    const infoPlotName = document.getElementById("infoPlotName");
+    const infoPlotDetail = document.getElementById("infoPlotDetail");
     const thaiAreaText = document.getElementById("thaiAreaText");
-    const centroidText = document.getElementById("centroidText");
     const currentLocationBox = document.getElementById("currentLocationBox");
     const floatingAreaText = document.getElementById("floatingAreaText");
+
     const coordModeBadge = document.getElementById("coordModeBadge");
     const centerCoordinatePopup = document.getElementById("centerCoordinatePopup");
     const centerCoordinatePopupText = document.getElementById("centerCoordinatePopupText");
+
     const previewModal = document.getElementById("previewModal");
     const previewImage = document.getElementById("previewImage");
     const tapSaveOverlay = document.getElementById("tapSaveOverlay");
     const iosSaveHint = document.getElementById("iosSaveHint");
     const saveImageButton = document.getElementById("saveImageButton");
     const toast = document.getElementById("toast");
+
+    document.addEventListener("input", (event) => {
+      if (event.target && (event.target.id === "plotName" || event.target.id === "plotDetail")) {
+        updateAreaInfo();
+      }
+    });
 
     window.addEventListener("load", async () => {
       await loadLogo();
@@ -1157,29 +1164,29 @@
     }
 
     function updateAreaInfo() {
-      const pointsCount = measurePoints.length;
-      pointsText.textContent = `จำนวนจุด: ${pointsCount}`;
+      const plotName = getPlotName();
+      const plotDetail = getPlotDetail();
 
-      if (pointsCount < 3) {
-        areaSqmText.textContent = "พื้นที่: - m²";
-        thaiAreaText.textContent = "พื้นที่ไทย: -";
-        centroidText.textContent = "พิกัดศูนย์กลางแปลง: -";
+      if (infoPlotName) {
+        infoPlotName.textContent = `ชื่อ: ${plotName}`;
+      }
+
+      if (infoPlotDetail) {
+        infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
+      }
+
+      if (measurePoints.length < 3) {
+        thaiAreaText.textContent = "ขนาดพื้นที่: -";
         floatingAreaText.textContent = "-";
         return;
       }
 
       const geojson = pointsToPolygonGeoJSON(measurePoints);
       const area = turf.area(geojson);
-      const centroid = turf.centroid(geojson);
-      const centerLon = centroid.geometry.coordinates[0];
-      const centerLat = centroid.geometry.coordinates[1];
-
       const thaiArea = formatThaiArea(area);
 
-      areaSqmText.textContent = `พื้นที่: ${formatNumber(area)} m²`;
-      thaiAreaText.textContent = `พื้นที่ไทย: ${thaiArea}`;
+      thaiAreaText.textContent = `ขนาดพื้นที่: ${thaiArea}`;
       floatingAreaText.textContent = thaiArea;
-      centroidText.textContent = `พิกัดศูนย์กลางแปลง: ${formatCoordinate(centerLat, centerLon)}`;
     }
 
     function pointsToPolygonGeoJSON(points) {
@@ -1212,6 +1219,7 @@
       if (infoCard) infoCard.classList.remove("hide");
       if (showBtn) showBtn.classList.add("hide");
 
+      updateAreaInfo();
       updateCenterCoordinateBox();
     }
 
@@ -1219,6 +1227,7 @@
       const panel = document.getElementById("notePanel");
       if (!panel) return;
       panel.classList.toggle("hide");
+      updateAreaInfo();
     }
 
     function startRealtimeLocation() {
@@ -1420,9 +1429,7 @@
       const lines = [
         { text: `ชื่อ: ${plotName}`, font: `900 ${nameFont}px Arial`, color: "#ffffff", gap: nameFont * 1.20 },
         { text: `รายละเอียด: ${plotDetail}`, font: `800 ${detailFont}px Arial`, color: "#f8fafc", gap: detailFont * 1.18 },
-        { text: `จำนวนจุด: ${measurePoints.length}`, font: `800 ${metaFont}px Arial`, color: "#dffaff", gap: metaFont * 1.18 },
-        { text: `พื้นที่: ${formatNumber(data.area)} m²`, font: `800 ${metaFont}px Arial`, color: "#dffaff", gap: metaFont * 1.18 },
-        { text: `พื้นที่ไทย: ${formatThaiArea(data.area)}`, font: `900 ${Math.round(metaFont * 1.12)}px Arial`, color: "#dffcef", gap: metaFont * 1.30 },
+        { text: `ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font: `900 ${Math.round(metaFont * 1.12)}px Arial`, color: "#dffcef", gap: metaFont * 1.30 },
         { text: `พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font: `800 ${metaFont}px Arial`, color: "#dffaff", gap: metaFont * 1.18 },
         { text: `วันที่: ${nowText}`, font: `800 ${metaFont}px Arial`, color: "#dffaff", gap: metaFont * 1.18 }
       ];
@@ -1731,13 +1738,6 @@
       const sqWa = remainAfterNgan / 4;
 
       return `${rai} ไร่ ${ngan} งาน ${sqWa.toFixed(2)} ตร.วา`;
-    }
-
-    function formatNumber(num) {
-      return Number(num || 0).toLocaleString("th-TH", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
     }
 
     function degToRad(deg) {
