@@ -401,6 +401,11 @@
       transform:scale(.96);
     }
 
+    button:disabled{
+      opacity:.55;
+      pointer-events:none;
+    }
+
     .control-pad{
       position:absolute;
       left:50%;
@@ -935,7 +940,7 @@
         {
           maxZoom: 20,
           attribution: "Tiles &copy; Esri",
-          crossOrigin: true
+          crossOrigin: "anonymous"
         }
       ).addTo(map);
 
@@ -944,7 +949,7 @@
         {
           maxZoom: 20,
           attribution: "Labels &copy; Esri",
-          crossOrigin: true
+          crossOrigin: "anonymous"
         }
       ).addTo(map);
 
@@ -1289,12 +1294,21 @@
 
       showToast("กำลังสร้างภาพแผนที่...");
 
+      const saveButton = document.querySelector(".float-save");
+      if (saveButton) saveButton.disabled = true;
+
       try {
-        const canvas = await html2canvas(document.querySelector(".app"), {
+        await waitForMapTiles();
+
+        const appElement = document.querySelector(".app");
+
+        const canvas = await html2canvas(appElement, {
+          backgroundColor: "#000000",
+          scale: Math.min(2, window.devicePixelRatio || 1),
           useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#000",
-          scale: 2,
+          allowTaint: true,
+          logging: false,
+          imageTimeout: 20000,
           ignoreElements: (element) => {
             return element.classList &&
               (
@@ -1314,20 +1328,78 @@
         drawCaptureInfo(ctx, outputCanvas.width, outputCanvas.height);
         drawTopLeftLogo(ctx, outputCanvas.width, outputCanvas.height);
 
-        outputCanvas.toBlob((blob) => {
-          if (!blob) {
-            alert("ไม่สามารถสร้างภาพแผนที่ได้");
-            return;
-          }
+        const blob = await canvasToBlobSafe(outputCanvas, "image/jpeg", 0.94);
 
-          const fileName = createMapFileName();
-          showPreviewModal(blob, fileName);
-        }, "image/jpeg", 0.94);
+        if (!blob) {
+          alert("ไม่สามารถสร้างไฟล์ภาพได้ กรุณาลองเปิดผ่าน Chrome หรือ Edge");
+          return;
+        }
+
+        const fileName = createMapFileName();
+        showPreviewModal(blob, fileName);
+        showToast("สร้างภาพสำเร็จ");
 
       } catch (error) {
-        console.error(error);
-        alert("ไม่สามารถบันทึกภาพแผนที่ได้ อาจเกิดจากข้อจำกัดของภาพแผนที่หรือเบราว์เซอร์");
+        console.error("captureMapImage error:", error);
+        alert(
+          "ไม่สามารถบันทึกภาพแผนที่ได้\n\n" +
+          "ให้ลองเปิดผ่าน Chrome / Edge / Safari โดยตรง และรอให้แผนที่โหลดครบก่อนกดบันทึก"
+        );
+      } finally {
+        if (saveButton) saveButton.disabled = false;
       }
+    }
+
+    function waitForMapTiles() {
+      return new Promise((resolve) => {
+        if (!map) {
+          resolve();
+          return;
+        }
+
+        let resolved = false;
+
+        const finish = () => {
+          if (resolved) return;
+          resolved = true;
+          resolve();
+        };
+
+        map.once("idle", finish);
+        setTimeout(finish, 1200);
+      });
+    }
+
+    function canvasToBlobSafe(canvas, type = "image/jpeg", quality = 0.94) {
+      return new Promise((resolve) => {
+        try {
+          if (canvas.toBlob) {
+            canvas.toBlob((blob) => {
+              resolve(blob);
+            }, type, quality);
+          } else {
+            const dataUrl = canvas.toDataURL(type, quality);
+            resolve(dataURLToBlob(dataUrl));
+          }
+        } catch (error) {
+          console.error("canvasToBlobSafe error:", error);
+          resolve(null);
+        }
+      });
+    }
+
+    function dataURLToBlob(dataUrl) {
+      const parts = dataUrl.split(",");
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const binary = atob(parts[1]);
+      const length = binary.length;
+      const array = new Uint8Array(length);
+
+      for (let i = 0; i < length; i++) {
+        array[i] = binary.charCodeAt(i);
+      }
+
+      return new Blob([array], { type: mime });
     }
 
     function drawCaptureInfo(ctx, width, height) {
@@ -1510,7 +1582,12 @@
       saveImageButton.style.display = isIOSNow ? "none" : "block";
 
       previewModal.classList.remove("hide");
-      showToast("สร้างภาพแล้ว");
+
+      if (!isIOSNow) {
+        setTimeout(() => {
+          savePreviewImage();
+        }, 500);
+      }
     }
 
     function closePreviewModal() {
@@ -1523,21 +1600,33 @@
         return;
       }
 
-      const url = URL.createObjectURL(latestImageBlob);
-      const link = document.createElement("a");
+      try {
+        const url = URL.createObjectURL(latestImageBlob);
+        const link = document.createElement("a");
 
-      link.href = url;
-      link.download = latestFileName;
-      link.rel = "noopener";
-      link.style.display = "none";
+        link.href = url;
+        link.download = latestFileName;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.style.display = "none";
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 2000);
 
-      showToast("บันทึกภาพแล้ว");
+        showToast("บันทึกภาพแล้ว");
+      } catch (error) {
+        console.error("savePreviewImage error:", error);
+
+        const url = URL.createObjectURL(latestImageBlob);
+        window.open(url, "_blank");
+
+        alert("ระบบเปิดรูปภาพในแท็บใหม่แล้ว ให้คลิกขวาที่รูปภาพแล้วเลือก Save image as...");
+      }
     }
 
     async function sharePreviewImage() {
