@@ -13,17 +13,19 @@
 
   <style>
     :root{
-      --app-height:100dvh;
       --app-width:100vw;
+      --app-height:100dvh;
       --green:#39f2a2;
       --cyan:#4cc9ff;
       --yellow:#ffb703;
-      --blue:#1f78b8;
       --dark:#06111f;
       --line:rgba(255,255,255,.16);
     }
 
-    *{box-sizing:border-box}
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
 
     html,
     body{
@@ -31,7 +33,6 @@
       padding:0;
       width:100%;
       height:100%;
-      min-height:100%;
       overflow:hidden;
       background:#02070d;
       color:#fff;
@@ -47,12 +48,9 @@
 
     .app{
       position:fixed;
-      left:0;
-      top:0;
+      inset:0;
       width:var(--app-width);
       height:var(--app-height);
-      min-height:100svh;
-      max-height:100dvh;
       overflow:hidden;
       background:#02070d;
     }
@@ -66,136 +64,83 @@
       background:#111;
     }
 
-    .tech-vignette{
+    .vignette{
       position:absolute;
       inset:0;
       z-index:2;
       pointer-events:none;
-      background:linear-gradient(to bottom,rgba(0,0,0,.14),transparent 36%,rgba(0,0,0,.18));
+      background:linear-gradient(to bottom,rgba(0,0,0,.12),transparent 35%,rgba(0,0,0,.18));
     }
 
-    .target-crosshair{
+    .crosshair{
       position:absolute;
       left:50%;
       top:50%;
-      width:74px;
-      height:74px;
+      width:76px;
+      height:76px;
       transform:translate(-50%,-50%);
-      z-index:650;
+      z-index:500;
       pointer-events:none;
       filter:drop-shadow(0 0 8px rgba(0,0,0,.75));
     }
 
-    .target-circle{
+    .crosshair .circle{
       position:absolute;
-      inset:12px;
-      border-radius:50%;
+      inset:13px;
       border:4px solid var(--yellow);
+      border-radius:50%;
       box-shadow:0 0 0 2px rgba(0,0,0,.55);
     }
 
-    .target-tick{
+    .crosshair .dot{
       position:absolute;
-      background:#fff;
-      border-radius:999px;
-      box-shadow:0 0 0 2px rgba(0,0,0,.55);
-    }
-
-    .target-tick.top{
-      width:4px;
-      height:14px;
-      left:50%;
-      top:2px;
-      transform:translateX(-50%);
-    }
-
-    .target-tick.bottom{
-      width:4px;
-      height:14px;
-      left:50%;
-      bottom:2px;
-      transform:translateX(-50%);
-    }
-
-    .target-tick.left{
-      width:14px;
-      height:4px;
-      left:2px;
-      top:50%;
-      transform:translateY(-50%);
-    }
-
-    .target-tick.right{
-      width:14px;
-      height:4px;
-      right:2px;
-      top:50%;
-      transform:translateY(-50%);
-    }
-
-    .target-dot{
-      position:absolute;
-      width:7px;
-      height:7px;
       left:50%;
       top:50%;
+      width:8px;
+      height:8px;
       transform:translate(-50%,-50%);
       border-radius:50%;
       background:var(--yellow);
       box-shadow:0 0 0 3px rgba(0,0,0,.65);
     }
 
-    .center-coordinate-popup{
+    .tick{
       position:absolute;
+      background:#fff;
+      border-radius:999px;
+      box-shadow:0 0 0 2px rgba(0,0,0,.55);
+    }
+
+    .tick.top{
+      width:5px;
+      height:16px;
       left:50%;
-      top:calc(50% - 78px);
+      top:1px;
       transform:translateX(-50%);
-      z-index:770;
-      min-width:230px;
-      max-width:min(88vw,380px);
-      padding:11px 38px 11px 14px;
-      border-radius:16px;
-      background:rgba(5,12,22,.88);
-      border:1px solid rgba(255,255,255,.22);
-      color:#fff;
-      font-size:13px;
-      font-weight:900;
-      line-height:1.45;
-      text-align:center;
-      box-shadow:0 14px 30px rgba(0,0,0,.38);
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
     }
 
-    .center-coordinate-popup::after{
-      content:"";
-      position:absolute;
+    .tick.bottom{
+      width:5px;
+      height:16px;
       left:50%;
-      bottom:-8px;
-      width:14px;
-      height:14px;
-      transform:translateX(-50%) rotate(45deg);
-      background:rgba(5,12,22,.88);
-      border-right:1px solid rgba(255,255,255,.18);
-      border-bottom:1px solid rgba(255,255,255,.18);
+      bottom:1px;
+      transform:translateX(-50%);
     }
 
-    .popup-close{
-      position:absolute;
-      right:8px;
-      top:7px;
-      width:25px;
-      height:25px;
-      border:0;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      padding:0;
-      background:rgba(255,255,255,.12);
-      color:#fff;
-      font-size:18px;
-      line-height:1;
-      box-shadow:none;
+    .tick.left{
+      width:16px;
+      height:5px;
+      left:1px;
+      top:50%;
+      transform:translateY(-50%);
+    }
+
+    .tick.right{
+      width:16px;
+      height:5px;
+      right:1px;
+      top:50%;
+      transform:translateY(-50%);
     }
 
     .top-panel{
@@ -203,7 +148,7 @@
       top:calc(10px + env(safe-area-inset-top));
       left:10px;
       right:10px;
-      z-index:700;
+      z-index:650;
       display:flex;
       gap:10px;
       align-items:flex-start;
@@ -211,15 +156,15 @@
     }
 
     .brand-card{
-      min-width:128px;
-      height:54px;
-      padding:7px 12px;
+      min-width:130px;
+      height:56px;
+      padding:8px 13px;
       border-radius:999px;
-      background:rgba(5,12,22,.76);
+      background:rgba(4,12,24,.78);
       border:1px solid var(--line);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
       box-shadow:0 12px 28px rgba(0,0,0,.35);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -228,19 +173,16 @@
 
     .brand-logo{
       width:100%;
-      max-width:150px;
-      height:38px;
+      max-width:155px;
+      height:40px;
       object-fit:contain;
       display:none;
     }
 
     .brand-text{
-      font-size:19px;
+      font-size:20px;
       font-weight:900;
-      background:linear-gradient(135deg,var(--green),var(--cyan));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
+      color:var(--green);
     }
 
     .info-card{
@@ -248,42 +190,42 @@
       max-width:520px;
       padding:12px;
       border-radius:22px;
-      background:rgba(5,12,22,.78);
+      background:rgba(4,12,24,.78);
       border:1px solid var(--line);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
       box-shadow:0 12px 28px rgba(0,0,0,.35);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
       pointer-events:auto;
     }
 
-    .info-header{
+    .panel-head{
       display:flex;
-      justify-content:space-between;
       align-items:center;
+      justify-content:space-between;
       gap:8px;
-      margin-bottom:7px;
+      margin-bottom:8px;
     }
 
-    .info-title{
+    .panel-title{
       font-size:14px;
       font-weight:900;
-      color:#e8fbff;
+      color:#dffaff;
     }
 
-    .icon-close-btn{
+    .close-btn{
       width:30px;
       height:30px;
-      padding:0!important;
-      border-radius:50%!important;
+      padding:0;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.14);
+      color:#fff;
       display:grid;
       place-items:center;
-      font-size:22px!important;
-      line-height:1;
+      font-size:22px;
       font-weight:900;
-      color:#ffffff!important;
-      background:rgba(255,255,255,.14)!important;
-      border:1px solid rgba(255,255,255,.18)!important;
-      box-shadow:none!important;
+      line-height:1;
+      box-shadow:none;
     }
 
     .info-grid{
@@ -300,7 +242,7 @@
       color:#dffcef;
     }
 
-    .current-location-box{
+    .coord-box{
       margin-top:8px;
       padding:8px 10px;
       border-radius:14px;
@@ -311,13 +253,13 @@
       line-height:1.45;
     }
 
-    .danger-mini-btn{
+    .danger-btn{
       margin-top:8px;
       width:100%;
-      padding:8px 10px;
+      padding:9px 10px;
       border-radius:14px;
       font-size:12px;
-      background:linear-gradient(135deg,rgba(190,18,60,.78),rgba(255,77,109,.54));
+      background:linear-gradient(135deg,rgba(190,18,60,.82),rgba(255,77,109,.56));
       color:#fff;
     }
 
@@ -325,7 +267,7 @@
       position:absolute;
       top:calc(76px + env(safe-area-inset-top));
       left:10px;
-      z-index:740;
+      z-index:660;
       padding:10px 13px;
       border-radius:999px;
       color:#04120c;
@@ -341,27 +283,16 @@
       left:10px;
       right:10px;
       bottom:calc(104px + env(safe-area-inset-bottom));
-      z-index:710;
+      z-index:640;
       max-width:520px;
       margin:0 auto;
       padding:12px;
       border-radius:22px;
-      background:rgba(5,12,22,.82);
+      background:rgba(4,12,24,.84);
       border:1px solid var(--line);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
       box-shadow:0 12px 28px rgba(0,0,0,.35);
-    }
-
-    .note-panel-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      font-size:13px;
-      font-weight:900;
-      color:#dffaff;
-      margin-bottom:8px;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
     }
 
     label{
@@ -372,7 +303,8 @@
       margin-bottom:5px;
     }
 
-    input,textarea{
+    input,
+    textarea{
       width:100%;
       border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.10);
@@ -383,17 +315,19 @@
       outline:none;
     }
 
-    input{margin-bottom:8px}
+    input{
+      margin-bottom:8px;
+    }
 
     textarea{
       min-height:62px;
-      max-height:100px;
+      max-height:110px;
       resize:vertical;
     }
 
     input::placeholder,
     textarea::placeholder{
-      color:rgba(255,255,255,.55);
+      color:rgba(255,255,255,.56);
     }
 
     button{
@@ -407,76 +341,19 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    button:active{transform:scale(.96)}
+    button:active{
+      transform:scale(.96);
+    }
 
     button:disabled{
       opacity:.55;
       pointer-events:none;
     }
 
-    .control-pad{
+    .float-btn{
       position:absolute;
-      left:50%;
-      bottom:calc(14px + env(safe-area-inset-bottom));
-      transform:translateX(-50%);
-      z-index:720;
-      width:238px;
-      height:78px;
-      display:grid;
-      grid-template-columns:58px 78px 58px;
-      gap:22px;
-      align-items:center;
-      justify-content:center;
-      background:transparent;
-      border:0;
-      box-shadow:none;
-      pointer-events:none;
-    }
-
-    .control-side-btn,
-    .control-main-btn{
-      pointer-events:auto;
-      position:relative;
-      display:grid;
-      place-items:center;
-      padding:0;
-      border:1px solid rgba(255,255,255,.82);
-      color:#ffffff;
-      background:rgba(235,247,255,.92);
-      box-shadow:0 10px 22px rgba(0,0,0,.32);
-      overflow:hidden;
-    }
-
-    .control-side-btn{
-      width:58px;
-      height:52px;
-      border-radius:18px;
-    }
-
-    .control-main-btn{
-      width:78px;
-      height:78px;
-      border-radius:50%;
-      background:linear-gradient(180deg,#79c9ff 0%,#1e88dc 100%);
-      border:3px solid rgba(255,255,255,.92);
-      box-shadow:0 12px 26px rgba(0,0,0,.35);
-    }
-
-    .control-svg{
-      width:28px;
-      height:28px;
-      fill:#23658f;
-    }
-
-    .control-main-svg{
-      width:40px;
-      height:40px;
-      fill:#ffffff;
-    }
-
-    .float-icon-btn{
-      position:absolute;
-      z-index:760;
+      right:14px;
+      z-index:670;
       width:56px;
       height:56px;
       border-radius:50%;
@@ -488,41 +365,45 @@
       box-shadow:0 10px 22px rgba(0,0,0,.32);
     }
 
-    .flat-svg{
+    .float-btn svg{
       width:29px;
       height:29px;
       display:block;
     }
 
-    .float-coord-mode{
-      right:14px;
+    .btn-mode{
       bottom:calc(334px + env(safe-area-inset-bottom));
     }
 
-    .float-coord-mode .flat-svg{fill:#7c3aed}
+    .btn-mode svg{
+      fill:#7c3aed;
+    }
 
-    .float-center-coord{
-      right:14px;
+    .btn-center{
       bottom:calc(262px + env(safe-area-inset-bottom));
     }
 
-    .float-center-coord .flat-svg{fill:#f59e0b}
+    .btn-center svg{
+      fill:#f59e0b;
+    }
 
-    .float-location{
-      right:14px;
+    .btn-location{
       bottom:calc(190px + env(safe-area-inset-bottom));
     }
 
-    .float-location .flat-svg{fill:#1f78b8}
+    .btn-location svg{
+      fill:#1f78b8;
+    }
 
-    .float-save{
-      right:14px;
+    .btn-save{
       bottom:calc(118px + env(safe-area-inset-bottom));
     }
 
-    .float-save .flat-svg{fill:#12835d}
+    .btn-save svg{
+      fill:#12835d;
+    }
 
-    .coord-badge{
+    .mode-badge{
       position:absolute;
       right:8px;
       bottom:5px;
@@ -537,36 +418,126 @@
       border:1px solid rgba(255,255,255,.8);
     }
 
-    .point-marker{
+    .bottom-pad{
+      position:absolute;
+      left:50%;
+      bottom:calc(14px + env(safe-area-inset-bottom));
+      transform:translateX(-50%);
+      z-index:660;
+      width:238px;
+      height:78px;
+      display:grid;
+      grid-template-columns:58px 78px 58px;
+      gap:22px;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+    }
+
+    .pad-btn,
+    .add-btn{
+      pointer-events:auto;
+      position:relative;
+      display:grid;
+      place-items:center;
+      padding:0;
+      border:1px solid rgba(255,255,255,.82);
+      color:#ffffff;
+      background:rgba(235,247,255,.92);
+      box-shadow:0 10px 22px rgba(0,0,0,.32);
+      overflow:hidden;
+    }
+
+    .pad-btn{
+      width:58px;
+      height:52px;
+      border-radius:18px;
+    }
+
+    .add-btn{
+      width:78px;
+      height:78px;
+      border-radius:50%;
+      background:linear-gradient(180deg,#79c9ff 0%,#1e88dc 100%);
+      border:3px solid rgba(255,255,255,.92);
+      box-shadow:0 12px 26px rgba(0,0,0,.35);
+    }
+
+    .pad-btn svg{
       width:28px;
       height:28px;
+      fill:#23658f;
+    }
+
+    .add-btn svg{
+      width:40px;
+      height:40px;
+      fill:#fff;
+    }
+
+    .point-marker{
+      width:30px;
+      height:30px;
       border-radius:50%;
       display:grid;
       place-items:center;
       color:#04120c;
       font-size:13px;
       font-weight:900;
-      background:linear-gradient(135deg,var(--green),var(--cyan));
-      border:2px solid #fff;
+      background:#59e1db;
+      border:3px solid #fff;
       box-shadow:0 4px 14px rgba(0,0,0,.45);
     }
 
-    .my-location-pulse{
+    .my-location{
       width:22px;
       height:22px;
       border-radius:50%;
       background:#1da1ff;
-      border:4px solid #ffffff;
-      box-shadow:
-        0 0 0 0 rgba(29,161,255,.65),
-        0 0 14px rgba(29,161,255,.80);
-      animation:locationPulse 1.45s ease-out infinite;
+      border:4px solid #fff;
+      box-shadow:0 0 0 0 rgba(29,161,255,.65),0 0 14px rgba(29,161,255,.8);
+      animation:pulse 1.45s ease-out infinite;
     }
 
-    @keyframes locationPulse{
-      0%{box-shadow:0 0 0 0 rgba(29,161,255,.65),0 0 14px rgba(29,161,255,.80)}
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(29,161,255,.65),0 0 14px rgba(29,161,255,.8)}
       70%{box-shadow:0 0 0 16px rgba(29,161,255,0),0 0 18px rgba(29,161,255,.55)}
-      100%{box-shadow:0 0 0 0 rgba(29,161,255,0),0 0 14px rgba(29,161,255,.80)}
+      100%{box-shadow:0 0 0 0 rgba(29,161,255,0),0 0 14px rgba(29,161,255,.8)}
+    }
+
+    .center-popup{
+      position:absolute;
+      left:50%;
+      top:calc(50% - 80px);
+      transform:translateX(-50%);
+      z-index:680;
+      min-width:230px;
+      max-width:min(88vw,380px);
+      padding:11px 38px 11px 14px;
+      border-radius:16px;
+      background:rgba(5,12,22,.88);
+      border:1px solid rgba(255,255,255,.22);
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+      line-height:1.45;
+      text-align:center;
+      box-shadow:0 14px 30px rgba(0,0,0,.38);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+    }
+
+    .center-popup::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-8px;
+      width:14px;
+      height:14px;
+      transform:translateX(-50%) rotate(45deg);
+      background:rgba(5,12,22,.88);
+      border-right:1px solid rgba(255,255,255,.18);
+      border-bottom:1px solid rgba(255,255,255,.18);
     }
 
     .toast{
@@ -574,7 +545,7 @@
       left:50%;
       bottom:calc(124px + env(safe-area-inset-bottom));
       transform:translateX(-50%) translateY(18px);
-      z-index:950;
+      z-index:900;
       min-width:min(92vw,360px);
       padding:12px 14px;
       border-radius:18px;
@@ -595,8 +566,7 @@
       transform:translateX(-50%) translateY(0);
     }
 
-    .preview-modal,
-    .browser-gate{
+    .modal{
       position:fixed;
       inset:0;
       z-index:1200;
@@ -609,13 +579,7 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    .browser-gate{z-index:2000}
-
-    .preview-modal.hide,
-    .browser-gate.hide{display:none}
-
-    .preview-card,
-    .browser-card{
+    .modal-card{
       width:100%;
       max-width:440px;
       max-height:92vh;
@@ -628,34 +592,20 @@
       text-align:center;
     }
 
-    .browser-icon{
-      width:70px;
-      height:70px;
-      margin:0 auto 12px;
-      border-radius:22px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg,#39f2a2,#4cc9ff);
-      color:#04120c;
-      font-size:34px;
-      font-weight:900;
-    }
-
-    .browser-title{
-      font-size:22px;
+    .modal-title{
+      font-size:20px;
       font-weight:900;
       margin-bottom:8px;
-      color:#fff;
     }
 
-    .browser-desc{
+    .modal-desc{
       font-size:14px;
       line-height:1.7;
       color:rgba(255,255,255,.82);
       margin-bottom:14px;
     }
 
-    .browser-warning{
+    .warning{
       padding:10px 12px;
       border-radius:16px;
       background:rgba(245,158,11,.12);
@@ -666,35 +616,27 @@
       margin-bottom:12px;
     }
 
-    .browser-actions{
+    .modal-actions{
       display:grid;
       gap:10px;
+      margin-top:12px;
     }
 
-    .browser-actions button{
+    .modal-actions button{
       width:100%;
-      min-height:50px;
-      border-radius:16px;
+      min-height:52px;
       padding:12px;
+      border-radius:16px;
       font-size:15px;
-      font-weight:900;
+      background:linear-gradient(180deg,rgba(24,34,52,.94),rgba(10,16,28,.94));
     }
 
-    .primary-action{background:linear-gradient(135deg,#16a34a,#22c55e)}
-    .secondary-action{background:rgba(255,255,255,.12)}
-    .danger-action{background:linear-gradient(135deg,#7f1d1d,#be123c)}
-
-    .preview-title{
-      font-size:18px;
-      font-weight:900;
-      margin-bottom:6px;
+    .primary{
+      background:linear-gradient(135deg,#16a34a,#22c55e)!important;
     }
 
-    .preview-note{
-      font-size:13px;
-      line-height:1.6;
-      color:rgba(255,255,255,.78);
-      margin-bottom:12px;
+    .danger{
+      background:linear-gradient(135deg,#7f1d1d,#be123c)!important;
     }
 
     .preview-image-wrap{
@@ -716,12 +658,22 @@
       user-select:auto;
     }
 
-    .tap-save-overlay{
+    .ios-hint{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(57,242,162,.10);
+      border:1px solid rgba(57,242,162,.22);
+      color:#dffcef;
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    .tap-save{
       position:absolute;
       left:50%;
       bottom:14px;
       transform:translateX(-50%);
-      z-index:2;
       padding:9px 14px;
       border-radius:999px;
       background:rgba(0,0,0,.68);
@@ -733,44 +685,20 @@
       display:none;
     }
 
-    .preview-actions{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-      margin-top:12px;
+    .hide{
+      display:none!important;
     }
 
-    .preview-actions button{
-      width:100%;
-      height:auto;
-      min-height:52px;
-      border-radius:16px;
-      padding:12px;
-      font-size:15px;
-      background:linear-gradient(180deg,rgba(24,34,52,.94),rgba(10,16,28,.94));
-    }
-
-    .preview-hint{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:14px;
-      background:rgba(57,242,162,.10);
-      border:1px solid rgba(57,242,162,.22);
-      color:#dffcef;
-      font-size:12px;
-      line-height:1.55;
-    }
-
-    .hide{display:none!important}
-
-    @media (max-width:520px){
+    @media(max-width:520px){
       .top-panel{
         flex-direction:column;
         right:auto;
         width:min(94vw,390px);
       }
 
-      .info-card{width:100%}
+      .info-card{
+        width:100%;
+      }
 
       .note-panel{
         bottom:calc(112px + env(safe-area-inset-bottom));
@@ -782,20 +710,20 @@
 <body>
   <div class="app">
     <div id="map"></div>
-    <div class="tech-vignette"></div>
+    <div class="vignette"></div>
 
-    <div class="target-crosshair">
-      <div class="target-circle"></div>
-      <div class="target-tick top"></div>
-      <div class="target-tick right"></div>
-      <div class="target-tick bottom"></div>
-      <div class="target-tick left"></div>
-      <div class="target-dot"></div>
+    <div class="crosshair">
+      <div class="circle"></div>
+      <div class="tick top"></div>
+      <div class="tick right"></div>
+      <div class="tick bottom"></div>
+      <div class="tick left"></div>
+      <div class="dot"></div>
     </div>
 
-    <div id="centerCoordinatePopup" class="center-coordinate-popup hide">
-      <button class="popup-close" onclick="hideCenterCoordinatePopup()">×</button>
-      <div id="centerCoordinatePopupText">-</div>
+    <div id="centerPopup" class="center-popup hide">
+      <button class="popup-close" onclick="hideCenterPopup()">×</button>
+      <div id="centerPopupText">-</div>
     </div>
 
     <div class="top-panel">
@@ -805,9 +733,9 @@
       </div>
 
       <div id="infoCard" class="info-card">
-        <div class="info-header">
-          <div class="info-title">ข้อมูลพื้นที่แปลง</div>
-          <button class="icon-close-btn" onclick="hideInfoPanel()" title="ปิดหน้าต่างข้อมูล">×</button>
+        <div class="panel-head">
+          <div class="panel-title">ข้อมูลพื้นที่แปลง</div>
+          <button class="close-btn" onclick="hideInfoPanel()">×</button>
         </div>
 
         <div class="info-grid">
@@ -816,11 +744,11 @@
           <div id="thaiAreaText" class="thai-area">ขนาดพื้นที่: -</div>
         </div>
 
-        <div id="currentLocationBox" class="current-location-box">
+        <div id="centerCoordBox" class="coord-box">
           พิกัดจุดศูนย์กลางเป้าเล็ง: -
         </div>
 
-        <button class="danger-mini-btn" onclick="clearAllPoints()">ล้างจุดทั้งหมด</button>
+        <button class="danger-btn" onclick="clearAllPoints()">ล้างจุดทั้งหมด</button>
       </div>
     </div>
 
@@ -829,9 +757,9 @@
     </button>
 
     <div id="notePanel" class="note-panel hide">
-      <div class="note-panel-title">
-        <span>บันทึกข้อมูลแปลง</span>
-        <button class="icon-close-btn" onclick="toggleNotePanel()" title="ปิดหน้าต่างบันทึกข้อมูล">×</button>
+      <div class="panel-head">
+        <div class="panel-title">บันทึกข้อมูลแปลง</div>
+        <button class="close-btn" onclick="toggleNotePanel()">×</button>
       </div>
 
       <label for="plotName">ชื่อ</label>
@@ -841,94 +769,74 @@
       <textarea id="plotDetail" placeholder="เช่น ชนิดพืช สถานที่ หมายเหตุ หรือรายละเอียดเพิ่มเติม"></textarea>
     </div>
 
-    <button class="float-icon-btn float-coord-mode" onclick="toggleCoordinateMode()" title="สลับ UTM / LatLon">
-      <svg viewBox="0 0 24 24" class="flat-svg">
-        <path d="M4 4h16v3H4V4zm0 6h10v3H4v-3zm0 6h16v3H4v-3zm13-6h3v3h-3v-3z"/>
-      </svg>
-      <span id="coordModeBadge" class="coord-badge">UTM</span>
+    <button class="float-btn btn-mode" onclick="toggleCoordinateMode()" title="สลับ UTM / LatLon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v3H4V4zm0 6h10v3H4v-3zm0 6h16v3H4v-3zm13-6h3v3h-3v-3z"/></svg>
+      <span id="coordModeBadge" class="mode-badge">UTM</span>
     </button>
 
-    <button class="float-icon-btn float-center-coord" onclick="showCenterCoordinate()" title="พิกัดจุดศูนย์กลางเป้าเล็ง">
-      <svg viewBox="0 0 24 24" class="flat-svg">
-        <path d="M12 2a1 1 0 0 1 1 1v2.1A7 7 0 0 1 18.9 11H21a1 1 0 1 1 0 2h-2.1A7 7 0 0 1 13 18.9V21a1 1 0 1 1-2 0v-2.1A7 7 0 0 1 5.1 13H3a1 1 0 1 1 0-2h2.1A7 7 0 0 1 11 5.1V3a1 1 0 0 1 1-1zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
-      </svg>
+    <button class="float-btn btn-center" onclick="showCenterCoordinate()" title="พิกัดจุดศูนย์กลางเป้าเล็ง">
+      <svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v2.1A7 7 0 0 1 18.9 11H21a1 1 0 1 1 0 2h-2.1A7 7 0 0 1 13 18.9V21a1 1 0 1 1-2 0v-2.1A7 7 0 0 1 5.1 13H3a1 1 0 1 1 0-2h2.1A7 7 0 0 1 11 5.1V3a1 1 0 0 1 1-1zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
     </button>
 
-    <button class="float-icon-btn float-location" onclick="goToMyLocation()" title="กลับไปตำแหน่งปัจจุบัน">
-      <svg viewBox="0 0 24 24" class="flat-svg">
-        <path d="M12 2.5c-3.2 0-5.8 2.6-5.8 5.8 0 4.4 5.8 11.2 5.8 11.2s5.8-6.8 5.8-11.2c0-3.2-2.6-5.8-5.8-5.8zm0 8.2a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z"/>
-      </svg>
+    <button class="float-btn btn-location" onclick="goToMyLocation()" title="กลับไปตำแหน่งปัจจุบัน">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5c-3.2 0-5.8 2.6-5.8 5.8 0 4.4 5.8 11.2 5.8 11.2s5.8-6.8 5.8-11.2c0-3.2-2.6-5.8-5.8-5.8zm0 8.2a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z"/></svg>
     </button>
 
-    <button class="float-icon-btn float-save" onclick="captureMapImage()" title="บันทึกภาพแผนที่">
-      <svg viewBox="0 0 24 24" class="flat-svg">
-        <path d="M7.2 5.2 8.8 3.5h6.4l1.6 1.7h2.7c1.1 0 2 .9 2 2v11.1c0 1.1-.9 2-2 2h-15c-1.1 0-2-.9-2-2V7.2c0-1.1.9-2 2-2h2.7zm4.8 12a4.4 4.4 0 1 0 0-8.8 4.4 4.4 0 0 0 0 8.8zm6.2-8.1a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2z"/>
-      </svg>
+    <button class="float-btn btn-save" onclick="captureMapImage()" title="บันทึกภาพแผนที่">
+      <svg viewBox="0 0 24 24"><path d="M7.2 5.2 8.8 3.5h6.4l1.6 1.7h2.7c1.1 0 2 .9 2 2v11.1c0 1.1-.9 2-2 2h-15c-1.1 0-2-.9-2-2V7.2c0-1.1.9-2 2-2h2.7zm4.8 12a4.4 4.4 0 1 0 0-8.8 4.4 4.4 0 0 0 0 8.8zm6.2-8.1a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2z"/></svg>
     </button>
 
-    <div class="control-pad">
-      <button class="control-side-btn" onclick="undoLastPoint()" title="ลบจุดล่าสุด">
-        <svg viewBox="0 0 24 24" class="control-svg">
-          <path d="M7.8 7H14c3.3 0 6 2.7 6 6s-2.7 6-6 6H7v-2h7c2.2 0 4-1.8 4-4s-1.8-4-4-4H7.8l2.6 2.6L9 13 4 8l5-5 1.4 1.4L7.8 7z"/>
-        </svg>
+    <div class="bottom-pad">
+      <button class="pad-btn" onclick="undoLastPoint()" title="ลบจุดล่าสุด">
+        <svg viewBox="0 0 24 24"><path d="M7.8 7H14c3.3 0 6 2.7 6 6s-2.7 6-6 6H7v-2h7c2.2 0 4-1.8 4-4s-1.8-4-4-4H7.8l2.6 2.6L9 13 4 8l5-5 1.4 1.4L7.8 7z"/></svg>
       </button>
 
-      <button class="control-main-btn" onclick="addPointFromCenter()" title="เพิ่มจุดจากศูนย์เล็ง">
-        <svg viewBox="0 0 24 24" class="control-main-svg">
-          <path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/>
-        </svg>
+      <button class="add-btn" onclick="addPointFromCenter()" title="เพิ่มจุดจากศูนย์เล็ง">
+        <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/></svg>
       </button>
 
-      <button class="control-side-btn" onclick="toggleNotePanel()" title="ข้อมูลแปลง">
-        <svg viewBox="0 0 24 24" class="control-svg">
-          <path d="M5 4h14c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm2 4v2h10V8H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"/>
-        </svg>
+      <button class="pad-btn" onclick="toggleNotePanel()" title="บันทึกข้อมูลแปลง">
+        <svg viewBox="0 0 24 24"><path d="M5 4h14c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm2 4v2h10V8H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"/></svg>
       </button>
     </div>
 
     <div id="toast" class="toast">ดำเนินการเรียบร้อย</div>
 
-    <div id="browserGate" class="browser-gate hide">
-      <div class="browser-card">
-        <div class="browser-icon">🌐</div>
-        <div class="browser-title">กรุณาเปิดด้วยเบราว์เซอร์หลัก</div>
-        <div class="browser-desc">
-          เพื่อให้การบันทึกภาพแผนที่ การแชร์รูปภาพ และการใช้พิกัด GPS ทำงานได้ถูกต้อง
-          แนะนำให้เปิดผ่าน Chrome, Safari, Edge หรือเบราว์เซอร์หลักของอุปกรณ์
+    <div id="browserGate" class="modal hide">
+      <div class="modal-card">
+        <div class="modal-title">กรุณาเปิดด้วยเบราว์เซอร์หลัก</div>
+        <div class="modal-desc">
+          เพื่อให้การบันทึกภาพ การแชร์รูปภาพ และการใช้พิกัด GPS ทำงานได้ถูกต้อง แนะนำให้เปิดผ่าน Chrome, Safari หรือ Edge
         </div>
-
-        <div id="browserGateReason" class="browser-warning">
+        <div id="browserGateReason" class="warning">
           ระบบตรวจพบว่าอาจเปิดผ่านเบราว์เซอร์ในแอป
         </div>
-
-        <div class="browser-actions">
-          <button class="primary-action" onclick="openInChromeAndroid()">เปิดด้วย Chrome</button>
-          <button class="secondary-action" onclick="copyCurrentLink()">คัดลอกลิงก์</button>
-          <button class="secondary-action" onclick="recheckBrowserSupport()">ตรวจสอบอีกครั้ง</button>
-          <button class="danger-action" onclick="continueAnyway()">ใช้งานต่อแบบจำกัด</button>
+        <div class="modal-actions">
+          <button class="primary" onclick="openInChromeAndroid()">เปิดด้วย Chrome</button>
+          <button onclick="copyCurrentLink()">คัดลอกลิงก์</button>
+          <button onclick="recheckBrowserSupport()">ตรวจสอบอีกครั้ง</button>
+          <button class="danger" onclick="continueAnyway()">ใช้งานต่อแบบจำกัด</button>
         </div>
       </div>
     </div>
 
-    <div id="previewModal" class="preview-modal hide">
-      <div class="preview-card">
-        <div class="preview-title">ตัวอย่างภาพแผนที่</div>
-        <div class="preview-note">ตรวจสอบภาพก่อนบันทึกหรือแชร์</div>
+    <div id="previewModal" class="modal hide">
+      <div class="modal-card">
+        <div class="modal-title">ตัวอย่างภาพแผนที่</div>
+        <div class="modal-desc">ตรวจสอบภาพก่อนบันทึกหรือแชร์</div>
 
         <div class="preview-image-wrap">
           <img id="previewImage" class="preview-image" alt="SmartLAND Preview">
-          <div id="tapSaveOverlay" class="tap-save-overlay">
-            แตะค้างที่รูปภาพเพื่อบันทึก
-          </div>
+          <div id="tapSaveOverlay" class="tap-save">แตะค้างที่รูปภาพเพื่อบันทึก</div>
         </div>
 
-        <div class="preview-actions">
+        <div class="modal-actions">
           <button id="saveImageButton" onclick="savePreviewImage()">บันทึกลงเครื่อง</button>
           <button onclick="sharePreviewImage()">แชร์รูปภาพ</button>
           <button onclick="closePreviewModal()">กลับไปแก้ไขแผนที่</button>
         </div>
 
-        <div id="iosSaveHint" class="preview-hint">
+        <div id="iosSaveHint" class="ios-hint">
           หากใช้ iPhone / iPad ให้แตะค้างที่รูปภาพ แล้วเลือก “บันทึกรูปภาพ” หรือใช้ปุ่มแชร์รูปภาพ
         </div>
       </div>
@@ -941,8 +849,8 @@
     let map;
     let measurePoints = [];
     let markers = [];
-    let polygonLayer = null;
     let lineLayer = null;
+    let polygonLayer = null;
     let coordinateMode = "utm";
 
     let locationWatchId = null;
@@ -954,25 +862,20 @@
     let latestImageBlob = null;
     let latestImageUrl = null;
     let latestFileName = null;
-
     let browserGateDismissed = false;
 
     const brandLogo = document.getElementById("brandLogo");
     const brandText = document.getElementById("brandText");
-
     const infoPlotName = document.getElementById("infoPlotName");
     const infoPlotDetail = document.getElementById("infoPlotDetail");
     const thaiAreaText = document.getElementById("thaiAreaText");
-    const currentLocationBox = document.getElementById("currentLocationBox");
+    const centerCoordBox = document.getElementById("centerCoordBox");
     const floatingAreaText = document.getElementById("floatingAreaText");
-
     const coordModeBadge = document.getElementById("coordModeBadge");
-    const centerCoordinatePopup = document.getElementById("centerCoordinatePopup");
-    const centerCoordinatePopupText = document.getElementById("centerCoordinatePopupText");
-
+    const centerPopup = document.getElementById("centerPopup");
+    const centerPopupText = document.getElementById("centerPopupText");
     const browserGate = document.getElementById("browserGate");
     const browserGateReason = document.getElementById("browserGateReason");
-
     const previewModal = document.getElementById("previewModal");
     const previewImage = document.getElementById("previewImage");
     const tapSaveOverlay = document.getElementById("tapSaveOverlay");
@@ -980,20 +883,13 @@
     const saveImageButton = document.getElementById("saveImageButton");
     const toast = document.getElementById("toast");
 
-    document.addEventListener("input", (event) => {
-      if (event.target && (event.target.id === "plotName" || event.target.id === "plotDetail")) {
-        updateAreaInfo();
-      }
-    });
-
     window.addEventListener("load", async () => {
-      setupResponsiveViewport();
-
+      setupViewport();
       await loadLogo();
       initMap();
 
       setTimeout(() => {
-        setResponsiveViewport();
+        setViewportSize();
         map.invalidateSize(false);
       }, 300);
 
@@ -1013,7 +909,27 @@
       }
     });
 
-    function setResponsiveViewport() {
+    document.addEventListener("input", (event) => {
+      if (event.target && (event.target.id === "plotName" || event.target.id === "plotDetail")) {
+        updateAreaInfo();
+      }
+    });
+
+    function setupViewport() {
+      setViewportSize();
+      window.addEventListener("resize", setViewportSize);
+      window.addEventListener("orientationchange", () => {
+        setTimeout(setViewportSize, 250);
+        setTimeout(setViewportSize, 700);
+      });
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", setViewportSize);
+        window.visualViewport.addEventListener("scroll", setViewportSize);
+      }
+    }
+
+    function setViewportSize() {
       const viewport = window.visualViewport;
       const width = viewport ? viewport.width : window.innerWidth;
       const height = viewport ? viewport.height : window.innerHeight;
@@ -1030,124 +946,6 @@
       }
     }
 
-    function setupResponsiveViewport() {
-      setResponsiveViewport();
-
-      window.addEventListener("resize", setResponsiveViewport);
-
-      window.addEventListener("orientationchange", () => {
-        setTimeout(setResponsiveViewport, 250);
-        setTimeout(setResponsiveViewport, 700);
-      });
-
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", setResponsiveViewport);
-        window.visualViewport.addEventListener("scroll", setResponsiveViewport);
-      }
-    }
-
-    function checkBrowserSupportOnStart() {
-      const result = getBrowserSupportStatus();
-
-      if (!result.ok) {
-        browserGateReason.textContent = result.reason;
-        browserGate.classList.remove("hide");
-      }
-    }
-
-    function getBrowserSupportStatus() {
-      const ua = navigator.userAgent || "";
-      const isLine = /Line/i.test(ua);
-      const isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBAN\/FBIOS/i.test(ua);
-      const isInstagram = /Instagram/i.test(ua);
-      const isMessenger = /MessengerForiOS|FB_IAB\/Messenger/i.test(ua);
-      const isTikTok = /TikTok/i.test(ua);
-      const isInApp = isLine || isFacebook || isInstagram || isMessenger || isTikTok;
-
-      const isSecure = window.isSecureContext || location.protocol === "https:" || location.hostname === "localhost";
-      const hasGeo = "geolocation" in navigator;
-      const hasCanvas = !!window.HTMLCanvasElement;
-      const hasDownload = "download" in document.createElement("a");
-      const hasShare = !!navigator.share;
-
-      if (isInApp && !browserGateDismissed) {
-        return {
-          ok:false,
-          reason:"ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
-        };
-      }
-
-      if (!isSecure) {
-        return {
-          ok:false,
-          reason:"เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
-        };
-      }
-
-      if (!hasGeo) {
-        return {
-          ok:false,
-          reason:"เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
-        };
-      }
-
-      if (!hasCanvas) {
-        return {
-          ok:false,
-          reason:"เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
-        };
-      }
-
-      if (!hasDownload && !hasShare) {
-        return {
-          ok:false,
-          reason:"เบราว์เซอร์นี้อาจไม่รองรับการบันทึกหรือแชร์รูปภาพ กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
-        };
-      }
-
-      return {ok:true, reason:""};
-    }
-
-    function openInChromeAndroid() {
-      const url = location.href;
-      const isAndroid = /Android/i.test(navigator.userAgent || "");
-
-      if (isAndroid) {
-        const cleanUrl = url.replace(/^https?:\/\//, "");
-        location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
-        return;
-      }
-
-      copyCurrentLink();
-      alert("ระบบคัดลอกลิงก์แล้ว กรุณานำไปวางเปิดใน Safari / Chrome / Edge");
-    }
-
-    async function copyCurrentLink() {
-      try {
-        await navigator.clipboard.writeText(location.href);
-        showToast("คัดลอกลิงก์แล้ว");
-      } catch (error) {
-        prompt("คัดลอกลิงก์นี้ไปเปิดใน Chrome / Safari / Edge", location.href);
-      }
-    }
-
-    function recheckBrowserSupport() {
-      const result = getBrowserSupportStatus();
-
-      if (result.ok) {
-        browserGate.classList.add("hide");
-        showToast("เบราว์เซอร์นี้พร้อมใช้งาน");
-      } else {
-        browserGateReason.textContent = result.reason;
-      }
-    }
-
-    function continueAnyway() {
-      browserGateDismissed = true;
-      browserGate.classList.add("hide");
-      showToast("ใช้งานต่อแบบจำกัด");
-    }
-
     function initMap() {
       map = L.map("map", {
         zoomControl:false,
@@ -1158,23 +956,17 @@
         position:"bottomright"
       }).addTo(map);
 
-      L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        {
-          maxZoom:20,
-          attribution:"Tiles &copy; Esri",
-          crossOrigin:"anonymous"
-        }
-      ).addTo(map);
+      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom:20,
+        attribution:"Tiles &copy; Esri",
+        crossOrigin:"anonymous"
+      }).addTo(map);
 
-      L.tileLayer(
-        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-        {
-          maxZoom:20,
-          attribution:"Labels &copy; Esri",
-          crossOrigin:"anonymous"
-        }
-      ).addTo(map);
+      L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom:20,
+        attribution:"Labels &copy; Esri",
+        crossOrigin:"anonymous"
+      }).addTo(map);
 
       map.on("move", () => {
         updateCenterCoordinateBox();
@@ -1187,7 +979,7 @@
       });
 
       map.whenReady(() => {
-        setResponsiveViewport();
+        setViewportSize();
         map.invalidateSize(false);
         updateCenterCoordinateBox();
       });
@@ -1223,11 +1015,8 @@
     }
 
     function updateCenterCoordinateBox() {
-      if (!currentLocationBox || !map) return;
-
-      currentLocationBox.innerHTML =
-        `พิกัดจุดศูนย์กลางเป้าเล็ง:<br>` +
-        `${getCenterCoordinateText()}`;
+      if (!centerCoordBox || !map) return;
+      centerCoordBox.innerHTML = `พิกัดจุดศูนย์กลางเป้าเล็ง:<br>${getCenterCoordinateText()}`;
     }
 
     function showCenterCoordinate() {
@@ -1236,23 +1025,18 @@
         return;
       }
 
-      centerCoordinatePopupText.textContent = getCenterCoordinateText();
-      centerCoordinatePopup.classList.remove("hide");
+      centerPopupText.textContent = getCenterCoordinateText();
+      centerPopup.classList.remove("hide");
       updateCenterCoordinateBox();
     }
 
-    function showCoordinatePopupText(text) {
-      centerCoordinatePopupText.textContent = text;
-      centerCoordinatePopup.classList.remove("hide");
-    }
-
-    function hideCenterCoordinatePopup() {
-      centerCoordinatePopup.classList.add("hide");
+    function hideCenterPopup() {
+      centerPopup.classList.add("hide");
     }
 
     function updateCenterPopupIfVisible() {
-      if (!centerCoordinatePopup.classList.contains("hide")) {
-        centerCoordinatePopupText.textContent = getCenterCoordinateText();
+      if (!centerPopup.classList.contains("hide")) {
+        centerPopupText.textContent = getCenterCoordinateText();
       }
     }
 
@@ -1262,13 +1046,6 @@
       updateAreaInfo();
       updateCenterCoordinateBox();
       updateCenterPopupIfVisible();
-
-      if (currentLocationMarker && lastCurrentLat !== null && lastCurrentLon !== null) {
-        currentLocationMarker.bindPopup(
-          `<b>ตำแหน่งปัจจุบัน</b><br>${formatCoordinate(lastCurrentLat, lastCurrentLon)}`
-        );
-      }
-
       showToast(`เปลี่ยนพิกัดเป็น ${coordinateMode === "utm" ? "UTM" : "Lat/Lon"}`);
     }
 
@@ -1289,7 +1066,7 @@
 
       const marker = L.marker([lat, lon], {
         draggable:true,
-        icon:createNumberIcon(measurePoints.length)
+        icon:createPointIcon(measurePoints.length)
       }).addTo(map);
 
       marker.on("drag", () => {
@@ -1307,30 +1084,30 @@
       updateShape();
     }
 
-    function createNumberIcon(number) {
+    function createPointIcon(number) {
       return L.divIcon({
         html:`<div class="point-marker">${number}</div>`,
         className:"",
-        iconSize:[28,28],
-        iconAnchor:[14,14]
+        iconSize:[30,30],
+        iconAnchor:[15,15]
       });
     }
 
     function refreshMarkerNumbers() {
-      markers.forEach((marker, index) => {
-        marker.setIcon(createNumberIcon(index + 1));
+      markers.forEach((marker,index) => {
+        marker.setIcon(createPointIcon(index + 1));
       });
     }
 
     function updateShape() {
-      if (polygonLayer) {
-        map.removeLayer(polygonLayer);
-        polygonLayer = null;
-      }
-
       if (lineLayer) {
         map.removeLayer(lineLayer);
         lineLayer = null;
+      }
+
+      if (polygonLayer) {
+        map.removeLayer(polygonLayer);
+        polygonLayer = null;
       }
 
       if (measurePoints.length >= 2) {
@@ -1339,7 +1116,6 @@
           weight:4,
           opacity:1
         }).addTo(map);
-
         lineLayer.bringToFront();
       }
 
@@ -1350,7 +1126,6 @@
           fillColor:"#39f2a2",
           fillOpacity:0.18
         }).addTo(map);
-
         polygonLayer.bringToFront();
       }
 
@@ -1377,11 +1152,11 @@
       markers = [];
       measurePoints = [];
 
-      if (polygonLayer) map.removeLayer(polygonLayer);
       if (lineLayer) map.removeLayer(lineLayer);
+      if (polygonLayer) map.removeLayer(polygonLayer);
 
-      polygonLayer = null;
       lineLayer = null;
+      polygonLayer = null;
 
       updateAreaInfo();
       showToast("ล้างจุดทั้งหมดแล้ว");
@@ -1391,8 +1166,8 @@
       const plotName = getPlotName();
       const plotDetail = getPlotDetail();
 
-      if (infoPlotName) infoPlotName.textContent = `ชื่อ: ${plotName}`;
-      if (infoPlotDetail) infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
+      infoPlotName.textContent = `ชื่อ: ${plotName}`;
+      infoPlotDetail.textContent = `รายละเอียด: ${plotDetail}`;
 
       if (measurePoints.length < 3) {
         thaiAreaText.textContent = "ขนาดพื้นที่: -";
@@ -1400,8 +1175,7 @@
         return;
       }
 
-      const geojson = pointsToPolygonGeoJSON(measurePoints);
-      const area = turf.area(geojson);
+      const area = turf.area(pointsToPolygonGeoJSON(measurePoints));
       const thaiArea = formatThaiArea(area);
 
       thaiAreaText.textContent = `ขนาดพื้นที่: ${thaiArea}`;
@@ -1414,38 +1188,20 @@
       return turf.polygon([coords]);
     }
 
-    function formatCoordinate(lat, lon) {
-      if (coordinateMode === "utm") {
-        const utm = latLonToUTM(lat, lon);
-        return `UTM ${utm.zone}${utm.hemisphere} X ${Math.round(utm.easting)} Y ${Math.round(utm.northing)}`;
-      }
-
-      return `Lat ${lat.toFixed(6)}, Lon ${lon.toFixed(6)}`;
-    }
-
     function hideInfoPanel() {
-      const infoCard = document.getElementById("infoCard");
-      const showBtn = document.getElementById("showInfoButton");
-
-      if (infoCard) infoCard.classList.add("hide");
-      if (showBtn) showBtn.classList.remove("hide");
+      document.getElementById("infoCard").classList.add("hide");
+      document.getElementById("showInfoButton").classList.remove("hide");
     }
 
     function showInfoPanel() {
-      const infoCard = document.getElementById("infoCard");
-      const showBtn = document.getElementById("showInfoButton");
-
-      if (infoCard) infoCard.classList.remove("hide");
-      if (showBtn) showBtn.classList.add("hide");
-
+      document.getElementById("infoCard").classList.remove("hide");
+      document.getElementById("showInfoButton").classList.add("hide");
       updateAreaInfo();
       updateCenterCoordinateBox();
     }
 
     function toggleNotePanel() {
-      const panel = document.getElementById("notePanel");
-      if (!panel) return;
-      panel.classList.toggle("hide");
+      document.getElementById("notePanel").classList.toggle("hide");
       updateAreaInfo();
     }
 
@@ -1457,13 +1213,9 @@
 
       locationWatchId = navigator.geolocation.watchPosition(
         (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-
-          lastCurrentLat = lat;
-          lastCurrentLon = lon;
-
-          updateCurrentLocationMarker(lat, lon);
+          lastCurrentLat = position.coords.latitude;
+          lastCurrentLon = position.coords.longitude;
+          updateCurrentLocationMarker(lastCurrentLat, lastCurrentLon);
           updateCenterCoordinateBox();
         },
         () => {
@@ -1478,10 +1230,8 @@
     }
 
     function updateCurrentLocationMarker(lat, lon) {
-      if (!map) return;
-
-      const myLocationIcon = L.divIcon({
-        html:`<div class="my-location-pulse"></div>`,
+      const icon = L.divIcon({
+        html:`<div class="my-location"></div>`,
         className:"",
         iconSize:[22,22],
         iconAnchor:[11,11]
@@ -1490,16 +1240,14 @@
       if (!currentLocationMarker) {
         currentLocationMarker = L.marker([lat, lon], {
           title:"ตำแหน่งปัจจุบัน",
-          icon:myLocationIcon
+          icon
         }).addTo(map);
       } else {
         currentLocationMarker.setLatLng([lat, lon]);
-        currentLocationMarker.setIcon(myLocationIcon);
+        currentLocationMarker.setIcon(icon);
       }
 
-      currentLocationMarker.bindPopup(
-        `<b>ตำแหน่งปัจจุบัน</b><br>${formatCoordinate(lat, lon)}`
-      );
+      currentLocationMarker.bindPopup(`<b>ตำแหน่งปัจจุบัน</b><br>${formatCoordinate(lat, lon)}`);
     }
 
     function goToMyLocation() {
@@ -1509,8 +1257,8 @@
       }
 
       map.setView([lastCurrentLat, lastCurrentLon], 18);
-      const text = formatCoordinate(lastCurrentLat, lastCurrentLon);
-      showCoordinatePopupText(text);
+      centerPopupText.textContent = formatCoordinate(lastCurrentLat, lastCurrentLon);
+      centerPopup.classList.remove("hide");
       updateCenterCoordinateBox();
     }
 
@@ -1518,10 +1266,11 @@
       const hiddenElements = [];
       const selectors = [
         ".leaflet-control-container",
-        ".leaflet-popup-pane",
-        ".leaflet-tooltip-pane",
         ".leaflet-marker-pane",
-        ".leaflet-overlay-pane"
+        ".leaflet-overlay-pane",
+        ".leaflet-shadow-pane",
+        ".leaflet-popup-pane",
+        ".leaflet-tooltip-pane"
       ];
 
       selectors.forEach(selector => {
@@ -1549,7 +1298,7 @@
 
       showToast("กำลังสร้างภาพแผนที่...");
 
-      const saveButton = document.querySelector(".float-save");
+      const saveButton = document.querySelector(".btn-save");
       if (saveButton) saveButton.disabled = true;
 
       let restoreMap = null;
@@ -1558,13 +1307,14 @@
         await waitForMapTiles();
 
         const mapElement = document.getElementById("map");
+
         restoreMap = prepareMapForCapture();
 
-        const rawMapCanvas = await html2canvas(mapElement, {
+        const mapCanvas = await html2canvas(mapElement, {
           backgroundColor:"#000000",
           scale:Math.min(2, window.devicePixelRatio || 1),
           useCORS:true,
-          allowTaint:true,
+          allowTaint:false,
           logging:false,
           imageTimeout:20000
         });
@@ -1575,11 +1325,11 @@
         }
 
         const outputCanvas = document.createElement("canvas");
-        outputCanvas.width = rawMapCanvas.width;
-        outputCanvas.height = rawMapCanvas.height;
+        outputCanvas.width = mapCanvas.width;
+        outputCanvas.height = mapCanvas.height;
 
         const ctx = outputCanvas.getContext("2d");
-        ctx.drawImage(rawMapCanvas, 0, 0);
+        ctx.drawImage(mapCanvas, 0, 0);
 
         drawMeasuredPolygonOnCanvas(
           ctx,
@@ -1610,29 +1360,134 @@
 
       } catch (error) {
         console.error("captureMapImage error:", error);
-        alert(
-          "ไม่สามารถบันทึกภาพแผนที่ได้\n\n" +
-          "ให้ลองเปิดผ่าน Chrome / Edge / Safari โดยตรง และรอให้แผนที่โหลดครบก่อนกดบันทึก"
-        );
+        alert("ไม่สามารถบันทึกภาพแผนที่ได้ กรุณาเปิดผ่าน Chrome / Edge / Safari โดยตรง และรอให้แผนที่โหลดครบก่อนกดบันทึก");
       } finally {
         if (restoreMap) restoreMap();
         if (saveButton) saveButton.disabled = false;
       }
     }
 
-    function getPolygonCanvasBounds(canvasWidth, canvasHeight, mapWidth, mapHeight) {
-      if (!map || measurePoints.length === 0) return null;
+    function drawMeasuredPolygonOnCanvas(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
+      if (!map || measurePoints.length < 2) return;
 
+      const points = getMeasurePointsOnCanvas(canvasWidth, canvasHeight, mapWidth, mapHeight);
+
+      ctx.save();
+
+      if (points.length >= 3) {
+        ctx.beginPath();
+        points.forEach((pt, index) => {
+          if (index === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = "rgba(57,242,162,0.16)";
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      points.forEach((pt, index) => {
+        if (index === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      });
+
+      if (points.length >= 3) ctx.closePath();
+
+      ctx.strokeStyle = "#ffb703";
+      ctx.lineWidth = Math.max(5, Math.round(Math.min(canvasWidth, canvasHeight) * 0.0048));
+      ctx.shadowColor = "rgba(0,0,0,0.55)";
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+
+      ctx.shadowBlur = 0;
+
+      points.forEach((pt, index) => {
+        drawCapturePointMarker(ctx, pt.x, pt.y, index + 1, canvasWidth, canvasHeight);
+      });
+
+      ctx.restore();
+    }
+
+    function getMeasurePointsOnCanvas(canvasWidth, canvasHeight, mapWidth, mapHeight) {
       const scaleX = canvasWidth / mapWidth;
       const scaleY = canvasHeight / mapHeight;
 
-      const pts = measurePoints.map(([lat, lng]) => {
+      return measurePoints.map(([lat, lng]) => {
         const p = map.latLngToContainerPoint([lat, lng]);
         return {
           x:p.x * scaleX,
           y:p.y * scaleY
         };
       });
+    }
+
+    function drawCapturePointMarker(ctx, x, y, number, canvasWidth, canvasHeight) {
+      const r = Math.max(18, Math.round(Math.min(canvasWidth, canvasHeight) * 0.018));
+      const fontSize = Math.max(20, Math.round(r * 1.05));
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = "#59e1db";
+      ctx.fill();
+
+      ctx.lineWidth = Math.max(3, Math.round(r * 0.18));
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+
+      ctx.fillStyle = "#04120c";
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(number), x, y + 1);
+      ctx.restore();
+    }
+
+    function drawOverlayLogoAndInfo(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
+      const polygonBounds = getPolygonCanvasBounds(canvasWidth, canvasHeight, mapWidth, mapHeight);
+      const avoidRects = polygonBounds ? [polygonBounds] : [];
+
+      const logoW = canvasWidth > canvasHeight
+        ? Math.round(canvasWidth * 0.22)
+        : Math.round(canvasWidth * 0.34);
+
+      const logoH = canvasWidth > canvasHeight
+        ? Math.round(canvasHeight * 0.08)
+        : Math.round(canvasHeight * 0.07);
+
+      const logoRect = chooseBestOverlayPosition(
+        logoW,
+        logoH,
+        canvasWidth,
+        canvasHeight,
+        avoidRects,
+        "top-left"
+      );
+
+      drawOverlayLogo(ctx, logoRect.x, logoRect.y, logoRect.w, logoRect.h);
+
+      const infoW = canvasWidth > canvasHeight
+        ? Math.round(canvasWidth * 0.56)
+        : Math.round(canvasWidth * 0.72);
+
+      const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
+
+      const infoRect = chooseBestOverlayPosition(
+        infoW,
+        infoH,
+        canvasWidth,
+        canvasHeight,
+        [...avoidRects, logoRect],
+        "bottom-left"
+      );
+
+      drawOverlayInfoBox(ctx, infoRect.x, infoRect.y, infoRect.w, infoRect.h, canvasWidth, canvasHeight);
+    }
+
+    function getPolygonCanvasBounds(canvasWidth, canvasHeight, mapWidth, mapHeight) {
+      if (!map || measurePoints.length === 0) return null;
+
+      const pts = getMeasurePointsOnCanvas(canvasWidth, canvasHeight, mapWidth, mapHeight);
 
       let minX = Infinity;
       let minY = Infinity;
@@ -1640,10 +1495,10 @@
       let maxY = -Infinity;
 
       pts.forEach(pt => {
-        if (pt.x < minX) minX = pt.x;
-        if (pt.y < minY) minY = pt.y;
-        if (pt.x > maxX) maxX = pt.x;
-        if (pt.y > maxY) maxY = pt.y;
+        minX = Math.min(minX, pt.x);
+        minY = Math.min(minY, pt.y);
+        maxX = Math.max(maxX, pt.x);
+        maxY = Math.max(maxY, pt.y);
       });
 
       return {
@@ -1695,15 +1550,15 @@
       ];
 
       for (const pos of ordered) {
-        const hasOverlap = avoidRects.some(rect => rectsOverlap(pos, rect, 22));
-        if (!hasOverlap) return pos;
+        const isOverlap = avoidRects.some(rect => rectsOverlap(pos, rect, 24));
+        if (!isOverlap) return pos;
       }
 
       let best = ordered[0];
       let bestScore = Infinity;
 
       ordered.forEach(pos => {
-        const score = avoidRects.reduce((sum, rect) => sum + overlapArea(pos, rect, 22), 0);
+        const score = avoidRects.reduce((sum, rect) => sum + overlapArea(pos, rect, 24), 0);
         if (score < bestScore) {
           bestScore = score;
           best = pos;
@@ -1711,47 +1566,6 @@
       });
 
       return best;
-    }
-
-    function drawOverlayLogoAndInfo(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
-      const polygonBounds = getPolygonCanvasBounds(canvasWidth, canvasHeight, mapWidth, mapHeight);
-      const avoidRects = polygonBounds ? [polygonBounds] : [];
-
-      const logoMaxW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.22)
-        : Math.round(canvasWidth * 0.34);
-
-      const logoMaxH = canvasWidth > canvasHeight
-        ? Math.round(canvasHeight * 0.08)
-        : Math.round(canvasHeight * 0.07);
-
-      const logoRect = chooseBestOverlayPosition(
-        logoMaxW,
-        logoMaxH,
-        canvasWidth,
-        canvasHeight,
-        avoidRects,
-        "top-left"
-      );
-
-      drawOverlayLogo(ctx, logoRect.x, logoRect.y, logoRect.w, logoRect.h);
-
-      const infoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.56)
-        : Math.round(canvasWidth * 0.72);
-
-      const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
-
-      const infoRect = chooseBestOverlayPosition(
-        infoW,
-        infoH,
-        canvasWidth,
-        canvasHeight,
-        [...avoidRects, logoRect],
-        "bottom-left"
-      );
-
-      drawOverlayInfoBox(ctx, infoRect.x, infoRect.y, infoRect.w, infoRect.h, canvasWidth, canvasHeight);
     }
 
     function drawOverlayLogo(ctx, x, y, maxW, maxH) {
@@ -1779,19 +1593,8 @@
 
     function measureInfoBoxHeight(ctx, boxW, canvasW, canvasH) {
       const data = getAreaData();
-      const plotName = getPlotName();
-      const plotDetail = getPlotDetail();
-      const nowText = formatShortThaiDateTime(new Date());
       const s = getOverlayTextStyles(canvasW, canvasH);
-
-      const rows = [
-        {text:"ข้อมูลพื้นที่แปลง", font:`900 ${s.title}px Arial`, maxLines:1, lineHeight:Math.round(s.title * 1.25)},
-        {text:`ชื่อ: ${plotName}`, font:`900 ${s.name}px Arial`, maxLines:2, lineHeight:Math.round(s.name * 1.25)},
-        {text:`รายละเอียด: ${plotDetail}`, font:`700 ${s.detail}px Arial`, maxLines:3, lineHeight:Math.round(s.detail * 1.28)},
-        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:`900 ${s.area}px Arial`, maxLines:2, lineHeight:Math.round(s.area * 1.25)},
-        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:`700 ${s.meta}px Arial`, maxLines:2, lineHeight:Math.round(s.meta * 1.28)},
-        {text:`วันที่: ${nowText}`, font:`700 ${s.meta}px Arial`, maxLines:1, lineHeight:Math.round(s.meta * 1.28)}
-      ];
+      const rows = getOverlayInfoRows(data, s);
 
       let h = s.paddingY * 2;
 
@@ -1806,10 +1609,8 @@
 
     function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
       const data = getAreaData();
-      const plotName = getPlotName();
-      const plotDetail = getPlotDetail();
-      const nowText = formatShortThaiDateTime(new Date());
       const s = getOverlayTextStyles(canvasW, canvasH);
+      const rows = getOverlayInfoRows(data, s);
 
       drawRoundRect(
         ctx,
@@ -1818,35 +1619,26 @@
         w,
         h,
         s.radius,
-        "rgba(4, 12, 24, 0.46)",
+        "rgba(4,12,24,0.46)",
         "rgba(255,255,255,0.30)"
       );
 
       ctx.save();
+
       ctx.beginPath();
       ctx.moveTo(x + s.paddingX, y + 12);
       ctx.lineTo(x + w - s.paddingX, y + 12);
       ctx.lineWidth = 2;
       ctx.strokeStyle = "rgba(126,245,255,0.44)";
       ctx.stroke();
-      ctx.restore();
 
       let cy = y + s.paddingY;
       ctx.textBaseline = "top";
 
-      const rows = [
-        {text:"ข้อมูลพื้นที่แปลง", font:`900 ${s.title}px Arial`, color:"#7ef5ff", maxLines:1, lineHeight:Math.round(s.title * 1.25)},
-        {text:`ชื่อ: ${plotName}`, font:`900 ${s.name}px Arial`, color:"#ffffff", maxLines:2, lineHeight:Math.round(s.name * 1.25)},
-        {text:`รายละเอียด: ${plotDetail}`, font:`700 ${s.detail}px Arial`, color:"#eef6ff", maxLines:3, lineHeight:Math.round(s.detail * 1.28)},
-        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:`900 ${s.area}px Arial`, color:"#d8fff0", maxLines:2, lineHeight:Math.round(s.area * 1.25)},
-        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:`700 ${s.meta}px Arial`, color:"#e3f7ff", maxLines:2, lineHeight:Math.round(s.meta * 1.28)},
-        {text:`วันที่: ${nowText}`, font:`700 ${s.meta}px Arial`, color:"#e3f7ff", maxLines:1, lineHeight:Math.round(s.meta * 1.28)}
-      ];
-
       rows.forEach(row => {
         ctx.font = row.font;
         ctx.fillStyle = row.color;
-        ctx.shadowColor = "rgba(0,0,0,0.70)";
+        ctx.shadowColor = "rgba(0,0,0,0.75)";
         ctx.shadowBlur = 5;
 
         const wrapped = wrapCanvasText(ctx, row.text, w - s.paddingX * 2, row.maxLines);
@@ -1858,81 +1650,42 @@
         cy += 6;
       });
 
-      ctx.shadowBlur = 0;
+      ctx.restore();
     }
 
-    function drawMeasuredPolygonOnCanvas(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
-      if (!map || measurePoints.length < 2) return;
+    function getOverlayInfoRows(data, s) {
+      const plotName = getPlotName();
+      const plotDetail = getPlotDetail();
+      const nowText = formatShortThaiDateTime(new Date());
 
-      const scaleX = canvasWidth / mapWidth;
-      const scaleY = canvasHeight / mapHeight;
+      return [
+        {text:"ข้อมูลพื้นที่แปลง", font:`900 ${s.title}px Arial`, color:"#7ef5ff", maxLines:1, lineHeight:Math.round(s.title * 1.25)},
+        {text:`ชื่อ: ${plotName}`, font:`900 ${s.name}px Arial`, color:"#ffffff", maxLines:2, lineHeight:Math.round(s.name * 1.25)},
+        {text:`รายละเอียด: ${plotDetail}`, font:`700 ${s.detail}px Arial`, color:"#eef6ff", maxLines:3, lineHeight:Math.round(s.detail * 1.28)},
+        {text:`ขนาดพื้นที่: ${formatThaiArea(data.area)}`, font:`900 ${s.area}px Arial`, color:"#d8fff0", maxLines:2, lineHeight:Math.round(s.area * 1.25)},
+        {text:`พิกัดศูนย์กลางแปลง: ${data.centroidText}`, font:`700 ${s.meta}px Arial`, color:"#e3f7ff", maxLines:2, lineHeight:Math.round(s.meta * 1.28)},
+        {text:`วันที่: ${nowText}`, font:`700 ${s.meta}px Arial`, color:"#e3f7ff", maxLines:1, lineHeight:Math.round(s.meta * 1.28)}
+      ];
+    }
 
-      const pts = measurePoints.map(([lat, lng]) => {
-        const p = map.latLngToContainerPoint([lat, lng]);
+    function getAreaData() {
+      if (measurePoints.length < 3) {
         return {
-          x:p.x * scaleX,
-          y:p.y * scaleY
+          area:0,
+          centroidText:"-"
         };
-      });
-
-      ctx.save();
-
-      if (pts.length >= 3) {
-        ctx.beginPath();
-        pts.forEach((pt, i) => {
-          if (i === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        });
-        ctx.closePath();
-        ctx.fillStyle = "rgba(57, 242, 162, 0.16)";
-        ctx.fill();
       }
 
-      if (pts.length >= 2) {
-        ctx.beginPath();
-        pts.forEach((pt, i) => {
-          if (i === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        });
-        if (pts.length >= 3) ctx.closePath();
+      const geojson = pointsToPolygonGeoJSON(measurePoints);
+      const area = turf.area(geojson);
+      const centroid = turf.centroid(geojson);
+      const lon = centroid.geometry.coordinates[0];
+      const lat = centroid.geometry.coordinates[1];
 
-        ctx.strokeStyle = "#ffb703";
-        ctx.lineWidth = Math.max(5, Math.round(Math.min(canvasWidth, canvasHeight) * 0.0045));
-        ctx.shadowColor = "rgba(0,0,0,0.45)";
-        ctx.shadowBlur = 8;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      pts.forEach((pt, index) => {
-        drawCapturePointMarker(ctx, pt.x, pt.y, index + 1, canvasWidth, canvasHeight);
-      });
-
-      ctx.restore();
-    }
-
-    function drawCapturePointMarker(ctx, x, y, number, canvasWidth, canvasHeight) {
-      const r = Math.max(18, Math.round(Math.min(canvasWidth, canvasHeight) * 0.018));
-      const fontSize = Math.max(20, Math.round(r * 1.05));
-
-      ctx.save();
-
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fillStyle = "#59e1db";
-      ctx.fill();
-
-      ctx.lineWidth = Math.max(3, Math.round(r * 0.18));
-      ctx.strokeStyle = "#ffffff";
-      ctx.stroke();
-
-      ctx.fillStyle = "#04120c";
-      ctx.font = `bold ${fontSize}px Arial`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(String(number), x, y + 1);
-
-      ctx.restore();
+      return {
+        area,
+        centroidText:formatCoordinate(lat, lon)
+      };
     }
 
     function waitForMapTiles() {
@@ -1942,11 +1695,11 @@
           return;
         }
 
-        let resolved = false;
+        let done = false;
 
         const finish = () => {
-          if (resolved) return;
-          resolved = true;
+          if (done) return;
+          done = true;
           resolve();
         };
 
@@ -1959,15 +1712,13 @@
       return new Promise((resolve) => {
         try {
           if (canvas.toBlob) {
-            canvas.toBlob((blob) => {
-              resolve(blob);
-            }, type, quality);
+            canvas.toBlob(blob => resolve(blob), type, quality);
           } else {
             const dataUrl = canvas.toDataURL(type, quality);
             resolve(dataURLToBlob(dataUrl));
           }
         } catch (error) {
-          console.error("canvasToBlobSafe error:", error);
+          console.error(error);
           resolve(null);
         }
       });
@@ -1987,47 +1738,28 @@
       return new Blob([array], {type:mime});
     }
 
-    function getAreaData() {
-      if (measurePoints.length < 3) {
-        return {area:0, centroidText:"-"};
-      }
-
-      const geojson = pointsToPolygonGeoJSON(measurePoints);
-      const area = turf.area(geojson);
-      const centroid = turf.centroid(geojson);
-      const centerLon = centroid.geometry.coordinates[0];
-      const centerLat = centroid.geometry.coordinates[1];
-
-      return {
-        area,
-        centroidText:formatCoordinate(centerLat, centerLon)
-      };
-    }
-
     function drawLogoFit(ctx, img, x, y, maxW, maxH) {
       const ratio = img.width / img.height;
-      let drawW = maxW;
-      let drawH = Math.round(drawW / ratio);
+      let w = maxW;
+      let h = Math.round(w / ratio);
 
-      if (drawH > maxH) {
-        drawH = maxH;
-        drawW = Math.round(drawH * ratio);
+      if (h > maxH) {
+        h = maxH;
+        w = Math.round(h * ratio);
       }
 
-      ctx.drawImage(img, x, y, drawW, drawH);
+      ctx.drawImage(img, x, y, w, h);
     }
 
     function drawSmartLandBadge(ctx, x, y, maxW, h) {
       ctx.save();
 
       const text = "SmartLAND";
-      const r = Math.round(h * 0.24);
-
       ctx.font = `900 ${Math.round(h * 0.46)}px Arial`;
-      const textWidth = ctx.measureText(text).width;
-      const w = Math.min(maxW, Math.round(textWidth + h * 0.90));
+      const textW = ctx.measureText(text).width;
+      const w = Math.min(maxW, Math.round(textW + h * 0.9));
 
-      drawRoundRect(ctx, x, y, w, h, r, "rgba(57,242,162,.95)", "rgba(255,255,255,.18)");
+      drawRoundRect(ctx, x, y, w, h, Math.round(h * 0.24), "rgba(57,242,162,.95)", "rgba(255,255,255,.18)");
 
       ctx.fillStyle = "rgba(2,8,14,.95)";
       ctx.textBaseline = "middle";
@@ -2105,12 +1837,6 @@
       saveImageButton.style.display = isIOSNow ? "none" : "block";
 
       previewModal.classList.remove("hide");
-
-      if (!isIOSNow) {
-        setTimeout(() => {
-          savePreviewImage();
-        }, 500);
-      }
     }
 
     function closePreviewModal() {
@@ -2137,17 +1863,11 @@
         link.click();
         document.body.removeChild(link);
 
-        setTimeout(() => {
-          URL.revokeObjectURL(url);
-        }, 2000);
-
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
         showToast("บันทึกภาพแล้ว");
       } catch (error) {
-        console.error("savePreviewImage error:", error);
-
         const url = URL.createObjectURL(latestImageBlob);
         window.open(url, "_blank");
-
         alert("ระบบเปิดรูปภาพในแท็บใหม่แล้ว ให้คลิกขวาที่รูปภาพแล้วเลือก Save image as...");
       }
     }
@@ -2169,7 +1889,6 @@
             text:"ภาพแผนที่จาก SmartLAND",
             files:[file]
           });
-
           showToast("แชร์รูปภาพแล้ว");
           return;
         }
@@ -2179,18 +1898,113 @@
             title:"SmartLAND",
             text:"ภาพแผนที่จาก SmartLAND"
           });
-
           showToast("แชร์ข้อมูลแล้ว");
           return;
         }
 
         alert("อุปกรณ์หรือเบราว์เซอร์นี้ยังไม่รองรับการแชร์โดยตรง");
       } catch (error) {
-        console.error(error);
         if (error.name !== "AbortError") {
           alert("ไม่สามารถแชร์รูปภาพได้ในขณะนี้");
         }
       }
+    }
+
+    function checkBrowserSupportOnStart() {
+      const result = getBrowserSupportStatus();
+
+      if (!result.ok) {
+        browserGateReason.textContent = result.reason;
+        browserGate.classList.remove("hide");
+      }
+    }
+
+    function getBrowserSupportStatus() {
+      const ua = navigator.userAgent || "";
+
+      const isLine = /Line/i.test(ua);
+      const isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBAN\/FBIOS/i.test(ua);
+      const isInstagram = /Instagram/i.test(ua);
+      const isMessenger = /MessengerForiOS|FB_IAB\/Messenger/i.test(ua);
+      const isTikTok = /TikTok/i.test(ua);
+      const isInApp = isLine || isFacebook || isInstagram || isMessenger || isTikTok;
+
+      const isSecure = window.isSecureContext || location.protocol === "https:" || location.hostname === "localhost";
+      const hasGeo = "geolocation" in navigator;
+      const hasCanvas = !!window.HTMLCanvasElement;
+
+      if (isInApp && !browserGateDismissed) {
+        return {
+          ok:false,
+          reason:"ระบบตรวจพบว่าเปิดผ่านเบราว์เซอร์ในแอป เช่น LINE / Facebook / Instagram ซึ่งอาจบันทึกภาพหรือแชร์รูปไม่ได้ กรุณาเปิดด้วย Chrome, Safari หรือ Edge"
+        };
+      }
+
+      if (!isSecure) {
+        return {
+          ok:false,
+          reason:"เว็บนี้ควรเปิดผ่าน HTTPS เพื่อให้ GPS และการบันทึกภาพทำงานได้ถูกต้อง"
+        };
+      }
+
+      if (!hasGeo) {
+        return {
+          ok:false,
+          reason:"เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง GPS กรุณาเปิดผ่าน Chrome, Safari หรือ Edge"
+        };
+      }
+
+      if (!hasCanvas) {
+        return {
+          ok:false,
+          reason:"เบราว์เซอร์นี้ไม่รองรับการสร้างภาพแผนที่ กรุณาเปลี่ยนเบราว์เซอร์"
+        };
+      }
+
+      return {
+        ok:true,
+        reason:""
+      };
+    }
+
+    function openInChromeAndroid() {
+      const url = location.href;
+      const isAndroid = /Android/i.test(navigator.userAgent || "");
+
+      if (isAndroid) {
+        const cleanUrl = url.replace(/^https?:\/\//, "");
+        location.href = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end`;
+        return;
+      }
+
+      copyCurrentLink();
+      alert("ระบบคัดลอกลิงก์แล้ว กรุณานำไปวางเปิดใน Safari / Chrome / Edge");
+    }
+
+    async function copyCurrentLink() {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        showToast("คัดลอกลิงก์แล้ว");
+      } catch (error) {
+        prompt("คัดลอกลิงก์นี้ไปเปิดใน Chrome / Safari / Edge", location.href);
+      }
+    }
+
+    function recheckBrowserSupport() {
+      const result = getBrowserSupportStatus();
+
+      if (result.ok) {
+        browserGate.classList.add("hide");
+        showToast("เบราว์เซอร์นี้พร้อมใช้งาน");
+      } else {
+        browserGateReason.textContent = result.reason;
+      }
+    }
+
+    function continueAnyway() {
+      browserGateDismissed = true;
+      browserGate.classList.add("hide");
+      showToast("ใช้งานต่อแบบจำกัด");
     }
 
     function isIOSDevice() {
@@ -2222,14 +2036,14 @@
     }
 
     function createMapFileName() {
-      const date = new Date();
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, "0");
-      const d = String(date.getDate()).padStart(2, "0");
-      const h = String(date.getHours()).padStart(2, "0");
-      const min = String(date.getMinutes()).padStart(2, "0");
-      const s = String(date.getSeconds()).padStart(2, "0");
-      return `SmartLAND_${y}${m}${d}_${h}${min}${s}.jpg`;
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const h = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      const s = String(d.getSeconds()).padStart(2, "0");
+      return `SmartLAND_${y}${m}${day}_${h}${min}${s}.jpg`;
     }
 
     function formatShortThaiDateTime(date) {
@@ -2247,13 +2061,20 @@
 
       const rai = Math.floor(areaSqm / 1600);
       const remainAfterRai = areaSqm - rai * 1600;
-
       const ngan = Math.floor(remainAfterRai / 400);
       const remainAfterNgan = remainAfterRai - ngan * 400;
-
       const sqWa = remainAfterNgan / 4;
 
       return `${rai} ไร่ ${ngan} งาน ${sqWa.toFixed(2)} ตร.วา`;
+    }
+
+    function formatCoordinate(lat, lon) {
+      if (coordinateMode === "utm") {
+        const utm = latLonToUTM(lat, lon);
+        return `UTM ${utm.zone}${utm.hemisphere} X ${Math.round(utm.easting)} Y ${Math.round(utm.northing)}`;
+      }
+
+      return `Lat ${lat.toFixed(6)}, Lon ${lon.toFixed(6)}`;
     }
 
     function degToRad(deg) {
@@ -2309,7 +2130,12 @@
       const hemisphere = lat >= 0 ? "N" : "S";
       if (lat < 0) northing += 10000000.0;
 
-      return {zone, hemisphere, easting, northing};
+      return {
+        zone,
+        hemisphere,
+        easting,
+        northing
+      };
     }
   </script>
 </body>
