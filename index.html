@@ -63,6 +63,12 @@
       background:#111;
     }
 
+    /* เพิ่มความคมชัดของภาพแผนที่จาก Esri World Imagery */
+    .leaflet-tile{
+      filter:contrast(1.12) saturate(1.10) brightness(1.03);
+      image-rendering:auto;
+    }
+
     .vignette{
       position:absolute;
       inset:0;
@@ -332,23 +338,6 @@
       font-size:18px;
       font-weight:900;
       box-shadow:0 4px 10px rgba(0,0,0,.15);
-    }
-
-    .note-panel{
-      position:absolute;
-      left:10px;
-      right:10px;
-      bottom:calc(104px + env(safe-area-inset-bottom));
-      z-index:640;
-      max-width:520px;
-      margin:0 auto;
-      padding:12px;
-      border-radius:22px;
-      background:rgba(4,12,24,.84);
-      border:1px solid var(--line);
-      box-shadow:0 12px 28px rgba(0,0,0,.35);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
     }
 
     label{
@@ -925,7 +914,7 @@
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
           maxZoom:20,
-          maxNativeZoom:17,
+          maxNativeZoom:19,
           attribution:"Tiles © Esri",
           crossOrigin:"anonymous"
         }
@@ -935,7 +924,7 @@
         "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
         {
           maxZoom:20,
-          maxNativeZoom:17,
+          maxNativeZoom:19,
           attribution:"Labels © Esri",
           crossOrigin:"anonymous"
         }
@@ -1144,11 +1133,6 @@
       updateCenterCoordinateBox();
     }
 
-    function toggleNotePanel() {
-      document.getElementById("notePanel").classList.toggle("hide");
-      updateAreaInfo();
-    }
-
     function startRealtimeLocation() {
       if (!navigator.geolocation) {
         updateCenterCoordinateBox();
@@ -1251,7 +1235,9 @@
         outputCanvas.height = mapCanvas.height;
 
         const ctx = outputCanvas.getContext("2d");
+        ctx.filter = "contrast(1.12) saturate(1.10) brightness(1.03)";
         ctx.drawImage(mapCanvas, 0, 0);
+        ctx.filter = "none";
 
         drawMeasuredPolygonOnCanvas(
           ctx,
