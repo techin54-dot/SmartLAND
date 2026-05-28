@@ -18,14 +18,10 @@
       --green:#39f2a2;
       --cyan:#4cc9ff;
       --yellow:#ffb703;
-      --dark:#06111f;
       --line:rgba(255,255,255,.16);
     }
 
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
-    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
     html,body{
       margin:0;
@@ -40,10 +36,18 @@
       touch-action:manipulation;
     }
 
-    body{
-      position:fixed;
-      inset:0;
+    body{position:fixed;inset:0}
+
+    button{
+      cursor:pointer;
+      border:none;
+      font-family:inherit;
+      -webkit-user-select:none;
+      user-select:none;
     }
+
+    button:active{transform:scale(.96)}
+    button:disabled{opacity:.55;pointer-events:none}
 
     .app{
       position:fixed;
@@ -103,13 +107,7 @@
       box-shadow:0 0 0 3px rgba(0,0,0,.65);
     }
 
-    .tick{
-      position:absolute;
-      background:#fff;
-      border-radius:999px;
-      box-shadow:0 0 0 2px rgba(0,0,0,.55);
-    }
-
+    .tick{position:absolute;background:#fff;border-radius:999px;box-shadow:0 0 0 2px rgba(0,0,0,.55)}
     .tick.top{width:5px;height:16px;left:50%;top:1px;transform:translateX(-50%)}
     .tick.bottom{width:5px;height:16px;left:50%;bottom:1px;transform:translateX(-50%)}
     .tick.left{width:16px;height:5px;left:1px;top:50%;transform:translateY(-50%)}
@@ -143,19 +141,8 @@
       pointer-events:auto;
     }
 
-    .brand-logo{
-      width:100%;
-      max-width:155px;
-      height:40px;
-      object-fit:contain;
-      display:none;
-    }
-
-    .brand-text{
-      font-size:20px;
-      font-weight:900;
-      color:var(--green);
-    }
+    .brand-logo{width:100%;max-width:155px;height:40px;object-fit:contain;display:none}
+    .brand-text{font-size:20px;font-weight:900;color:var(--green)}
 
     .info-card{
       flex:1;
@@ -170,19 +157,8 @@
       pointer-events:auto;
     }
 
-    .panel-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:8px;
-    }
-
-    .panel-title{
-      font-size:14px;
-      font-weight:900;
-      color:#dffaff;
-    }
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+    .panel-title{font-size:14px;font-weight:900;color:#dffaff}
 
     .close-btn{
       width:30px;
@@ -198,22 +174,10 @@
       font-weight:900;
       line-height:1;
       box-shadow:none;
-      cursor:pointer;
     }
 
-    .info-grid{
-      display:grid;
-      gap:5px;
-      font-size:12px;
-      line-height:1.45;
-      color:#f8fafc;
-    }
-
-    .thai-area{
-      font-size:15px;
-      font-weight:900;
-      color:#dffcef;
-    }
+    .info-grid{display:grid;gap:5px;font-size:12px;line-height:1.45;color:#f8fafc}
+    .thai-area{font-size:15px;font-weight:900;color:#dffcef}
 
     .coord-box{
       margin-top:8px;
@@ -232,8 +196,10 @@
       padding:9px 10px;
       border-radius:14px;
       font-size:12px;
+      font-weight:900;
       background:linear-gradient(135deg,rgba(190,18,60,.82),rgba(255,77,109,.56));
       color:#fff;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
     }
 
     .show-info-btn{
@@ -249,7 +215,6 @@
       background:linear-gradient(135deg,var(--green),var(--cyan));
       border:1px solid rgba(255,255,255,.25);
       box-shadow:0 12px 30px rgba(0,0,0,.35);
-      cursor:pointer;
     }
 
     .note-panel{
@@ -269,13 +234,7 @@
       -webkit-backdrop-filter:blur(14px);
     }
 
-    label{
-      display:block;
-      font-size:12px;
-      font-weight:900;
-      color:#dffcef;
-      margin-bottom:5px;
-    }
+    label{display:block;font-size:12px;font-weight:900;color:#dffcef;margin-bottom:5px}
 
     input,textarea{
       width:100%;
@@ -286,25 +245,12 @@
       padding:10px 12px;
       font-size:14px;
       outline:none;
+      font-family:inherit;
     }
 
     input{margin-bottom:8px}
     textarea{min-height:62px;max-height:110px;resize:vertical}
     input::placeholder,textarea::placeholder{color:rgba(255,255,255,.56)}
-
-    button{
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.16);
-      color:#fff;
-      border-radius:16px;
-      font-weight:900;
-      box-shadow:0 10px 24px rgba(0,0,0,.25);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-
-    button:active{transform:scale(.96)}
-    button:disabled{opacity:.55;pointer-events:none}
 
     .float-btn{
       position:absolute;
@@ -469,7 +415,6 @@
       font-size:18px;
       line-height:1;
       box-shadow:none;
-      cursor:pointer;
     }
 
     .toast{
@@ -542,6 +487,8 @@
       padding:12px;
       border-radius:16px;
       font-size:15px;
+      color:#fff;
+      font-weight:900;
       background:linear-gradient(180deg,rgba(24,34,52,.94),rgba(10,16,28,.94));
     }
 
@@ -1170,21 +1117,8 @@
         const ctx = outputCanvas.getContext("2d");
         ctx.drawImage(mapCanvas, 0, 0);
 
-        drawMeasuredPolygonOnCanvas(
-          ctx,
-          outputCanvas.width,
-          outputCanvas.height,
-          mapElement.clientWidth,
-          mapElement.clientHeight
-        );
-
-        drawOverlayLogoAndInfo(
-          ctx,
-          outputCanvas.width,
-          outputCanvas.height,
-          mapElement.clientWidth,
-          mapElement.clientHeight
-        );
+        drawMeasuredPolygonOnCanvas(ctx, outputCanvas.width, outputCanvas.height, mapElement.clientWidth, mapElement.clientHeight);
+        drawOverlayLogoAndInfo(ctx, outputCanvas.width, outputCanvas.height, mapElement.clientWidth, mapElement.clientHeight);
 
         const blob = await canvasToBlobSafe(outputCanvas, "image/jpeg", 0.94);
         if (!blob) {
@@ -1211,7 +1145,7 @@
       const mapW = mapElement.clientWidth;
       const mapH = mapElement.clientHeight;
       const topSafe = Math.max(80, Math.round(mapH * 0.12));
-      const bottomSafe = Math.max(190, Math.round(mapH * 0.26));
+      const bottomSafe = Math.max(210, Math.round(mapH * 0.28));
       const sideSafe = Math.max(28, Math.round(mapW * 0.055));
 
       map.fitBounds(bounds, {
@@ -1341,21 +1275,12 @@
 
     function drawOverlayLogoAndInfo(ctx, canvasWidth, canvasHeight, mapWidth, mapHeight) {
       const margin = Math.round(Math.min(canvasWidth, canvasHeight) * 0.035);
-
-      const logoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.23)
-        : Math.round(canvasWidth * 0.36);
-
-      const logoH = canvasWidth > canvasHeight
-        ? Math.round(canvasHeight * 0.085)
-        : Math.round(canvasHeight * 0.075);
+      const logoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.23) : Math.round(canvasWidth * 0.36);
+      const logoH = canvasWidth > canvasHeight ? Math.round(canvasHeight * 0.085) : Math.round(canvasHeight * 0.075);
 
       drawOverlayLogo(ctx, margin, margin, logoW, logoH);
 
-      const infoW = canvasWidth > canvasHeight
-        ? Math.round(canvasWidth * 0.60)
-        : Math.round(canvasWidth * 0.88);
-
+      const infoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.60) : Math.round(canvasWidth * 0.88);
       const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
       const infoX = Math.round((canvasWidth - infoW) / 2);
       const infoY = canvasHeight - infoH - margin;
@@ -1373,12 +1298,14 @@
       const clamp = (value, min, max) => Math.max(min, Math.min(max, Math.round(value)));
 
       return {
-        nameLabel:clamp(base * 0.025, 20, 30),
-        nameValue:clamp(base * 0.033, 26, 40),
-        detailLabel:clamp(base * 0.024, 19, 29),
-        detailValue:clamp(base * 0.030, 24, 36),
+        nameLabel:clamp(base * 0.026, 20, 30),
+        nameValue:clamp(base * 0.034, 26, 42),
+        detailLabel:clamp(base * 0.024, 19, 28),
+        detailValue:clamp(base * 0.029, 23, 35),
+        areaLabel:clamp(base * 0.024, 19, 28),
+        areaValue:clamp(base * 0.032, 25, 38),
         coordLabel:clamp(base * 0.025, 20, 30),
-        coordValue:clamp(base * 0.035, 28, 44),
+        coordValue:clamp(base * 0.035, 27, 44),
         metaLabel:clamp(base * 0.023, 18, 27),
         metaValue:clamp(base * 0.028, 22, 34),
         paddingX:clamp(base * 0.030, 22, 34),
@@ -1388,6 +1315,13 @@
         innerGap:clamp(base * 0.011, 8, 13),
         labelGap:clamp(base * 0.012, 10, 16)
       };
+    }
+
+    function shortenOverlayDetail(text, maxLen = 52) {
+      const value = String(text || "").trim();
+      if (!value) return "-";
+      if (value.length <= maxLen) return value;
+      return value.slice(0, maxLen).trim() + "...";
     }
 
     function measureInfoBoxHeight(ctx, boxW, canvasW, canvasH) {
@@ -1420,16 +1354,7 @@
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
 
-      drawRoundRect(
-        ctx,
-        x,
-        y,
-        w,
-        h,
-        s.radius,
-        "rgba(3, 12, 24, 0.68)",
-        "rgba(126, 245, 255, 0.30)"
-      );
+      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(3, 12, 24, 0.70)", "rgba(126, 245, 255, 0.28)");
 
       ctx.save();
       let cy = y + s.paddingY;
@@ -1445,21 +1370,11 @@
           const cardW = w - s.paddingX * 2;
           const innerX = cardX + 14;
           const innerW = cardW - 28;
-
           ctx.font = row.valueFont;
           const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
           const cardH = 16 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 16;
 
-          drawRoundRect(
-            ctx,
-            cardX,
-            cardY,
-            cardW,
-            cardH,
-            Math.round(s.radius * 0.68),
-            "rgba(50, 160, 255, 0.12)",
-            "rgba(76, 201, 255, 0.24)"
-          );
+          drawRoundRect(ctx, cardX, cardY, cardW, cardH, Math.round(s.radius * 0.68), "rgba(50, 160, 255, 0.12)", "rgba(76, 201, 255, 0.22)");
 
           ctx.font = row.labelFont;
           ctx.fillStyle = row.labelColor;
@@ -1467,7 +1382,6 @@
 
           ctx.font = row.valueFont;
           ctx.fillStyle = row.color;
-
           let valueY = cardY + 12 + row.labelLineHeight + s.innerGap;
           valueLines.forEach(line => {
             ctx.fillText(line, innerX, valueY);
@@ -1504,39 +1418,53 @@
 
     function getOverlayInfoRows(data, s) {
       const plotName = getPlotName() || "-";
-      const plotDetail = getPlotDetail() || "-";
+      const plotDetail = shortenOverlayDetail(getPlotDetail() || "-", 52);
       const nowText = formatShortThaiDateTime(new Date());
+      const thaiArea = data.area > 0 ? formatThaiArea(data.area) : "-";
 
       return [
         {
           type:"normal",
-          label:"ชื่อ",
+          label:"👤",
           text:plotName,
           labelFont:`800 ${s.nameLabel}px Arial`,
           valueFont:`900 ${s.nameValue}px Arial`,
           labelColor:"#ffffff",
           color:"#ffffff",
-          maxLines:2,
-          labelWidth:s.nameLabel * 2.8,
+          maxLines:1,
+          labelWidth:s.nameLabel * 1.8,
           labelLineHeight:Math.round(s.nameLabel * 1.16),
           valueLineHeight:Math.round(s.nameValue * 1.18)
         },
         {
           type:"normal",
-          label:"รายละเอียด",
+          label:"📝",
           text:plotDetail,
           labelFont:`800 ${s.detailLabel}px Arial`,
           valueFont:`800 ${s.detailValue}px Arial`,
-          labelColor:"#cfeeff",
+          labelColor:"#d8efff",
           color:"#ffffff",
           maxLines:2,
-          labelWidth:s.detailLabel * 5.4,
+          labelWidth:s.detailLabel * 1.8,
           labelLineHeight:Math.round(s.detailLabel * 1.16),
           valueLineHeight:Math.round(s.detailValue * 1.18)
         },
         {
+          type:"normal",
+          label:"📐",
+          text:thaiArea,
+          labelFont:`800 ${s.areaLabel}px Arial`,
+          valueFont:`900 ${s.areaValue}px Arial`,
+          labelColor:"#76ffbf",
+          color:"#f3fff8",
+          maxLines:2,
+          labelWidth:s.areaLabel * 1.8,
+          labelLineHeight:Math.round(s.areaLabel * 1.16),
+          valueLineHeight:Math.round(s.areaValue * 1.18)
+        },
+        {
           type:"highlight",
-          label:"พิกัดแปลง",
+          label:"📍 พิกัดแปลง",
           text:data.centroidText || "-",
           labelFont:`900 ${s.coordLabel}px Arial`,
           valueFont:`900 ${s.coordValue}px Arial`,
@@ -1548,14 +1476,14 @@
         },
         {
           type:"normal",
-          label:"วันที่และเวลา",
+          label:"🕒",
           text:nowText,
           labelFont:`800 ${s.metaLabel}px Arial`,
           valueFont:`800 ${s.metaValue}px Arial`,
           labelColor:"#ffcf5a",
           color:"#fff5d9",
           maxLines:1,
-          labelWidth:s.metaLabel * 5.6,
+          labelWidth:s.metaLabel * 1.8,
           labelLineHeight:Math.round(s.metaLabel * 1.16),
           valueLineHeight:Math.round(s.metaValue * 1.16)
         }
@@ -1644,7 +1572,7 @@
       if (!text) return ["-"];
 
       const hasSpace = text.includes(" ");
-      const units = hasSpace ? text.split(" ").filter(Boolean) : Array.from(text);
+      const units = hasSpace ? text.split(/\s+/) : Array.from(text);
       const lines = [];
       let line = "";
 
