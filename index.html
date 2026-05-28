@@ -1429,10 +1429,10 @@
 
       drawOverlayLogo(ctx, margin, margin, logoW, logoH);
 
-      const infoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.63) : Math.round(canvasWidth * 0.90);
+      const infoW = canvasWidth > canvasHeight ? Math.round(canvasWidth * 0.64) : Math.round(canvasWidth * 0.90);
       const infoH = measureInfoBoxHeight(ctx, infoW, canvasWidth, canvasHeight);
       const infoX = Math.round((canvasWidth - infoW) / 2);
-      const infoY = canvasHeight - infoH - margin - 6;
+      const infoY = canvasHeight - infoH - margin;
 
       drawOverlayInfoBox(ctx, infoX, infoY, infoW, infoH, canvasWidth, canvasHeight);
     }
@@ -1447,29 +1447,25 @@
       const clamp = (value, min, max) => Math.max(min, Math.min(max, Math.round(value)));
 
       return {
-        titleLabel:clamp(base * 0.022, 18, 26),
-        titleValue:clamp(base * 0.034, 28, 44),
-        detailLabel:clamp(base * 0.021, 17, 24),
-        detailValue:clamp(base * 0.028, 22, 34),
-        areaLabel:clamp(base * 0.021, 17, 24),
-        areaValue:clamp(base * 0.030, 24, 36),
-        coordLabel:clamp(base * 0.022, 18, 26),
-        coordValue:clamp(base * 0.033, 26, 40),
-        timeLabel:clamp(base * 0.021, 17, 24),
-        timeValue:clamp(base * 0.028, 22, 34),
-        paddingX:clamp(base * 0.032, 22, 34),
-        paddingY:clamp(base * 0.030, 20, 32),
-        radius:clamp(base * 0.026, 18, 28),
-        rowGap:clamp(base * 0.018, 12, 18),
-        innerGap:clamp(base * 0.012, 8, 12),
-        labelGap:clamp(base * 0.016, 10, 16),
-        panelBorder:2,
-        coordBoxRadius:clamp(base * 0.020, 14, 24)
+        labelFont:clamp(base * 0.022, 18, 26),
+        valueFont:clamp(base * 0.031, 24, 38),
+        detailValueFont:clamp(base * 0.027, 22, 34),
+        coordValueFont:clamp(base * 0.032, 25, 40),
+        timeValueFont:clamp(base * 0.027, 22, 34),
+        paddingX:clamp(base * 0.034, 24, 38),
+        paddingY:clamp(base * 0.030, 22, 34),
+        radius:clamp(base * 0.026, 20, 30),
+        rowGap:clamp(base * 0.017, 12, 18),
+        innerGap:clamp(base * 0.010, 8, 12),
+        labelGap:clamp(base * 0.014, 10, 16),
+        iconSize:clamp(base * 0.038, 30, 42),
+        cardPadding:clamp(base * 0.018, 14, 22),
+        coordBoxRadius:clamp(base * 0.020, 16, 24)
       };
     }
 
     function shortenOverlayDetail(text, maxLen = 42) {
-      const value = String(text || "").trim();
+      const value = String(text || "").trim().split(" ").filter(Boolean).join(" ");
       if (!value) return "-";
       if (value.length <= maxLen) return value;
       return value.slice(0, maxLen).trim() + "...";
@@ -1479,25 +1475,19 @@
       const data = getAreaData();
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
+      const contentW = boxW - s.paddingX * 2 - s.iconSize - s.labelGap;
       let h = s.paddingY * 2;
 
       rows.forEach(row => {
-        if (row.type === "highlight") {
-          const innerW = boxW - s.paddingX * 2 - 28;
-          ctx.font = row.valueFont;
-          const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-          h += 16 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 16 + s.rowGap;
-          return;
-        }
-
-        const labelW = row.labelWidth;
-        const valueW = boxW - s.paddingX * 2 - labelW - s.labelGap;
         ctx.font = row.valueFont;
-        const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
-        h += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
+        const valueLines = wrapCanvasText(ctx, row.text, contentW, row.maxLines);
+        const topH = Math.max(s.iconSize, row.labelLineHeight);
+        const rowH = topH + s.innerGap + (valueLines.length * row.valueLineHeight);
+        const extra = row.type === "highlight" ? s.cardPadding * 2 : 0;
+        h += rowH + extra + s.rowGap;
       });
 
-      return h + 8;
+      return h + 4;
     }
 
     function drawOverlayInfoBox(ctx, x, y, w, h, canvasW, canvasH) {
@@ -1505,65 +1495,76 @@
       const s = getOverlayTextStyles(canvasW, canvasH);
       const rows = getOverlayInfoRows(data, s);
 
-      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(3, 12, 24, 0.74)", "rgba(140, 240, 255, 0.24)");
+      drawRoundRect(ctx, x, y, w, h, s.radius, "rgba(3, 12, 24, 0.76)", "rgba(140, 240, 255, 0.26)");
 
       ctx.save();
-      let cy = y + s.paddingY;
       ctx.textBaseline = "top";
+      let cy = y + s.paddingY;
 
       rows.forEach(row => {
-        ctx.shadowColor = "rgba(0,0,0,0.72)";
-        ctx.shadowBlur = 6;
+        const rowX = x + s.paddingX;
+        const rowW = w - s.paddingX * 2;
+        const iconX = rowX;
+        const contentX = rowX + s.iconSize + s.labelGap;
+        const contentW = rowW - s.iconSize - s.labelGap;
 
+        ctx.font = row.valueFont;
+        const valueLines = wrapCanvasText(ctx, row.text, contentW, row.maxLines);
+        const topH = Math.max(s.iconSize, row.labelLineHeight);
+        const rowH = topH + s.innerGap + (valueLines.length * row.valueLineHeight);
+
+        const drawY = cy;
         if (row.type === "highlight") {
-          const cardX = x + s.paddingX;
-          const cardY = cy;
-          const cardW = w - s.paddingX * 2;
-          const innerX = cardX + 14;
-          const innerW = cardW - 28;
-          ctx.font = row.valueFont;
-          const valueLines = wrapCanvasText(ctx, row.text, innerW, row.maxLines);
-          const cardH = 16 + row.labelLineHeight + s.innerGap + (valueLines.length * row.valueLineHeight) + 16;
-
-          drawRoundRect(ctx, cardX, cardY, cardW, cardH, s.coordBoxRadius, "rgba(36, 129, 190, 0.16)", "rgba(76, 201, 255, 0.30)");
-
-          ctx.font = row.labelFont;
-          ctx.fillStyle = row.labelColor;
-          ctx.fillText(row.label, innerX, cardY + 12);
-
-          ctx.font = row.valueFont;
-          ctx.fillStyle = row.color;
-          let valueY = cardY + 12 + row.labelLineHeight + s.innerGap;
-          valueLines.forEach(line => {
-            ctx.fillText(line, innerX, valueY);
-            valueY += row.valueLineHeight;
-          });
-
-          cy += cardH + s.rowGap;
-          return;
+          drawRoundRect(
+            ctx,
+            rowX - s.cardPadding,
+            cy - s.cardPadding,
+            rowW + s.cardPadding * 2,
+            rowH + s.cardPadding * 2,
+            s.coordBoxRadius,
+            "rgba(36, 129, 190, 0.17)",
+            "rgba(76, 201, 255, 0.32)"
+          );
         }
 
-        const labelX = x + s.paddingX;
-        const valueX = labelX + row.labelWidth + s.labelGap;
-        const valueW = w - s.paddingX * 2 - row.labelWidth - s.labelGap;
+        drawOverlayIconBadge(ctx, iconX, drawY, s.iconSize, row.icon, row.iconFill, row.iconColor);
 
+        ctx.shadowColor = "rgba(0,0,0,0.75)";
+        ctx.shadowBlur = 6;
         ctx.font = row.labelFont;
         ctx.fillStyle = row.labelColor;
-        ctx.fillText(row.label, labelX, cy);
+        ctx.fillText(row.label, contentX, drawY + Math.max(0, (s.iconSize - row.labelLineHeight) / 2));
 
         ctx.font = row.valueFont;
         ctx.fillStyle = row.color;
-        const valueLines = wrapCanvasText(ctx, row.text, valueW, row.maxLines);
-
-        let valueY = cy;
+        let valueY = drawY + topH + s.innerGap;
         valueLines.forEach(line => {
-          ctx.fillText(line, valueX, valueY);
+          ctx.fillText(line, contentX, valueY);
           valueY += row.valueLineHeight;
         });
 
-        cy += Math.max(row.labelLineHeight, valueLines.length * row.valueLineHeight) + s.rowGap;
+        ctx.shadowBlur = 0;
+        cy += rowH + (row.type === "highlight" ? s.cardPadding * 2 : 0) + s.rowGap;
       });
 
+      ctx.restore();
+    }
+
+    function drawOverlayIconBadge(ctx, x, y, size, text, fill, color) {
+      ctx.save();
+      const r = size / 2;
+      ctx.beginPath();
+      ctx.arc(x + r, y + r, r, 0, Math.PI * 2);
+      ctx.fillStyle = fill;
+      ctx.fill();
+      ctx.lineWidth = Math.max(2, Math.round(size * 0.07));
+      ctx.strokeStyle = "rgba(255,255,255,0.75)";
+      ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.font = `900 ${Math.round(size * 0.48)}px Arial`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x + r, y + r + 1);
       ctx.restore();
     }
 
@@ -1576,67 +1577,78 @@
       return [
         {
           type:"normal",
-          label:"👤 ชื่อ",
+          icon:"ช",
+          label:"ชื่อ",
           text:plotName,
-          labelFont:`800 ${s.titleLabel}px Arial`,
-          valueFont:`900 ${s.titleValue}px Arial`,
+          iconFill:"rgba(59,130,246,0.95)",
+          iconColor:"#ffffff",
+          labelFont:`900 ${s.labelFont}px Arial`,
+          valueFont:`900 ${s.valueFont}px Arial`,
           labelColor:"#bff9ff",
           color:"#ffffff",
           maxLines:1,
-          labelWidth:s.titleLabel * 4.0,
-          labelLineHeight:Math.round(s.titleLabel * 1.15),
-          valueLineHeight:Math.round(s.titleValue * 1.16)
+          labelLineHeight:Math.round(s.labelFont * 1.22),
+          valueLineHeight:Math.round(s.valueFont * 1.22)
         },
         {
           type:"normal",
-          label:"📝 รายละเอียด",
+          icon:"ร",
+          label:"รายละเอียด",
           text:plotDetail,
-          labelFont:`800 ${s.detailLabel}px Arial`,
-          valueFont:`800 ${s.detailValue}px Arial`,
+          iconFill:"rgba(14,165,233,0.92)",
+          iconColor:"#ffffff",
+          labelFont:`900 ${s.labelFont}px Arial`,
+          valueFont:`800 ${s.detailValueFont}px Arial`,
           labelColor:"#d7f2ff",
           color:"#ffffff",
           maxLines:2,
-          labelWidth:s.detailLabel * 5.3,
-          labelLineHeight:Math.round(s.detailLabel * 1.15),
-          valueLineHeight:Math.round(s.detailValue * 1.18)
+          labelLineHeight:Math.round(s.labelFont * 1.22),
+          valueLineHeight:Math.round(s.detailValueFont * 1.24)
         },
         {
           type:"normal",
-          label:"📐 ขนาดพื้นที่",
+          icon:"น",
+          label:"ขนาดพื้นที่",
           text:thaiArea,
-          labelFont:`800 ${s.areaLabel}px Arial`,
-          valueFont:`900 ${s.areaValue}px Arial`,
+          iconFill:"rgba(34,197,94,0.95)",
+          iconColor:"#052e16",
+          labelFont:`900 ${s.labelFont}px Arial`,
+          valueFont:`900 ${s.valueFont}px Arial`,
           labelColor:"#8dffbf",
           color:"#f7fff9",
           maxLines:2,
-          labelWidth:s.areaLabel * 5.0,
-          labelLineHeight:Math.round(s.areaLabel * 1.15),
-          valueLineHeight:Math.round(s.areaValue * 1.18)
+          labelLineHeight:Math.round(s.labelFont * 1.22),
+          valueLineHeight:Math.round(s.valueFont * 1.22)
         },
         {
           type:"highlight",
-          label:"📍 พิกัดแปลง",
+          icon:"ต",
+          label:"พิกัดแปลง",
           text:data.centroidText || "-",
-          labelFont:`900 ${s.coordLabel}px Arial`,
-          valueFont:`900 ${s.coordValue}px Arial`,
+          iconFill:"rgba(239,68,68,0.95)",
+          iconColor:"#ffffff",
+          labelFont:`900 ${s.labelFont}px Arial`,
+          valueFont:`900 ${s.coordValueFont}px Arial`,
           labelColor:"#8fe9ff",
           color:"#ffffff",
           maxLines:2,
-          labelLineHeight:Math.round(s.coordLabel * 1.15),
-          valueLineHeight:Math.round(s.coordValue * 1.16)
+          labelLineHeight:Math.round(s.labelFont * 1.22),
+          valueLineHeight:Math.round(s.coordValueFont * 1.22)
         },
         {
           type:"normal",
-          label:"🕒 วันที่และเวลา",
+          icon:"ว",
+          label:"วันที่และเวลา",
           text:nowText,
-          labelFont:`800 ${s.timeLabel}px Arial`,
-          valueFont:`800 ${s.timeValue}px Arial`,
+          iconFill:"rgba(245,158,11,0.95)",
+          iconColor:"#111827",
+          labelFont:`900 ${s.labelFont}px Arial`,
+          valueFont:`800 ${s.timeValueFont}px Arial`,
           labelColor:"#ffd56d",
           color:"#fff6dd",
           maxLines:1,
-          labelWidth:s.timeLabel * 6.0,
-          labelLineHeight:Math.round(s.timeLabel * 1.15),
-          valueLineHeight:Math.round(s.timeValue * 1.16)
+          labelLineHeight:Math.round(s.labelFont * 1.22),
+          valueLineHeight:Math.round(s.timeValueFont * 1.18)
         }
       ];
     }
